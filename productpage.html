@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VietSoul - Chợ Văn Hóa Số</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chỉ giữ lại Playfair Display cho tiêu đề và Inter cho nội dung -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 1. KHAI BÁO FONT MỚI (SVN-Agency FB) */
+        @font-face {
+            font-family: 'SVN Agency FB';
+            src: url('SVN-Agency FB.ttf') format('truetype'); /* Sử dụng file font đã tải lên */
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: 'Inter', sans-serif; /* Dùng Inter cho nội dung chính dễ đọc */
+            background-color: #fcf8f5; /* Light Peach/Beige - Nền nhạt hơn (theo yêu cầu trước) */
+            color: #333;
+        }
+        /* Áp dụng Playfair Display cho tất cả các tiêu đề (font-heading) */
+        h1, h2, h3, h4, .font-heading { 
+            font-family: 'SVN Agency FB', serif;
+        }
+        
+        /* Đảm bảo tất cả nội dung còn lại là Inter */
+        .text-xs, .text-sm, p, span, a, input, button {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Overwrite cho các phần tiêu đề lớn để đảm bảo dùng Playfair */
+        .text-3xl, .text-2xl, .text-xl, .font-semibold, .font-bold {
+             font-family: 'SVN Agency FB', serif;
+        }
+        
+        .text-brand-primary { color: #920c0c; } /* Deep Red / Wine Red */
+        .bg-brand-primary { background-color: #920c0c; }
+        .text-brand-accent { color: #e1d6c0; } /* Earthy Beige - Dùng làm nền cho các thành phần */
+        .bg-brand-accent { background-color: #fcf8f5; } /* Nền nhạt cho các thành phần */
+        .bg-brand-light { background-color: #d7c093; } /* Rất nhạt, gần trắng */
+        .shadow-custom { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+            border: 1px solid transparent;
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(146, 12, 12, 0.2);
+            border: 2px solid #920c0c; /* Khung màu đỏ đậm hơn khi hover */
+        }
+        .filter-btn {
+            background-color: #fcf8f5; /* Nền nhạt cho nút filter thường */
+            color: #5c0808; /* Text màu đỏ sẫm */
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+        }
+        .filter-btn.active {
+            background-color: #920c0c; /* Màu đỏ brand cho active */
+            color: white;
+            box-shadow: 0 2px 8px rgba(146, 12, 12, 0.3);
+        }
+        .tab-btn {
+            transition: border-bottom 0.3s, color 0.3s;
+            font-family: 'Playfair Display', serif; /* Dùng Playfair cho tab */
+        }
+        .tab-btn.active {
+            border-bottom: 3px solid #920c0c;
+            color: #920c0c;
+            font-weight: 700;
+        }
+        /* Chatbot Styles - Giữ Inter cho nội dung chat */
+        .chat-bubble-user {
+            background-color: #920c0c;
+            color: white;
+            border-bottom-right-radius: 0;
+            max-width: 85%;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-family: 'Inter', sans-serif;
+        }
+        .chat-bubble-ai {
+            background-color: #fff;
+            color: #5c0808;
+            border: 1px solid #e2c68c;
+            border-bottom-left-radius: 0;
+            max-width: 90%;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            animation: fadeIn 0.5s ease-out;
+            font-family: 'Inter', sans-serif;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-brand-accent">
+
+    <header class="sticky top-0 z-50 bg-white shadow-custom">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center max-w-7xl">
+            <div class="flex items-center">
+                <span class="text-3xl font-extrabold text-brand-primary font-heading">VietSoul</span>
+                <span class="text-sm ml-2 px-2 py-1 rounded-full bg-brand-accent text-brand-primary font-semibold">CULTURE & GREEN COMMERCE</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <input type="text" placeholder="Tìm kiếm sản phẩm, làng nghề..." class="hidden md:block w-72 border border-gray-300 rounded-full py-2 px-4 text-sm focus:ring-brand-primary focus:border-brand-primary">
+                <button class="text-xl text-gray-700 hover:text-brand-primary transition duration-150" title="Giỏ hàng">🛒</button>
+                <button class="text-xl text-gray-700 hover:text-brand-primary transition duration-150" title="Tài khoản">👤</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-7xl grid grid-cols-1 md:grid-cols-12 gap-8">
+        
+        <aside class="md:col-span-3 bg-white p-6 rounded-xl shadow-custom h-fit sticky top-20">
+            <h3 class="text-xl font-bold text-brand-primary mb-4 border-b pb-2 font-heading">Danh mục Văn hóa</h3>
+            <div id="filter-container" class="space-y-3">
+                <button data-filter="all" class="filter-btn active w-full text-left py-2 px-4 rounded-lg transition duration-150 hover:bg-brand-accent">Tất cả Sản phẩm</button>
+                <button data-filter="tranh" class="filter-btn w-full text-left py-2 px-4 rounded-lg transition duration-150 hover:bg-brand-accent">Tranh Dân Gian</button>
+                <button data-filter="gom" class="filter-btn w-full text-left py-2 px-4 rounded-lg transition duration-150 hover:bg-brand-accent">Gốm Sứ</button>
+                <button data-filter="lua" class="filter-btn w-full text-left py-2 px-4 rounded-lg transition duration-150 hover:bg-brand-accent">Lụa & Vải Thủ công</button>
+                <button data-filter="dotuong" class="filter-btn w-full text-left py-2 px-4 rounded-lg transition duration-150 hover:bg-brand-accent">Đồ Thờ Tượng</button>
+                <button data-filter="gift" class="filter-btn w-full text-left py-2 px-4 rounded-lg transition duration-150 hover:bg-brand-accent">Quà tặng ESG</button>
+            </div>
+            
+            <h3 class="text-xl font-bold text-brand-primary mt-6 mb-4 border-b pb-2 font-heading">Tiêu chí Lọc</h3>
+            <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer hover:text-brand-primary transition duration-150">
+                <input type="checkbox" id="green-tag-filter" class="rounded text-brand-primary focus:ring-brand-primary">
+                <span>Chỉ hiển thị "Green Tag"</span>
+            </label>
+        </aside>
+
+        <section class="md:col-span-9">
+            <h2 class="text-3xl font-bold text-brand-primary mb-6 font-heading">Marketplace: Tinh hoa Thủ công Việt</h2>
+            <p class="text-gray-700 mb-8">Khám phá các sản phẩm độc đáo từ làng nghề, mỗi món hàng đều được gắn Câu chuyện Nghệ nhân và Chứng nhận Xanh.</p>
+            
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            </div>
+        </section>
+    </main>
+    
+    <div id="detail-sidebar" class="fixed inset-y-0 right-0 w-full md:w-1/3 bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 overflow-y-auto p-6 flex flex-col">
+        <div class="flex justify-between items-center border-b pb-4 mb-4">
+            <h3 class="text-2xl font-bold text-brand-primary font-heading">Chi tiết Sản phẩm</h3>
+            <button id="close-sidebar-btn" class="text-2xl text-gray-500 hover:text-red-500 transition duration-150">❌</button>
+        </div>
+        
+        <div class="flex-grow">
+            <div id="product-summary" class="mb-6">
+                <!-- Product summary will be rendered here --></div>
+
+            <div class="border-t pt-4">
+                <div class="flex space-x-2 border-b">
+                    <button class="tab-btn active px-4 py-2 text-brand-primary font-heading" data-tab-content="story">Chuyện Nghề & AI Storytelling</button>
+                    <button class="tab-btn px-4 py-2 text-brand-primary font-heading" data-tab-content="green-tag">Dấu Hiệu Xanh (Green Tag)</button>
+                </div>
+                
+                <div id="story-content" class="tab-content pt-4">
+                    <h4 class="font-semibold text-xl text-brand-primary mb-3 font-heading">AI Kể Chuyện Nghệ Nhân:</h4>
+                    
+                    <div id="chat-interface" class="bg-brand-accent h-80 rounded-lg p-3 flex flex-col shadow-inner">
+                        <div id="product-chat-window" class="flex-grow overflow-y-auto space-y-3 pr-2">
+                            <!-- Chat messages will be appended here --></div>
+                        <div class="mt-3 flex">
+                            <input type="text" id="product-chat-input" placeholder="Hỏi AI về lịch sử hoặc nghệ nhân..." class="flex-grow border border-gray-300 rounded-full py-2 px-4 text-sm focus:ring-brand-primary focus:border-brand-primary" disabled>
+                            <button id="product-send-btn" class="ml-2 bg-brand-primary text-white p-2 rounded-full w-9 h-9 flex items-center justify-center hover:bg-red-900 disabled:opacity-50" title="Gửi câu hỏi" disabled>
+                                <span class="text-lg">↑</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="green-tag-content" class="tab-content hidden pt-4">
+                    <h4 class="font-semibold text-xl text-brand-primary mb-3 font-heading">Cam kết Bền vững (Green Tag Checklist):</h4>
+                    <ul id="green-tag-list" class="space-y-2 text-gray-700">
+                        <!-- Green tags will be rendered here --></ul>
+                </div>
+            </div>
+        </div>
+        
+        <button class="w-full bg-brand-primary text-white font-bold py-3 rounded-full hover:bg-red-900 transition duration-300 mt-6 shadow-xl shadow-red-200 font-heading">
+            Thêm vào Giỏ hàng
+        </button>
+    </div>
+
+    <script>
+        // Placeholder for user turn in script
+        const USER_TURN = 'user_turn';
+
+        // Mocked response data, keyed by product ID
+        const mockChatResponses = {
+            1: [ // Tranh Ngũ Hổ Làng Sình
+                { role: 'ai', text: 'Chào bạn, tôi là AI Hướng Dẫn của VietSoul. Tôi có thể kể cho bạn nghe về lịch sử Tranh Ngũ Hổ, ý nghĩa từng chi tiết, hoặc người nghệ nhân tạo ra nó. Bạn muốn biết gì?' },
+                { role: USER_TURN, text: 'Kể cho tôi về người nghệ nhân đi.' },
+                { role: 'ai', text: 'Tuyệt vời! Người nghệ nhân là B, người đã bảo tồn bí quyết khắc và in tranh Sình qua 5 thế hệ trong gia đình. Ông tin rằng mỗi nét chạm là một lời cầu nguyện. Dù đã 80 tuổi, ông vẫn trực tiếp giám sát việc chế tác bản in để đảm bảo độ tinh xảo.' }
+            ],
+            2: [ // Bình Gốm Hoa Sen Khảm
+                { role: 'ai', text: 'Chào bạn, chiếc bình gốm này đến từ Bát Tràng, nhưng với công thức nung đặc biệt để giảm thiểu carbon. Bạn muốn tìm hiểu về quy trình nung xanh hay ý nghĩa của họa tiết Hoa Sen?' },
+                { role: USER_TURN, text: 'Quy trình nung xanh là gì?' },
+                { role: 'ai', text: 'Quy trình Nung Xanh giảm nhiệt độ nung gốm xuống 100 độ C so với truyền thống. Điều này giúp tiết kiệm 15% năng lượng và giảm đáng kể khí thải CO2. Mặc dù tốn nhiều công sức hơn, hợp tác xã cam kết thực hiện vì trách nhiệm môi trường.' }
+            ],
+            3: [ // Khăn Lụa Vạn Phúc Nhuộm Chàm
+                { role: 'ai', text: 'Chào bạn, đây là sản phẩm lụa Vạn Phúc nhuộm bằng phương pháp truyền thống. Bạn có muốn biết về quy trình nhuộm Chàm hay câu chuyện khởi nghiệp của người nghệ nhân trẻ?' },
+                { role: 'user_turn', text: 'Kể về câu chuyện khởi nghiệp.' },
+                { role: 'ai', text: 'Thương hiệu Sắc Việt được thành lập bởi một người con của làng Vạn Phúc, với mong muốn đưa kỹ thuật nhuộm Chàm không hóa chất lên nền tảng số. Họ đã ứng dụng công nghệ để tìm kiếm khách hàng quốc tế, nhưng vẫn giữ nguyên sự tỉ mỉ thủ công trong từng sản phẩm.' }
+            ],
+            4: [ // Bộ Quà tặng Văn hóa 'Hồn Việt'
+                { role: 'ai', text: 'Xin chào, đây là Bộ Quà Tặng ESG dành riêng cho doanh nghiệp. Chúng tôi có thể cung cấp báo cáo tác động xã hội (Social Impact Report) đi kèm với bộ quà. Bạn muốn xem báo cáo hay yêu cầu tùy chỉnh (customization)?' },
+                { role: 'user_turn', text: 'Yêu cầu tùy chỉnh.' },
+                { role: 'ai', text: 'Tuyệt vời! Chúng tôi có thể in logo doanh nghiệp bạn bằng mực sinh học lên bao bì tái chế, hoặc tùy chỉnh các sản phẩm thủ công bên trong theo chủ đề của sự kiện.' }
+            ],
+            5: [ // Đồ trang trí mây tre đan
+                { role: 'ai', text: 'Chào bạn, sản phẩm mây tre đan này đến từ Hợp tác xã Bao La. Bạn muốn biết về kỹ thuật đan thủ công hay nguồn gốc vật liệu tự nhiên của sản phẩm?' },
+                { role: 'user_turn', text: 'Nguồn gốc vật liệu tự nhiên.' },
+                { role: 'ai', text: 'Nguyên liệu mây tre được thu hoạch bền vững, phơi nắng tự nhiên thay vì tẩy trắng bằng hóa chất. Dù không có Green Tag chính thức, sản phẩm cam kết quy trình chế tác sạch và thân thiện với môi trường.' }
+            ],
+             6: [ // Tượng gỗ Quan Âm Làng Đồng Kỵ
+                { role: 'ai', text: 'Chào bạn, đây là bức Tượng Quan Âm được chạm khắc tại làng Đồng Kỵ. Tác phẩm này được làm từ gỗ tái chế (gỗ cũ được khai thác bền vững). Bạn muốn biết về nguồn gốc gỗ, ý nghĩa phong thủy, hay quy trình chạm khắc thủ công?' },
+                { role: 'user_turn', text: 'Quy trình chạm khắc thủ công.' },
+                { role: 'ai', text: 'Nghệ nhân T có kỹ thuật chạm khắc nổi bật, kết hợp các nét truyền thống và hiện đại, giúp tiết kiệm nguyên liệu gỗ mà vẫn đảm bảo độ tinh xảo. Tác phẩm này là sự tôn vinh sự tỉ mỉ, công sức và kiên nhẫn của nghệ nhân.' }
+            ],
+             7: [ // Tranh sơn mài 'Phố cổ Hà Nội'
+                { role: 'ai', text: 'Xin chào, đây là sản phẩm tranh sơn mài cao cấp, sử dụng kỹ thuật mài truyền thống kết hợp vật liệu tự nhiên. Bạn muốn tìm hiểu về vật liệu sơn mài (nhựa cây sơn) hay họa sĩ đã sáng tác tác phẩm này?' },
+                { role: 'user_turn', text: 'Vật liệu sơn mài.' },
+                { role: 'ai', text: 'Sơn mài truyền thống đòi hỏi độ khéo léo cao. Lớp sơn ở đây được khai thác từ cây sơn (cây Rhus verniciflua) và được lọc kỹ lưỡng, đảm bảo độ bóng tự nhiên mà không cần hóa chất công nghiệp. Tuy nhiên, do quá trình chế tác mất nhiều thời gian, giá thành cao hơn.' }
+            ],
+             8: [ // Túi vải ESG thêu tay
+                { role: 'ai', text: 'Chào bạn, đây là một sản phẩm phụ kiện thời trang với mục tiêu xã hội (Social-impact). Bạn muốn biết về nguồn gốc vải tái chế, hay chương trình tạo việc làm cho người khuyết tật thông qua việc thêu tay?' },
+                { role: 'user_turn', text: 'Chương trình tạo việc làm.' },
+                { role: 'ai', text: 'Túi vải này là kết quả của hợp tác xã X, nơi 100% người thêu là người khuyết tật. Công việc thêu tay không chỉ tạo thu nhập ổn định mà còn giúp họ tái hòa nhập xã hội, mang lại ý nghĩa sâu sắc cho sản phẩm này.' }
+            ]
+        };
+
+        // Global chat state variables
+        let currentProductChatId = null;
+        let chatHistory = {};
+
+        function addMessage(chatWindow, role, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('flex', 'space-x-3', 'mb-3');
+            
+            if (role === 'user') {
+                messageDiv.classList.add('justify-end');
+                messageDiv.innerHTML = `<div class="p-2 chat-bubble-user rounded-xl shadow-md">${text}</div>`;
+            } else {
+                messageDiv.classList.add('justify-start', 'items-start');
+                messageDiv.innerHTML = `
+                    <span class="text-xl text-brand-primary">🤖</span>
+                    <div class="p-2 chat-bubble-ai rounded-xl shadow-md flex flex-col">
+                        <p class="font-bold mb-1 text-xs text-brand-primary font-heading">VietSoul AI Guide</p>
+                        <p>${text}</p>
+                    </div>
+                `;
+            }
+            
+            chatWindow.appendChild(messageDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function startChatSimulation(productId) {
+            const chatWindow = document.getElementById('product-chat-window');
+            const input = document.getElementById('product-chat-input');
+            const sendBtn = document.getElementById('product-send-btn');
+            
+            const currentStep = chatHistory[productId] || 0;
+            const data = mockChatResponses[productId];
+
+            if (data && currentStep < data.length) {
+                const message = data[currentStep];
+                
+                if (message.role === 'ai') {
+                    addMessage(chatWindow, 'ai', message.text);
+                    chatHistory[productId]++;
+                    input.disabled = true;
+                    sendBtn.disabled = true;
+
+                    // Schedule the next message or enable user input
+                    if (chatHistory[productId] < data.length) {
+                        const nextMessage = data[chatHistory[productId]];
+                        if (nextMessage.role === 'ai') {
+                            setTimeout(() => startChatSimulation(productId), 3000); // AI to AI
+                        } else if (nextMessage.role === USER_TURN) {
+                            setTimeout(() => {
+                                input.disabled = false;
+                                sendBtn.disabled = false;
+                                input.placeholder = "Gõ câu trả lời của bạn...";
+                                input.focus();
+                            }, 1000);
+                        }
+                    } else {
+                        // End of script
+                        setTimeout(() => {
+                             input.placeholder = "Bạn đã khám phá hết câu chuyện này. Thêm vào giỏ hàng nhé!";
+                             input.disabled = true;
+                             sendBtn.disabled = true;
+                             addMessage(chatWindow, 'ai', "Cảm ơn bạn đã khám phá! Câu chuyện đã kết thúc, bạn có thể tham khảo tab Green Tag hoặc tiếp tục mua hàng.");
+                        }, 1000);
+                    }
+
+                } else if (message.role === USER_TURN) {
+                    // This case is only hit if the user re-enters the tab and it's their turn
+                    input.disabled = false;
+                    sendBtn.disabled = false;
+                    input.placeholder = "Gõ câu trả lời của bạn...";
+                    input.focus();
+                }
+            } else if (data && currentStep >= data.length) {
+                 input.placeholder = "Bạn đã khám phá hết câu chuyện này. Thêm vào giỏ hàng nhé!";
+                 input.disabled = true;
+                 sendBtn.disabled = true;
+            }
+        }
+
+        function handleChatInput(e) {
+            const input = document.getElementById('product-chat-input');
+            const sendBtn = document.getElementById('product-send-btn');
+            const chatWindow = document.getElementById('product-chat-window');
+            const inputText = input.value.trim();
+            
+            if ((e.type === 'click' || (e.type === 'keypress' && e.key === 'Enter')) && inputText && !input.disabled) {
+                const productId = currentProductChatId;
+                const currentStep = chatHistory[productId];
+                const data = mockChatResponses[productId];
+                
+                // 1. Display user message
+                addMessage(chatWindow, 'user', inputText);
+                input.value = '';
+                
+                // 2. Advance chat step
+                input.disabled = true;
+                sendBtn.disabled = true;
+                
+                if (data && currentStep < data.length && data[currentStep].role === USER_TURN) {
+                    // Match found: advance the script step
+                    chatHistory[productId]++; 
+                } else if (currentStep === 0) {
+                     // First message, always advance to start AI script
+                    chatHistory[productId]++;
+                } 
+                
+                // 3. Trigger next AI response after a short delay
+                setTimeout(() => startChatSimulation(productId), 1500); 
+
+            }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            /* ===== 1. MOCK DATA & STATE (Repeated for local reference) ===== */
+            const products = [
+                { id: 1, name: "Tranh Ngũ Hổ Làng Sình", price: "450.000 VNĐ", artist: "Nghệ nhân Nguyễn Văn B", category: "tranh", location: "Huế",
+                  img: "https://file.hstatic.net/200000017614/file/tranh-ngu-ho-1_430d9f1800314e81b3e2fb3a27f5c9a6.jpg", // Hình ảnh Tranh Ngũ Hổ
+                  story: "Tranh Ngũ Hổ là biểu tượng hộ mệnh của người dân Huế. Bức tranh này được khắc từ khuôn gỗ hơn 100 năm tuổi, in bằng tay với mực sinh học. Câu chuyện về người thợ B đã giữ gìn bí quyết này qua 5 thế hệ là minh chứng cho sự kiên trì với di sản văn hóa phi vật thể.",
+                  greenTags: ["Bao bì tái chế (Kraft)", "Mực in sinh học", "Giao hàng Carbon thấp (Eco-Delivery)"],
+                  isGreen: true
+                },
+                { id: 2, name: "Bình Gốm Hoa Sen Khảm", price: "890.000 VNĐ", artist: "Hợp tác xã Bát Tràng", category: "gốm", location: "Hà Nội",
+                  img: "https://i.etsystatic.com/20886807/r/il/15690c/1977818224/il_1080xN.1977818224_mo5c.jpg", // Hình ảnh Bình Gốm Hoa Sen Khảm
+                  story: "Bình gốm này được nung ở nhiệt độ thấp hơn tiêu chuẩn công nghiệp để giảm phát thải khí CO2, nhưng vẫn giữ được độ bền. Họa tiết Hoa Sen tượng trưng cho sự thanh khiết, được khảm thủ công tỉ mỉ trong 3 ngày.",
+                  greenTags: ["Sản xuất tiết kiệm năng lượng", "Nguyên liệu đất sét tự nhiên", "Không sử dụng chì/hóa chất độc hại"],
+                  isGreen: true
+                },
+                { id: 3, name: "Khăn Lụa Vạn Phúc Nhuộm Chàm", price: "280.000 VNĐ", artist: "Thương hiệu Sắc Việt", category: "lụa", location: "Hà Nội",
+                  img: "https://cdn.shopify.com/s/files/1/0101/0450/4401/products/c4-jpg-1575540676767_600x.jpg?v=1575622995", // Hình ảnh Khăn Lụa Vạn Phúc Nhuộm Chàm
+                  story: "Sản phẩm sử dụng phương pháp nhuộm Chàm truyền thống, không thải hóa chất ra môi trường. Khăn lụa mềm mại, giữ ấm tốt, là món quà lý tưởng cho người thân yêu. Câu chuyện về người phụ nữ khởi nghiệp ở làng lụa Vạn Phúc trong thời đại số.",
+                  greenTags: ["Nhuộm tự nhiên (Chàm)", "Vật liệu vải lụa tơ tằm", "Bao bì giấy tái chế"],
+                  isGreen: true
+                },
+                { id: 4, name: "Bộ Quà tặng Văn hóa 'Hồn Việt'", price: "1.250.000 VNĐ", artist: "VietSoul Originals", category: "gift", location: "Đa dạng",
+                  img: "https://file.hstatic.net/200000290629/article/0dfe42b7-2dda-4150-a01a-2a6d5315e6d5_ec514eccc14143e2bea9ac86d0f7fad3_fb6e16db861c4c208ed744fa6fee83fa.jpeg", // Hình ảnh Bộ Quà tặng Văn hóa 'Hồn Việt'
+                  story: "Bộ quà tặng được thiết kế dành riêng cho doanh nghiệp (B2B) nhằm mục đích ESG. Bao gồm một món gốm mini, một cuốn sổ tay từ giấy tái chế và một postcard Tranh Sình. Mỗi hộp quà là một thông điệp về trách nhiệm xã hội.",
+                  greenTags: ["100% vật liệu tái chế", "Sản phẩm được chứng nhận Green Tag", "Tạo sinh kế cho 3 làng nghề"],
+                  isGreen: true
+                },
+                { id: 5, name: "Đồ trang trí mây tre đan", price: "150.000 VNĐ", artist: "Hợp tác xã Bao La", category: "gốm", location: "Huế",
+                  img: "https://dantra.vn/uploads/san-pham/thi-cong/decor-tuong/trang-tri-may-tre-dan-16.jpg", // Hình ảnh Đồ trang trí mây tre đan
+                  story: "Món đồ trang trí nhà cửa, sử dụng nguyên liệu mây tre đan tự nhiên, phơi nắng để tạo màu, không dùng thuốc nhuộm công nghiệp. Sản phẩm này không có Green Tag vì vận chuyển xa, nhưng nghệ nhân cam kết về nguyên liệu.",
+                  greenTags: ["Nguyên liệu mây tre tự nhiên"],
+                  isGreen: false
+                },
+                // Thêm 3 sản phẩm mới
+                { id: 6, name: "Tượng Quan Âm Gỗ Tái chế", price: "2.500.000 VNĐ", artist: "Nghệ nhân T, Làng Đồng Kỵ", category: "gỗ", location: "Bắc Ninh",
+                  img: "https://godinh.com/web/image/1714964/image3.png?access_token=b5472d81-b8e6-48c6-925f-d499eb9f49ed", // Hình ảnh Tượng Quan Âm Gỗ Tái chế
+                  story: "Bức tượng này được làm từ gỗ tái chế từ các công trình cũ, đảm bảo tính bền vững và giảm thiểu khai thác rừng. Nghệ nhân T đã thổi hồn vào tác phẩm, truyền tải sự từ bi, thanh tịnh.",
+                  greenTags: ["Sử dụng gỗ tái chế", "Công đoạn chạm khắc giảm thiểu phế liệu", "Không dùng hóa chất bảo quản"],
+                  isGreen: true
+                },
+                { id: 7, name: "Tranh Sơn Mài 'Phố Cổ'", price: "3.800.000 VNĐ", artist: "Họa sĩ V", category: "tranh", location: "Hà Nội",
+                  img: "https://www.kiettacnghethuat.com/wp-content/uploads/ha-noi-moi-tranh-son-mai-pho-cua-hoa-si-nguyen-van-nghia.jpg", // Hình ảnh Tranh Sơn Mài 'Phố Cổ'
+                  story: "Tranh sơn mài vẽ phong cảnh Phố Cổ, sử dụng nhựa cây sơn tự nhiên. Quy trình chế tác mất 6 tháng với nhiều công đoạn mài và đánh bóng thủ công. Đây là một tác phẩm nghệ thuật có giá trị đầu tư và bền vững về mặt vật liệu.",
+                  greenTags: ["Nguyên liệu nhựa cây sơn tự nhiên", "Giảm thiểu hóa chất", "Độ bền trên 50 năm"],
+                  isGreen: true
+                },
+                { id: 8, name: "Túi Vải Thêu Tay 'Sen'", price: "350.000 VNĐ", artist: "Hợp tác xã Xã hội X", category: "lụa", location: "TP.HCM",
+                  img: "https://i.etsystatic.com/32617721/r/il/e9c3b6/3697004149/il_1588xN.3697004149_jjyv.jpg", // Hình ảnh Túi Vải Thêu Tay 'Sen'
+                  story: "Túi Tote vải được may từ vải bông tái chế (Recycled Cotton), thân thiện môi trường. Họa tiết hoa sen thêu tay bởi người khuyết tật, mang thông điệp về sự kiên cường và hỗ trợ cộng đồng.",
+                  greenTags: ["Vải bông tái chế 100%", "Tạo sinh kế cho người khuyết tật", "Không chất tẩy trắng"],
+                  isGreen: true
+                }
+            ];
+
+            let currentFilter = 'all';
+            let greenTagOnly = false;
+            
+            /* ===== 2. DOM Elements & HANDLERS ===== */
+            const productGrid = document.getElementById('product-grid');
+            const filterButtons = document.querySelectorAll('#filter-container .filter-btn');
+            const detailSidebar = document.getElementById('detail-sidebar');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            const greenTagFilterCheckbox = document.getElementById('green-tag-filter');
+            
+            const productSummary = document.getElementById('product-summary');
+            const greenTagList = document.getElementById('green-tag-list');
+
+            const tabButtons = document.querySelectorAll('#detail-sidebar .tab-btn');
+            const tabContents = document.querySelectorAll('#detail-sidebar .tab-content');
+
+            const inputElement = document.getElementById('product-chat-input');
+            const sendButton = document.getElementById('product-send-btn');
+            
+            // Attach event listeners for chat input
+            sendButton.addEventListener('click', handleChatInput);
+            inputElement.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleChatInput(e);
+                }
+            });
+
+            /* ===== 3. FUNCTIONS (Shared functions defined globally above) ===== */
+
+            function renderProducts(categoryFilter, isGreenOnly) {
+                productGrid.innerHTML = '';
+                
+                const filteredProducts = products.filter(p => {
+                    const categoryMatch = categoryFilter === 'all' || p.category === categoryFilter;
+                    const greenMatch = !isGreenOnly || p.isGreen;
+                    return categoryMatch && greenMatch;
+                });
+
+                if (filteredProducts.length === 0) {
+                    productGrid.innerHTML = `<p class="text-gray-500 col-span-full italic p-8 text-center bg-white rounded-xl shadow-custom">Không tìm thấy sản phẩm nào phù hợp với tiêu chí lọc.</p>`;
+                    return;
+                }
+
+                filteredProducts.forEach(product => {
+                    const card = document.createElement('div');
+                    card.classList.add('product-card', 'bg-white', 'rounded-xl', 'overflow-hidden', 'shadow-custom', 'cursor-pointer', 'transition', 'duration-300');
+                    card.setAttribute('data-id', product.id);
+                    
+                    const greenTagIcon = product.isGreen ? 
+                        `<span class="text-xs font-bold text-white bg-brand-primary px-2 py-0.5 rounded-full absolute top-3 right-3 shadow-md">🌿 Green Tag</span>` : 
+                        `<span class="text-xs font-bold text-gray-700 bg-gray-200 px-2 py-0.5 rounded-full absolute top-3 right-3">Thủ công</span>`;
+
+                    card.innerHTML = `
+                        <div class="relative">
+                            <img src="${product.img}" alt="${product.name}" class="w-full h-48 object-cover">
+                            ${greenTagIcon}
+                        </div>
+                        <div class="p-4">
+                            <p class="text-xs text-gray-500 mb-1">${product.location} | ${product.category.toUpperCase()}</p>
+                            <h4 class="font-semibold text-lg text-brand-primary font-heading truncate" title="${product.name}">${product.name}</h4>
+                            <p class="text-gray-800 font-bold mt-2">${product.price}</p>
+                            <p class="text-sm text-gray-600 mt-1">Nghệ nhân: ${product.artist}</p>
+                        </div>
+                    `;
+                    productGrid.appendChild(card);
+                });
+
+                // Attach event listeners to newly rendered cards
+                productGrid.querySelectorAll('.product-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const productId = parseInt(card.getAttribute('data-id'));
+                        showProductDetail(productId);
+                    });
+                });
+            }
+
+            function showProductDetail(id) {
+                const product = products.find(p => p.id === id);
+                if (!product) return;
+                
+                // 1. Update Product Summary
+                productSummary.innerHTML = `
+                    <img src="${product.img}" alt="${product.name}" class="w-full h-32 object-cover rounded-lg mb-4">
+                    <h4 class="text-xl font-bold text-brand-primary font-heading">${product.name}</h4>
+                    <p class="text-lg font-bold text-gray-800">${product.price}</p>
+                    <p class="text-sm text-gray-500 mt-1">Nghệ nhân: ${product.artist} | ${product.location}</p>
+                `;
+
+                // 2. Update Green Tag Tab
+                greenTagList.innerHTML = product.greenTags.map(tag => 
+                    `<li class="flex items-start space-x-2">
+                        <span class="text-xl text-brand-primary">✅</span>
+                        <p>${tag}</p>
+                    </li>`
+                ).join('');
+                if (product.greenTags.length === 0) {
+                     greenTagList.innerHTML = `<li class="text-gray-500 italic">Sản phẩm này cam kết thủ công nhưng chưa có chứng nhận Green Tag chính thức.</li>`;
+                }
+
+                // 3. Initialize Chat Interface
+                const chatWindow = document.getElementById('product-chat-window');
+                chatWindow.innerHTML = ''; // Clear previous chat
+                currentProductChatId = id;
+                
+                // Reset chat history for the product to restart the storytelling
+                chatHistory[id] = 0;
+
+                // Start the chat simulation when the detail sidebar is shown
+                // Use a short delay to allow sidebar transition to finish
+                setTimeout(() => startChatSimulation(id), 500); 
+
+                // Reset tabs to default (Storytelling)
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.add('hidden'));
+                document.querySelector('[data-tab-content="story"]').classList.add('active');
+                document.getElementById('story-content').classList.remove('hidden');
+
+                // Show Sidebar
+                detailSidebar.classList.remove('translate-x-full');
+            }
+            
+            function hideProductDetail() {
+                detailSidebar.classList.add('translate-x-full');
+                currentProductChatId = null;
+                // Disable input when closed
+                inputElement.disabled = true;
+                sendButton.disabled = true;
+            }
+
+            /* ===== 4. Event Listeners Initialization ===== */
+
+            // 4.1. Category Filtering
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    currentFilter = button.getAttribute('data-filter');
+                    
+                    // Update active button state
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    renderProducts(currentFilter, greenTagOnly);
+                });
+            });
+
+            // 4.2. Green Tag Checkbox Filter
+            greenTagFilterCheckbox.addEventListener('change', (e) => {
+                greenTagOnly = e.target.checked;
+                renderProducts(currentFilter, greenTagOnly);
+            });
+
+
+            // 4.3. Detail Sidebar Handlers
+            closeSidebarBtn.addEventListener('click', hideProductDetail);
+            
+            // 4.4. Tab Switching Logic for Detail Panel
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const target = button.getAttribute('data-tab-content');
+                    
+                    // Update active button state
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    // Show/hide content
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    document.getElementById(`${target}-content`).classList.remove('hidden');
+
+                    // If switching back to story tab, ensure chat state is correct
+                    if (target === 'story' && currentProductChatId) {
+                        // Re-enable input if it was the user's turn when they left
+                        const currentStep = chatHistory[currentProductChatId];
+                        const data = mockChatResponses[currentProductChatId];
+                        if (data && currentStep < data.length && data[currentStep].role === USER_TURN) {
+                             inputElement.disabled = false;
+                             sendButton.disabled = false;
+                        }
+                    } else {
+                        // Disable input if on Green Tag tab
+                        inputElement.disabled = true;
+                        sendButton.disabled = true;
+                    }
+
+                });
+            });
+
+            // Initial render on page load
+            renderProducts(currentFilter, greenTagOnly);
+
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viet Soul - Trang Chủ & Marketplace</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 1. KHAI BÁO FONT SVN-Agency FB */
+        @font-face {
+            font-family: 'SVN Agency FB';
+            src: url('SVN-Agency FB.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* Màu sắc & Font tùy chỉnh */
+        :root {
+            --color-primary: #8B0000; /* Đỏ Đô / Maroon */
+            --color-secondary: #FFD700; /* Vàng Gold */
+            --color-background: #FFF8E1; /* Kem Nhạt */
+            --font-display: 'SVN Agency FB', 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-background);
+            color: #333;
+            scroll-behavior: smooth;
+        }
+
+        .text-display, h1, h2, h3, h4, .font-heading { 
+            font-family: var(--font-display); 
+        }
+        
+        .bg-primary { background-color: var(--color-primary); }
+        .text-primary { color: var(--color-primary); }
+        .bg-secondary { background-color: var(--color-secondary); }
+        .text-secondary { color: var(--color-secondary); }
+
+        /* Animation & UI Effects */
+        .btn-hover:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-primary);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(139, 0, 0, 0.15);
+        }
+
+        .map-pin { animation: pulse-pin 1.5s infinite; }
+        @keyframes pulse-pin {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Chatbot bubble styles */
+        .chat-bubble-user {
+            background-color: var(--color-primary);
+            color: white;
+            border-bottom-right-radius: 0;
+        }
+        .chat-bubble-ai {
+            background-color: white;
+            color: #333;
+            border: 1px solid #e2c68c;
+            border-bottom-left-radius: 0;
+        }
+
+        .tab-btn.active {
+            border-bottom: 3px solid var(--color-primary);
+            color: var(--color-primary);
+            font-weight: bold;
+        }
+
+        .filter-btn {
+            background-color: white;
+            color: var(--color-primary);
+            transition: all 0.3s;
+        }
+        .filter-btn.active {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .hidden-page { display: none; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- SHARED HEADER -->
+    <header class="bg-primary shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <span onclick="showPage('home')" class="text-5xl text-white font-bold tracking-widest text-display cursor-pointer uppercase">VIET SOUL</span>
+            <span class="text-sm ml-3 px-2 py-1 rounded-full bg-brand-accent text-white font-semibold">
+                CULTURE & GREEN COMMERCE
+            </span>
+            
+            <div class="hidden lg:flex flex-1 mx-8 max-w-xl">
+                <input type="text" placeholder="Tìm kiếm sản phẩm, danh mục..." class="w-full p-2 rounded-l-md border-none focus:ring-2 focus:ring-secondary text-gray-800 text-sm" />
+                <button class="bg-secondary text-primary p-2 rounded-r-md hover:opacity-90 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </button>
+            </div>
+
+            <div class="flex space-x-4 text-white">
+                <button class="flex items-center space-x-1 p-2 rounded-full hover:bg-white/10 transition group">
+                    <svg class="w-6 h-6 group-hover:text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    <span class="hidden sm:inline text-xs">Tài khoản</span>
+                </button>
+                <button class="relative flex items-center space-x-1 p-2 rounded-full hover:bg-white/10 transition group">
+                    <svg class="w-6 h-6 group-hover:text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold bg-secondary text-primary rounded-full transform translate-x-1/2 -translate-y-1/2">3</span>
+                </button>
+            </div>
+        </div>
+        <nav class="bg-primary border-t border-white/20 text-sm">
+            <div class="container mx-auto px-4">
+                <ul class="flex justify-center space-x-4 lg:space-x-8 py-2 overflow-x-auto">
+                    <li><a href="javascript:void(0)" onclick="showPage('home')" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading">TRANG CHỦ</a></li>
+                    <li><a href="javascript:void(0)" onclick="showPage('products')" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading">DANH MỤC</a></li>
+                    <li><a href="#" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading">MÃ GIẢM GIÁ</a></li>
+                    <li><a href="#" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading">BỘ SƯU TẬP</a></li>
+                    <li><a href="#" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading">LÀNG NGHỀ</a></li>
+                    <li><a href="#" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading">CHĂM SÓC KHÁCH HÀNG</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div id="main-content">
+        <!-- PAGE 1: HOME PAGE -->
+        <main id="home-page" class="flex-1">
+            <!-- Hero/Banner Section (3 cột) -->
+            <section class="px-4 mt-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Banner 1: Đèn Lồng -->
+                    <a href="#" class="relative overflow-hidden rounded-lg shadow-xl group h-64 sm:h-80 lg:h-96">
+                        <img src="https://i.ex-cdn.com/vntravellive.com/files/news/2019/05/02/the-gioi-den-long-ruc-ro-o-hoi-an-161742.jpg" alt="Đèn Lồng" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/1200x960/A0522D/FFF8E1?text=ĐÈN+LỒNG+HỘI+AN';">
+                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-100 group-hover:opacity-100 transition duration-300">
+                            <span class="text-3xl font-bold text-white p-3 border-2 border-white rounded-lg text-display">KHÁM PHÁ ĐÈN LỒNG</span>
+                        </div>
+                    </a>
+                    
+                    <!-- Banner 2: Tranh Dân Gian -->
+                    <a href="#" class="relative overflow-hidden rounded-lg shadow-xl group h-64 sm:h-80 lg:h-96">
+                        <img src="https://static.vinwonders.com/2023/02/tranh-lang-sinh-topbanner.jpg" alt="Tranh Dân Gian" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/1200x960/8B4513/FFF8E1?text=TRANH+DÂN+GIAN';">
+                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-100 group-hover:opacity-100 transition duration-300">
+                            <span class="text-3xl font-bold text-white p-3 border-2 border-white rounded-lg text-display">NGHỆ THUẬT DÂN GIAN</span>
+                        </div>
+                    </a>
+
+                    <!-- Banner 3: Đồ Đan Lát -->
+                    <a href="#" class="relative overflow-hidden rounded-lg shadow-xl group h-64 sm:h-80 lg:h-96">
+                        <img src="https://th.bing.com/th/id/R.c65c05aa5af9e8d74e248460c022d281?rik=itZPM7MUxMGW9Q&pid=ImgRaw&r=0" alt="Đan Lát Tre" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/1200x960/B8860B/FFF8E1?text=ĐAN+LÁT+THỦ+CÔNG';">
+                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-100 group-hover:opacity-100 transition duration-300">
+                            <span class="text-3xl font-bold text-white p-3 border-2 border-white rounded-lg text-display">SẢN PHẨM MÂY TRE</span>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- COMBINED SECTION: FLASH SALE (LEFT) & FEATURED PRODUCTS (RIGHT) -->
+            <section class="container mx-auto px-4 my-10">
+                <div class="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-12 gap-6 lg:gap-8">
+                    
+                    <!-- LEFT COLUMN (Flash Sale & Promotional Banner) -->
+                    <div class="lg:col-span-1 xl:col-span-3 flex flex-col space-y-6">
+                        
+                        <!-- 1. Flash Sale Box -->
+                        <div class="bg-primary text-white p-6 rounded-xl shadow-2xl flex flex-col items-center text-center">
+                            <h2 class="text-2xl font-bold text-secondary text-display mb-3">FLASH SALE</h2>
+                            
+                            <!-- Đồng hồ đếm ngược -->
+                            <div id="countdown-timer" class="flex justify-center space-x-2 mb-4 text-sm">
+                                <div class="flex flex-col items-center bg-secondary text-primary p-2 rounded shadow-inner">
+                                    <span id="days" class="text-2xl font-extrabold text-display">00</span>
+                                    <span class="text-xs">Ngày</span>
+                                </div>
+                                <div class="flex flex-col items-center bg-secondary text-primary p-2 rounded shadow-inner">
+                                    <span id="hours" class="text-2xl font-extrabold text-display">00</span>
+                                    <span class="text-xs">Giờ</span>
+                                </div>
+                                <div class="flex flex-col items-center bg-secondary text-primary p-2 rounded shadow-inner">
+                                    <span id="minutes" class="text-2xl font-extrabold text-display">00</span>
+                                    <span class="text-xs">Phút</span>
+                                </div>
+                                <div class="flex flex-col items-center bg-secondary text-primary p-2 rounded shadow-inner">
+                                    <span id="seconds" class="text-2xl font-extrabold text-display">00</span>
+                                    <span class="text-xs">Giây</span>
+                                </div>
+                            </div>
+                            
+                            <p class="text-sm mb-4">Ưu đãi lên đến 50%!</p>
+
+                            <a href="#" class="px-4 py-2 bg-secondary text-primary font-bold rounded-full text-sm btn-hover transition duration-300 hover:scale-105">
+                                SĂN SALE
+                            </a>
+                        </div>
+                        
+                        <!-- 2. Promotional Banner -->
+                        <a href="#" class="relative overflow-hidden rounded-lg shadow-2xl group h-64 bg-primary">
+                            <!-- Background Pattern -->
+                            <div class="absolute inset-0 opacity-5">
+                                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <pattern id="dot-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                                            <circle cx="20" cy="20" r="1" fill="white"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="100%" height="100%" fill="url(#dot-pattern)"/>
+                                </svg>
+                            </div>
+                            
+                            <!-- Header Text "Ưu đãi độc quyền" -->
+                            <div class="absolute top-4 left-0 right-0 text-center">
+                                <h3 class="text-secondary text-xl font-black text-display tracking-widest drop-shadow-lg" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+                                    ƯU ĐÃI ĐỘC QUYỀN
+                                </h3>
+                            </div>
+                            
+                            <div class="absolute inset-0 bg-gradient-to-t to-transparent flex flex-col justify-end p-6">
+                                <div class="transform transition duration-300 group-hover:translate-y-[-4px]">
+                                    <p class="text-secondary text-sm font-bold mb-1 animate-pulse">⚡ NHANH TAY KẺO LỠ</p>
+                                    <h3 class="text-white text-2xl font-bold text-display mb-2">VietSoul Premium</h3>
+                                    <p class="text-white/90 text-sm mb-3">Bộ sưu tập độc quyền chỉ có tại VietSoul</p>
+                                    <div class="inline-block px-4 py-1 bg-secondary text-primary text-xs font-bold rounded-full">
+                                        GIẢM ĐẾN 40%
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- 3. Làng Nghề Nổi Bật -->
+                        <div class="relative overflow-hidden rounded-lg shadow-2xl group h-64 bg-gradient-to-br from-amber-700 via-yellow-800 to-orange-900">
+                            <!-- Background Pattern -->
+                            <div class="absolute inset-0 opacity-10">
+                                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <pattern id="craft-pattern" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+                                            <path d="M25 5 L30 15 L20 15 Z M25 45 L30 35 L20 35 Z M5 25 L15 20 L15 30 Z M45 25 L35 20 L35 30 Z" fill="currentColor" opacity="0.3"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="100%" height="100%" fill="url(#craft-pattern)"/>
+                                </svg>
+                            </div>
+                            
+                            <!-- Header Text -->
+                            <div class="absolute top-3 left-0 right-0 text-center mb-12">
+                                <h2 class="text-white text-xl font-black text-display tracking-wider drop-shadow-lg" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+                                    LÀNG NGHỀ NỔI BẬT
+                                </h2>
+                            </div>
+                            
+                            <!-- Content -->
+                            <div class="absolute inset-0 flex flex-col justify-center items-center p-6 text-center">
+                                <div class="transform transition duration-300 group-hover:scale-105">
+                                    <div class="mb-4">
+                                        <p class="text-white/90 text-sm mb-2">📍 Khám phá nghệ thuật truyền thống</p>
+                                        <div class="space-y-1">
+                                            <p class="text-secondary font-bold text-xs">• Gốm Bát Tràng • Lụa Vạn Phúc •</p>
+                                            <p class="text-secondary font-bold text-xs">• Tranh Đông Hồ • Đèn Lồng Hội An •</p>
+                                            <p class="text-secondary font-bold text-xs">• Mây Tre Phú Vinh •</p>
+                                        </div>
+                                    </div>
+                                    <a href="#" class="inline-block px-5 py-2 bg-white text-amber-900 text-xs font-bold rounded-full hover:bg-secondary hover:text-primary transition duration-300 shadow-lg">
+                                        KHÁM PHÁ NGAY
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    
+                    <!-- RIGHT COLUMN (Featured Products) -->
+                    <div class="lg:col-span-3 xl:col-span-9">
+                        <h2 class="text-3xl text-primary font-bold mb-4 pb-2 border-b-2 border-primary text-display">SẢN PHẨM NỔI BẬT</h2>
+                        
+                        <!-- PRODUCT GRID -->
+                        <div id="featured-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <!-- Sản phẩm sẽ được render bằng JavaScript -->
+                        </div>
+
+                        <div class="text-center mt-6">
+                            <button onclick="showPage('products')" class="px-10 py-3 border-2 border-primary text-primary font-bold rounded-full hover:bg-primary hover:text-white transition uppercase text-sm tracking-widest font-heading shadow-md">
+                                Xem tất cả sản phẩm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NEW SECTION: LÀNG NGHỀ VÀ BẢN ĐỒ -->
+            <section class="container mx-auto px-4 my-16">
+                <div class="bg-white rounded-2xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+                    
+                    <!-- LEFT COLUMN: VĂN BẢN (Text) -->
+                    <div class="p-8 lg:p-12 flex flex-col justify-center">
+                        <h2 class="text-4xl text-primary font-bold mb-6 text-display">
+                            Linh Hồn Việt Nam: Từ Làng Nghề đến Di Sản Văn Hóa
+                        </h2>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Các làng nghề thủ công truyền thống từ bao đời nay đã trở thành mạch máu văn hóa chảy bền bỉ trong lòng dân tộc. Đó không chỉ là nơi sản xuất ra những vật phẩm sinh hoạt, mà là những "bảo tàng sống", nơi lưu giữ những bí quyết chế tác tinh xảo được truyền nối qua hàng trăm năm, từ bàn tay cha sang ánh mắt con, từ thế hệ này sang thế hệ khác.
+Mỗi sản phẩm ra đời không đơn thuần là một món đồ vô tri, mà là một phần tâm hồn của người nghệ nhân, là sự giao thoa kỳ diệu giữa tinh hoa của đất trời và sự kiên nhẫn tột cùng của con người. 
+                        </p>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+Chúng tôi không chỉ bán những sản phẩm thủ công; chúng tôi đang kể lại những câu chuyện – chuyện về những giọt mồ hôi rơi trên xưởng gỗ, chuyện về đôi mắt miệt mài bên khung dệt dưới ánh đèn khuya. Bằng cả niềm tự trọng và lòng biết ơn nguồn cội, chúng tôi khao khát mang "linh hồn Việt" vượt qua mọi biên giới, để bạn bè quốc tế không chỉ chiêm ngưỡng một sản phẩm đẹp, mà còn cảm nhận được nhịp đập của một nền văn hóa nghìn năm văn hiến.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed italic border-l-4 border-secondary pl-4 mb-6">
+                            "Từ những tấm lụa Vạn Phúc mềm mại, đồ gốm Bát Tràng bền bỉ, đến những bức tranh dân gian Đông Hồ đầy màu sắc, chúng tôi tự hào mang linh hồn Việt đến gần hơn với thế giới."
+                        </p>
+                        <ul class="space-y-2 text-sm font-semibold mb-6">
+                            <li class="flex items-center text-primary">
+                                <span class="text-xl mr-2">🌟</span> Bảo tồn di sản Việt Nam.
+                            </li>
+                            <li class="flex items-center text-primary">
+                                <span class="text-xl mr-2">🌱</span> Phát triển bền vững, thân thiện với môi trường.
+                            </li>
+                            <li class="flex items-center text-primary">
+                                <span class="text-xl mr-2">🤝</span> Tạo sinh kế cho cộng đồng nghệ nhân.
+                            </li>
+                        </ul>
+                        <p class="text-gray-700 leading-relaxed italic border-l-4 border-secondary pl-4 mb-6">
+"Mỗi sản phẩm là một nhịp cầu, nối liền quá khứ huy hoàng đến hiện tại rực rỡ, đưa những giá trị nguyên bản của Việt Nam vươn xa tận cùng thế giới."
+                        </p>
+                    </div>
+
+                    <!-- RIGHT COLUMN: BẢN ĐỒ (Map Image + Pins) -->
+                    <div class="relative bg-primary/90 min-h-[400px] flex items-center justify-center p-4 overflow-hidden">
+                        <!-- 1. The Map Image (Provided URL) -->
+                        <img src="https://sackim.com/wp-content/uploads/2022/04/hinh-anh-ban-do-viet-nam-vector-03.jpg" 
+                             alt="Bản đồ Việt Nam - Làng nghề" 
+                             class="w-full h-full object-contain opacity-90 transition duration-300 scale-125 group-hover:scale-130"
+                             onerror="this.onerror=null;this.src='https://placehold.co/400x900/4A90E2/FFF8E1?text=BẢN+ĐỒ+VIỆT+NAM';"
+                             style="max-height: 90vh;">
+
+                        <!-- 2. Overlay Container for Pins (relative to the map image container) -->
+                        <!-- Kích thước 100% để phủ kín khu vực hình ảnh bản đồ -->
+                        <div class="absolute inset-0 pointer-events-none flex justify-center items-center">
+                            
+                            <div class="relative w-full h-full max-w-lg"> <!-- Relative container cho các pins -->
+
+                                <!-- Pin: Hà Nội/Bát Tràng (Gốm) -->
+                                <div class="map-pin-container absolute" style="top: 19%; left: 31%;">
+                                    <div class="map-pin w-5 h-5 rounded-full bg-red-600 border-2 border-secondary shadow-lg"></div>
+                                    <span class="absolute top-1/2 left-6 -mt-3 whitespace-nowrap text-black text-sm font-bold text-display drop-shadow">Hà Nội</span>
+                                </div>
+
+                                <!-- Pin: Huế (Trung) -->
+                                <div class="map-pin-container absolute" style="top: 42%; left: 36%;">
+                                    <div class="map-pin w-5 h-5 rounded-full bg-red-600 border-2 border-secondary shadow-lg"></div>
+                                    <span class="absolute top-1/2 left-6 -mt-3 whitespace-nowrap text-black text-sm font-bold text-display drop-shadow">Huế</span>
+                                </div>
+
+                                <!-- Pin: TP.HCM (Nam) -->
+                                <div class="map-pin-container absolute" style="top: 68%; left: 42%;">
+                                    <div class="map-pin w-5 h-5 rounded-full bg-red-600 border-2 border-secondary shadow-lg"></div>
+                                    <span class="absolute top-1/2 left-6 -mt-3 whitespace-nowrap text-black text-sm font-bold text-display drop-shadow">TP.HCM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NEW SECTION: DASHBOARD PHẢN HỒI KHÁCH HÀNG -->
+            <section class="container mx-auto px-4 my-16">
+                <div class="bg-white rounded-2xl shadow-2xl p-8 lg:p-10">
+                    <h2 class="text-3xl text-primary font-bold mb-8 text-display border-b border-primary/30 pb-3">
+                        Đánh giá & Phản hồi Khách hàng
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                        
+                        <!-- COLUMN 1: KẾT QUẢ TỔNG QUAN (KPI Card) -->
+                        <div class="lg:col-span-1 bg-primary text-white rounded-xl p-6 flex flex-col items-center text-center shadow-xl">
+                            <p class="text-sm font-semibold text-secondary mb-2 text-display">ĐIỂM TRUNG BÌNH CHUNG</p>
+                            <div class="text-7xl font-extrabold text-secondary mb-2 text-display">
+                                4.9
+                            </div>
+                            <div class="text-sm space-x-1 mb-4">
+                                <span class="text-secondary">★</span>
+                                <span class="text-secondary">★</span>
+                                <span class="text-secondary">★</span>
+                                <span class="text-secondary">★</span>
+                                <span class="text-secondary">★</span>
+                            </div>
+                            <span class="text-white mb-6">(12,500+ đánh giá)</span>
+                            <p class="text-xs opacity-80">98% khách hàng hài lòng về chất lượng sản phẩm và dịch vụ.</p>
+                        </div>
+
+                        <!-- COLUMN 2 & 3: STATISTIC CARDS (Grid 2x2) -->
+                        <div class="lg:col-span-2 grid grid-cols-2 gap-4">
+                            
+                            <!-- Stat Card 1: Orders -->
+                            <div class="bg-gray-100 p-4 rounded-xl shadow-md border-t-4 border-primary">
+                                <p class="text-xs text-gray-500 font-semibold uppercase mb-1">TỔNG ĐƠN HÀNG</p>
+                                <p class="text-3xl font-bold text-primary text-display mb-2">3,450+</p>
+                                <p class="text-xs text-gray-600 mt-1">Giao dịch thành công trong năm nay.</p>
+                            </div>
+                            
+                            <!-- Stat Card 2: Customers -->
+                            <div class="bg-gray-100 p-4 rounded-xl shadow-md border-t-4 border-secondary">
+                                <p class="text-xs text-gray-500 font-semibold uppercase mb-1">KHÁCH HÀNG</p>
+                                <p class="text-3xl font-bold text-primary text-display mb-2">1,800+</p>
+                                <p class="text-xs text-gray-600 mt-1">Khách hàng thân thiết và quay lại mua hàng.</p>
+                            </div>
+                            
+                            <!-- Stat Card 3: Feedback Speed -->
+                            <div class="bg-gray-100 p-4 rounded-xl shadow-md border-t-4 border-secondary">
+                                <p class="text-xs text-gray-500 font-semibold uppercase mb-1">TỐC ĐỘ PHẢN HỒI</p>
+                                <p class="text-3xl font-bold text-primary text-display mb-2">45s</p>
+                                <p class="text-xs text-gray-600 mt-1">Thời gian phản hồi trung bình của đội CSKH.</p>
+                            </div>
+                            
+                            <!-- Stat Card 4: Green Commitment -->
+                            <div class="bg-gray-100 p-4 rounded-xl shadow-md border-t-4 border-primary">
+                                <p class="text-xs text-gray-500 font-semibold uppercase mb-1">CAM KẾT XANH</p>
+                                <p class="text-3xl font-bold text-primary text-display mb-2">90%</p>
+                                <p class="text-xs text-gray-600 mt-1">Sản phẩm có chứng nhận Green Tag.</p>
+                            </div>
+
+                        </div>
+
+                        <!-- COLUMN 4: RATING BREAKDOWN (Visualization Mock) -->
+                        <div class="lg:col-span-1 p-4 bg-gray-50 rounded-xl shadow-md">
+                            <p class="text-base font-bold text-primary mb-3 text-display">Phân tích Đánh giá Sao</p>
+                            
+                            <!-- Rating 5 Star -->
+                            <div class="flex items-center space-x-2 mb-1 text-sm">
+                                <span class="font-bold">5 ★</span>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary h-2.5 rounded-full rating-bar-5" style="width:85%"></div>
+                                </div>
+                                <span class="text-gray-600 text-xs">85%</span>
+                            </div>
+
+                            <!-- Rating 4 Star -->
+                            <div class="flex items-center space-x-2 mb-1 text-sm">
+                                <span class="font-bold">4 ★</span>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary h-2.5 rounded-full rating-bar-4" style="width:10%"></div>
+                                </div>
+                                <span class="text-gray-600 text-xs">10%</span>
+                            </div>
+                            
+                            <!-- Rating 3 Star -->
+                            <div class="flex items-center space-x-2 mb-1 text-sm">
+                                <span class="font-bold">3 ★</span>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary h-2.5 rounded-full rating-bar-3" style="width:3%"></div>
+                                </div>
+                                <span class="text-gray-600 text-xs">3%</span>
+                            </div>
+                            
+                            <!-- Rating 2 Star -->
+                            <div class="flex items-center space-x-2 mb-1 text-sm">
+                                <span class="font-bold">2 ★</span>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary h-2.5 rounded-full rating-bar-2" style="width:1%"></div>
+                                </div>
+                                <span class="text-gray-600 text-xs">1%</span>
+                            </div>
+                            
+                            <!-- Rating 1 Star -->
+                            <div class="flex items-center space-x-2 mb-1 text-sm">
+                                <span class="font-bold">1 ★</span>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary h-2.5 rounded-full rating-bar-1" style="width:1%"></div>
+                                </div>
+                                <span class="text-gray-600 text-xs">1%</span>
+                            </div>
+                            
+                            <p class="text-xs text-center text-gray-500 mt-4">Tất cả dữ liệu đã được xác thực.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+            <!-- END DASHBOARD SECTION -->
+
+            <!-- NEW SECTION: FOUNDER SECTION (4 Founders) -->
+            <section class="container mx-auto px-4 my-16 text-left">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl text-primary font-black text-display uppercase tracking-widest">Đội ngũ Sáng lập</h2>
+                    <div class="w-24 h-1 bg-secondary mx-auto mt-4 rounded-full"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+                    <!-- Founder 1 -->
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:-translate-y-2 transition-all duration-300 border border-primary/5">
+                        <div class="h-64 overflow-hidden">
+                            <img src="Phương Anh.jpg" class="w-full h-full object-cover transition duration-500" alt="Founder 1">
+                        </div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-xl font-black text-primary text-display uppercase mb-1">Huỳnh Lương Phương Anh</h3>
+                            <p class="text-[10px] text-secondary font-bold uppercase tracking-widest mb-4">CEO & Founder</p>
+                            <div class="relative">
+                                <span class="absolute -top-4 -left-2 text-4xl text-primary/10 font-serif">“</span>
+                                <p class="text-xs text-gray-600 italic leading-relaxed">VietSoul là nhịp cầu nối liền quá khứ và tương lai, nơi mỗi món quà gửi đi là một mảnh linh hồn Việt được lan tỏa.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Founder 2 -->
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:-translate-y-2 transition-all duration-300 border border-primary/5">
+                        <div class="h-64 overflow-hidden">
+                            <img src="Linh.png" class="w-full h-full object-cover transition duration-500" alt="Founder 2">
+                        </div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-xl font-black text-primary text-display uppercase mb-1">Phạm Nguyễn Huyền Linh</h3>
+                            <p class="text-[10px] text-secondary font-bold uppercase tracking-widest mb-4">COO & Co-Founder</p>
+                            <div class="relative">
+                                <span class="absolute -top-4 -left-2 text-4xl text-primary/10 font-serif">“</span>
+                                <p class="text-xs text-gray-600 italic leading-relaxed">Chúng tôi tin rằng sự bền vững của văn hóa nằm ở việc tạo ra sinh kế hạnh phúc cho những nghệ nhân làng nghề.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Founder 3 -->
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:-translate-y-2 transition-all duration-300 border border-primary/5">
+                        <div class="h-64 overflow-hidden">
+                            <img src="Thành.jpg" class="w-full h-full object-cover transition duration-500" alt="Founder 3">
+                        </div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-xl font-black text-primary text-display uppercase mb-1">Dương Tiến Thành</h3>
+                            <p class="text-[10px] text-secondary font-bold uppercase tracking-widest mb-4">CTO & Co-Founder</p>
+                            <div class="relative">
+                                <span class="absolute -top-4 -left-2 text-4xl text-primary/10 font-serif">“</span>
+                                <p class="text-xs text-gray-600 italic leading-relaxed">Công nghệ không thay thế bàn tay người thợ, nó giúp kể câu chuyện di sản theo cách hiện đại và minh bạch nhất.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Founder 4 -->
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden group hover:-translate-y-2 transition-all duration-300 border border-primary/5">
+                        <div class="h-64 overflow-hidden">
+                            <img src="Khánh.jpg" class="w-full h-full object-cover transition duration-500" alt="Founder 4">
+                        </div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-xl font-black text-primary text-display uppercase mb-1">Nguyễn Nam Khánh</h3>
+                            <p class="text-[10px] text-secondary font-bold uppercase tracking-widest mb-4">Design Director & Co-Founder</p>
+                            <div class="relative">
+                                <span class="absolute -top-4 -left-2 text-4xl text-primary/10 font-serif">“</span>
+                                <p class="text-xs text-gray-600 italic leading-relaxed">Mỗi thiết kế tại VietSoul đều mang hơi thở đương đại nhưng không bao giờ xa rời gốc rễ văn hóa bản địa.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- PAGE 2: MARKETPLACE PAGE -->
+        <main id="products-page" class="hidden-page flex-grow container mx-auto px-4 py-8 max-w-7xl text-left">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <!-- Sidebar -->
+                <aside class="md:col-span-3 bg-white p-6 rounded-xl shadow-lg h-fit sticky top-28">
+                    <h3 class="text-xl font-bold text-primary mb-4 border-b pb-2 text-display uppercase tracking-widest">Danh mục Văn hóa</h3>
+                    <div id="filter-container" class="space-y-2">
+                        <button data-filter="all" class="filter-btn active w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition font-heading">TẤT CẢ SẢN PHẨM</button>
+                        <button data-filter="tranh" class="filter-btn w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition font-heading">TRANH DÂN GIAN</button>
+                        <button data-filter="gom" class="filter-btn w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition font-heading">GỐM SỨ & ĐAN LÁT</button>
+                        <button data-filter="lua" class="filter-btn w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition font-heading">LỤA & VẢI THỦ CÔNG</button>
+                        <button data-filter="dotuong" class="filter-btn w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition font-heading">ĐỒ THỜ TƯỢNG</button>
+                        <button data-filter="gift" class="filter-btn w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition font-heading">QUÀ TẶNG ESG</button>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary mt-8 mb-4 border-b pb-2 text-display uppercase tracking-widest">Tiêu chí Xanh</h3>
+                    <label class="flex items-center space-x-2 text-sm cursor-pointer hover:text-primary transition group">
+                        <input type="checkbox" id="green-tag-filter" class="rounded text-primary focus:ring-primary w-4 h-4">
+                        <span class="font-medium">Chỉ hiển thị "Green Tag" 🌿</span>
+                    </label>
+                </aside>
+
+                <!-- Grid -->
+                <section class="md:col-span-9">
+                    <div class="flex justify-between items-end mb-8 border-b-2 border-primary/20 pb-4">
+                        <div>
+                            <h2 class="text-3xl font-bold text-primary text-display uppercase tracking-wider">Chợ Văn Hóa Số</h2>
+                            <p class="text-xs text-gray-500 mt-1 uppercase tracking-widest">Tinh hoa làng nghề Việt Nam</p>
+                        </div>
+                        <button onclick="showPage('home')" class="text-xs font-bold text-gray-400 hover:text-primary transition">← Quay lại Trang Chủ</button>
+                    </div>
+                    <div id="marketplace-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- JS Renders Full Data here -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+        <footer class="bg-primary text-white mt-10 p-8">
+            <div class="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-3 text-secondary text-display">VIET SOUL</h3>
+                    <p class="text-sm opacity-80">Nơi lưu giữ hồn Việt qua từng sản phẩm thủ công tinh xảo, từ làng nghề truyền thống.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-3 border-b border-secondary/50 pb-1 text-display">Danh Mục Chính</h4>
+                    <ul class="space-y-1 text-sm">
+                        <li><a href="#" class="hover:text-secondary transition duration-150">Đồ Gốm Sứ</a></li>
+                        <li><a href="#" class="hover:text-secondary transition duration-150">Vải Thêu</a></li>
+                        <li><a href="#" class="hover:text-secondary transition duration-150">Tranh Dân gian</a></li>
+                        <li><a href="#" class="hover:text-secondary transition duration-150">Đồ Gỗ Mỹ Nghệ</a></li>
+                        <li><a href="#" class="hover:text-secondary transition duration-150">Trang Sức</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-3 border-b border-secondary/50 pb-1 text-display">Hỗ Trợ Khách Hàng</h4>
+                    <ul class="space-y-1 text-sm">
+                        <li><a href="#" class="hover:text-secondary transition duration-150">Liên Hệ</a></li>
+                        <li><a href="#" class="hover:text-secondary transition duration-150">Chính Sách Đổi Trả</a></li>
+                        <li><a href="#" class="hover:text-secondary transition duration-150">Hướng Dẫn Mua Hàng</a></li>
+                        <li><a href="#" class="hover:text-secondary transition duration-150">Tuyển Dụng</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-3 border-b border-secondary/50 pb-1 text-display">Liên Hệ</h4>
+                    <p class="text-sm">Địa chỉ: 123 Ngũ Hành Sơn, Đà Nẵng, Việt Nam</p>
+                    <p class="text-sm">Email: contact@vietsoul.vn</p>
+                    <p class="text-sm">Điện thoại: (024) 1234 5678</p>
+                </div>
+            </div>
+            <div class="text-center text-sm opacity-70 mt-8 pt-4 border-t border-white/20">
+                &copy; 2025 Viet Soul. Bảo lưu mọi quyền.
+            </div>
+        </footer>
+
+    <!-- PRODUCT DETAIL SIDEBAR -->
+    <div id="detail-sidebar" class="fixed inset-y-0 right-0 w-full md:w-[450px] bg-white shadow-2xl z-[60] transform translate-x-full transition-transform duration-500 overflow-y-auto p-8 flex flex-col text-left">
+        <div class="flex justify-between items-center border-b border-primary/10 pb-4 mb-6">
+            <h3 class="text-2xl font-bold text-primary text-display uppercase">Chi tiết sản phẩm</h3>
+            <button id="close-sidebar-btn" class="text-gray-300 hover:text-red-600 transition text-2xl">❌</button>
+        </div>
+        <div id="product-detail-content" class="flex-grow scroll-smooth">
+            <div id="product-summary" class="mb-8"></div>
+            <div class="border-t border-primary/5 pt-6">
+                <div class="flex space-x-1 border-b border-primary/10">
+                    <button class="tab-btn active px-4 py-2 text-sm uppercase font-heading" data-tab="story">AI STORYTELLING</button>
+                    <button class="tab-btn px-4 py-2 text-sm uppercase font-heading" data-tab="green">GREEN TAG</button>
+                </div>
+                <div id="tab-story" class="pt-6">
+                    <div id="chat-interface" class="bg-[#fcf8f5] h-96 rounded-xl p-4 flex flex-col shadow-inner border border-primary/5">
+                        <div id="chat-window" class="flex-grow overflow-y-auto space-y-4 pr-2 text-sm leading-relaxed"></div>
+                        <div class="mt-4 flex bg-white rounded-full p-1 border border-primary/10 shadow-sm">
+                            <input type="text" id="chat-input" placeholder="Hỏi AI về nghệ nhân..." class="flex-grow bg-transparent px-4 py-2 text-xs focus:outline-none">
+                            <button id="chat-send" class="bg-primary text-white p-2 rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-900 transition">↑</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-green" class="pt-6 hidden">
+                    <ul id="green-list" class="space-y-4 text-sm text-gray-700 italic"></ul>
+                </div>
+            </div>
+        </div>
+        <button class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:shadow-2xl transition mt-8 uppercase font-heading tracking-widest text-sm">THÊM VÀO GIỎ HÀNG</button>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script type="module">
+        // --- MASTER DATA (KẾT HỢP DỮ LIỆU CẢ 2 TRANG) ---
+        const allProducts = [
+            { id: 1, name: "Tranh Đông Hồ 'Mục Đồng'", description: "Tranh Gỗ Sơn Mài | Làng Sình", price: "150.000", sold: "987", category: "tranh", location: "Huế", artist: "Nguyễn Văn B", isGreen: true, img: "https://noithatbinhminh.com.vn/wp-content/uploads/2021/11/tranh-dong-ho-06.jpg", fallback: "https://placehold.co/600x400/8B0000/FFF8E1?text=Tranh+Đông+Hồ", tags: ["Mực in sinh học", "Bao bì Kraft tái chế", "Eco-Delivery"], story: "Tranh Mục Đồng cưỡi trâu thổi sáo thể hiện cảnh thái bình. Nghệ nhân B đã khắc gỗ hơn 50 năm để tạo ra bản in này." },
+            { id: 2, name: "Áo Dài Lụa Tơ Tằm", description: "Chất liệu Tơ Tằm cao cấp | Vạn Phúc", price: "500.000", sold: "2346", category: "lua", location: "Hà Nội", artist: "HTX Vạn Phúc", isGreen: true, img: "https://tse3.mm.bing.net/th/id/OIP.lhv8Zf1PwAa9LOToaNPNFgHaJ4?cb=ucfimg2&ucfimg=1&w=2250&h=3000&rs=1&pid=ImgDetMain&o=7&rm=3", fallback: "https://placehold.co/600x400/A0522D/FFF8E1?text=Áo+Dài+Lụa", tags: ["Tơ tằm tự nhiên", "Dệt tay truyền thống"], story: "Lụa Vạn Phúc mướt nhẹ, nhuộm từ lá cây tự nhiên, là biểu tượng của sự thanh cao phụ nữ Việt." },
+            { id: 3, name: "Khăn Choàng Lụa", description: "Họa tiết chim công | Lụa Bảo Lộc", price: "250.000", sold: "6785", category: "lua", location: "Lâm Đồng", artist: "Sắc Việt", isGreen: true, img: "https://di2ponv0v5otw.cloudfront.net/posts/2021/09/25/614fe8d2941f17ecbef0ee87/m_614fe921275e55bb97e034b2.jpg", fallback: "https://placehold.co/600x400/B8860B/FFF8E1?text=Khăn+Lụa", tags: ["Thêu tay thủ công", "Bao bì tái chế"], story: "Chim công đại diện cho sự quyền quý. Khăn được thêu tay tỉ mỉ bởi các nghệ nhân trẻ tại Lâm Đồng." },
+            { id: 4, name: "Hoa giấy Thanh Tiên", description: "Hoa giấy truyền thống lâu đời | Huế", price: "100.000", sold: "1005", category: "gift", location: "Huế", artist: "Làng Thanh Tiên", isGreen: true, img: "https://dulichtudo.vn/wp-content/uploads/2021/03/3-lang-nghe-hoa-giay-thanh-tien-768x512.jpg", fallback: "https://placehold.co/600x400/FF6B35/FFF8E1?text=Hoa+Giấy", tags: ["Giấy tre nhuộm màu thực vật"], story: "Hoa giấy Thanh Tiên rực rỡ, không tàn, là niềm tự hào của vùng đất Cố đô Huế." },
+            { id: 5, name: "Gốm Sứ Bát Tràng", description: "Bộ ấm chén cao cấp | Bát Tràng", price: "600.000", sold: "567", category: "gom", location: "Hà Nội", artist: "HTX Bát Tràng", isGreen: true, img: "https://images.squarespace-cdn.com/content/v1/5ef75ab2b9e1265aaf984ec3/fb7790c5-bf44-4aa3-909d-1016088707c2/Porcelain+faceted.bowls+with+markings.jpeg", fallback: "https://placehold.co/600x400/4A90E2/FFF8E1?text=Gốm+Bát+Tràng", tags: ["Đất sét tự nhiên", "Nung tiết kiệm điện"], story: "Ấm chén được nung ở 1200 độ C, loại bỏ chì và độc tố, giữ trọn hương vị trà xanh Việt." },
+            { id: 6, name: "Giỏ Đan Tre", description: "Thủ công mỹ nghệ | Phú Vinh", price: "120.000", sold: "423", category: "gom", location: "Bắc Ninh", artist: "Nghệ nhân T", isGreen: false, img: "https://images.baoangiang.com.vn/image/fckeditor/upload/2023/20231119/images/450afdbf5640801ed951.jpg", fallback: "https://placehold.co/600x400/7CB342/FFF8E1?text=Giỏ+Tre", tags: ["Tre già tự nhiên"], story: "Tre được phơi nắng để tạo màu óng vàng thay vì sử dụng hóa chất nhuộm công nghiệp." },
+            { id: 7, name: "Tượng Quan Âm Gỗ", description: "Gỗ Tái Chế | Đồng Kỵ", price: "1.000.000", sold: "12", category: "dotuong", location: "Bắc Ninh", artist: "Làng Đồng Kỵ", isGreen: true, img: "https://godinh.com/web/image/1714964/image3.png?access_token=b5472d81-b8e6-48c6-925f-d499eb9f49ed", fallback: "https://placehold.co/600x400/8B4513/FFF8E1?text=Tượng+Gỗ", tags: ["Gỗ quý tái sinh", "Chạm thủ công"], story: "Sử dụng gỗ từ các công trình kiến trúc cũ bị dỡ bỏ để chạm khắc thành các tác phẩm tâm linh." },
+            { id: 8, name: "Túi Vải Thêu Sen", description: "Vải Bông Tái Chế | ESG", price: "250.000", sold: "301", category: "lua", location: "TP.HCM", artist: "HTX Xã hội X", isGreen: true, img: "https://i.etsystatic.com/32617721/r/il/e9c3b6/3697004149/il_1588xN.3697004149_jjyv.jpg", fallback: "https://placehold.co/600x400/616161/FFF8E1?text=Túi+Vải", tags: ["Tạo việc làm xã hội", "Vải cotton tái chế"], story: "Mỗi chiếc túi thêu tay giúp tạo sinh kế cho cộng đồng người khuyết tật vượt khó tại TP.HCM." },
+            { id: 9, name: "Tranh Ngũ Hổ Làng Sình", description: "Tranh Dân Gian | Di sản Huế", price: "450.000", sold: "1.2K", artist: "Nghệ nhân Nguyễn Văn B", category: "tranh", location: "Huế", img: "https://file.hstatic.net/200000017614/file/tranh-ngu-ho-1_430d9f1800314e81b3e2fb3a27f5c9a6.jpg", fallback: "https://placehold.co/600x400/8B0000/FFF8E1?text=Tranh+Ngũ+Hổ", tags: ["Bao bì tái chế (Kraft)", "Mực in sinh học", "Giao hàng Carbon thấp (Eco-Delivery)"], story: "Tranh Ngũ Hổ là biểu tượng hộ mệnh của người dân Huế. Bức tranh này được khắc từ khuôn gỗ hơn 100 năm tuổi, in bằng tay với mực sinh học. Câu chuyện về người thợ Kỳ Hữu Phước đã giữ gìn bí quyết này qua 5 thế hệ là minh chứng cho sự kiên trì với di sản văn hóa phi vật thể.", isGreen: true },
+            { id: 10, name: "Bình Gốm Hoa Sen Khảm", description: "Gốm Bát Tràng | Tinh hoa Đất", price: "890.000", sold: "850", artist: "Hợp tác xã Bát Tràng", category: "gom", location: "Hà Nội", img: "https://i.etsystatic.com/20886807/r/il/15690c/1977818224/il_1080xN.1977818224_mo5c.jpg", fallback: "https://placehold.co/600x400/4A90E2/FFF8E1?text=Gốm+Hoa+Sen", tags: ["Sản xuất tiết kiệm năng lượng", "Nguyên liệu đất sét tự nhiên", "Không sử dụng chì/hóa chất độc hại"], story: "Bình gốm này được nung ở nhiệt độ thấp hơn tiêu chuẩn công nghiệp để giảm phát thải khí CO2, nhưng vẫn giữ được độ bền. Họa tiết Hoa Sen tượng trưng cho sự thanh khiết, được khảm thủ công tỉ mỉ trong 3 ngày.", isGreen: true },
+            { id: 11, name: "Khăn Lụa Vạn Phúc Nhuộm Chàm", description: "Lụa Vạn Phúc | Hà Nội", price: "280.000", sold: "2.1K", artist: "Thương hiệu Sắc Việt", category: "lua", location: "Hà Nội", img: "https://cdn.shopify.com/s/files/1/0101/0450/4401/products/c4-jpg-1575540676767_600x.jpg?v=1575622995", fallback: "https://placehold.co/600x400/A0522D/FFF8E1?text=Khăn+Lụa", tags: ["Nhuộm tự nhiên (Chàm)", "Vật liệu vải lụa tơ tằm", "Bao bì giấy tái chế"], story: "Sản phẩm sử dụng phương pháp nhuộm Chàm truyền thống, không thải hóa chất ra môi trường. Khăn lụa mềm mại, giữ ấm tốt, là món quà lý tưởng cho người thân yêu. Câu chuyện về người phụ nữ khởi nghiệp ở làng lụa Vạn Phúc trong thời đại số.", isGreen: true },
+            { id: 12, name: "Bộ Quà tặng Văn hóa 'Hồn Việt'", description: "Quà tặng ESG | Di sản số", price: "1.250.000", sold: "320", artist: "VietSoul Originals", category: "gift", location: "Đa dạng", img: "https://file.hstatic.net/200000290629/article/0dfe42b7-2dda-4150-a01a-2a6d5315e6d5_ec514eccc14143e2bea9ac86d0f7fad3_fb6e16db861c4c208ed744fa6fee83fa.jpeg", fallback: "https://placehold.co/600x400/920c0c/fcf8f5?text=Quà+ESG", tags: ["100% vật liệu tái chế", "Sản phẩm được chứng nhận Green Tag", "Tạo sinh kế cho 3 làng nghề"], story: "Bộ quà tặng được thiết kế dành riêng cho doanh nghiệp (B2B) nhằm mục đích ESG. Bao gồm một món gốm mini, một cuốn sổ tay từ giấy tái chế và một postcard Tranh Sình. Mỗi hộp quà là một thông điệp về trách nhiệm xã hội.", isGreen: true },
+            { id: 13, name: "Đồ trang trí mây tre đan", description: "Mây Tre Đan | Huế", price: "150.000", sold: "410", artist: "Hợp tác xã Bao La", category: "gom", location: "Huế", img: "https://dantra.vn/uploads/san-pham/thi-cong/decor-tuong/trang-tri-may-tre-dan-16.jpg", fallback: "https://placehold.co/600x400/7CB342/FFF8E1?text=Mây+Tre", tags: ["Nguyên liệu mây tre tự nhiên"], story: "Món đồ trang trí nhà cửa, sử dụng nguyên liệu mây tre đan tự nhiên, phơi nắng để tạo màu, không dùng thuốc nhuộm công nghiệp. Sản phẩm này không có Green Tag vì vận chuyển xa, nhưng nghệ nhân cam kết về nguyên liệu.", isGreen: false },
+            { id: 14, name: "Tranh Sơn Mài 'Phố Cổ'", description: "Sơn Mài Cao Cấp | Hà Nội", price: "500.000", sold: "55", artist: "Họa sĩ V", category: "tranh", location: "Hà Nội", img: "https://www.kiettacnghethuat.com/wp-content/uploads/ha-noi-moi-tranh-son-mai-pho-cua-hoa-si-nguyen-van-nghia.jpg", fallback: "https://placehold.co/600x400/8B4513/FFF8E1?text=Sơn+Mài", tags: ["Nguyên liệu nhựa cây sơn tự nhiên", "Giảm thiểu hóa chất", "Độ bền trên 50 năm"], story: "Tranh sơn mài vẽ phong cảnh Phố Cổ, sử dụng nhựa cây sơn tự nhiên. Quy trình chế tác mất 6 tháng với nhiều công đoạn mài và đánh bóng thủ công. Đây là một tác phẩm nghệ thuật có giá trị đầu tư và bền vững về mặt vật liệu.", isGreen: true }
+        ];
+
+        // --- MOCK CHAT RESPONSES (KỊCH BẢN CHAT CHO 14 SẢN PHẨM) ---
+        const USER_TURN = 'user_turn';
+        const mockChatResponses = {};
+        allProducts.forEach(p => {
+            mockChatResponses[p.id] = [
+                { role: 'ai', text: `Chào bạn, tôi là AI Hướng Dẫn của VietSoul. Tôi có thể kể cho bạn nghe về lịch sử của <b>${p.name}</b>, ý nghĩa từng chi tiết, hoặc người nghệ nhân tạo ra nó. Bạn muốn biết gì?` },
+                { role: USER_TURN, text: 'Kể cho tôi nghe về câu chuyện của sản phẩm này đi.' },
+                { role: 'ai', text: `Tuyệt vời! ${p.story} Sản phẩm này đến từ ${p.location} và được tạo ra bởi ${p.artist}. Bạn có muốn biết về các tiêu chí Xanh (Green Tag) của nó không?` }
+            ];
+        });
+
+        // --- GLOBAL STATE ---
+        let currentProductChatId = null;
+        let chatHistory = {};
+
+        // --- NAVIGATION ---
+        window.showPage = (pageId) => {
+            document.getElementById('home-page').classList.toggle('hidden-page', pageId !== 'home');
+            document.getElementById('products-page').classList.toggle('hidden-page', pageId !== 'products');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (pageId === 'products') renderMarketplace();
+        };
+
+        // --- RENDER HOMEPAGE (STYLE CHỈNH Y NHƯ MẪU) ---
+        function renderHomeProducts() {
+            const grid = document.getElementById('featured-products-grid');
+            if (!grid) return;
+            // Hiển thị 6 sản phẩm đầu tiên theo style của bạn
+            const homeItems = allProducts.slice(0, 6);
+            grid.innerHTML = homeItems.map(p => `
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group hover:shadow-2xl transition duration-300">
+                    <a href="javascript:void(0)" onclick="openProductDetail(${p.id})" class="block">
+                        <div class="relative overflow-hidden aspect-square">
+                            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110" onerror="this.src='${p.fallback}';">
+                        </div>
+                    </a>
+                    <div class="p-4 bg-white">
+                        <h3 class="text-base font-semibold text-gray-800 mb-1 line-clamp-2 hover:text-primary transition duration-200 font-heading">
+                            <a href="javascript:void(0)" onclick="openProductDetail(${p.id})">${p.name}</a>
+                        </h3>
+                        <p class="text-sm text-gray-500 mb-2">${p.description}</p>
+                        <div class="flex items-center justify-between">
+                            <p class="text-xl font-bold text-primary">${p.price} ₫</p>
+                            <p class="text-xs text-gray-400">Đã bán ${p.sold}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- RENDER MARKETPLACE ---
+        let filterCat = 'all';
+        let greenTag = false;
+
+        function renderMarketplace() {
+            const grid = document.getElementById('marketplace-grid');
+            const filtered = allProducts.filter(p => (filterCat === 'all' || p.category === filterCat) && (!greenTag || p.isGreen));
+            grid.innerHTML = filtered.map(p => `
+                <div class="product-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer" onclick="openProductDetail(${p.id})">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="${p.img}" class="w-full h-full object-cover" alt="${p.name}">
+                        ${p.isGreen ? '<span class="absolute top-2 right-2 bg-primary text-white text-[10px] px-2 py-1 rounded-full font-bold">🌿</span>' : ''}
+                    </div>
+                    <div class="p-4">
+                        <p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest mb-1">${p.location} | ${p.artist}</p>
+                        <h4 class="font-bold text-gray-800 line-clamp-1 mb-2 font-heading uppercase text-sm">${p.name}</h4>
+                        <div class="flex justify-between items-center border-t pt-2">
+                            <span class="font-black text-primary text-lg">${p.price} ₫</span>
+                            <span class="text-[10px] text-gray-400 font-bold uppercase">Bán: ${p.sold}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- DETAIL & CHAT LOGIC ---
+        let activeId = null;
+        window.openProductDetail = (id) => {
+            const p = allProducts.find(x => x.id === id);
+            activeId = id;
+            document.getElementById('product-summary').innerHTML = `
+                <img src="${p.img}" class="w-full h-44 object-cover rounded-xl shadow-lg mb-6">
+                <h4 class="text-3xl font-black text-primary text-display leading-tight uppercase mb-2">${p.name}</h4>
+                <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mb-3">${p.artist} — ${p.location}</p>
+                <div class="bg-gray-50 p-4 rounded-xl flex justify-between items-center border border-primary/5">
+                    <span class="text-2xl font-black text-primary">${p.price} ₫</span>
+                    <span class="text-[10px] font-bold text-secondary uppercase">Đã bán ${p.sold}</span>
+                </div>
+            `;
+            document.getElementById('green-list').innerHTML = p.tags.map(t => `<li class="flex items-center space-x-2"><span>✅</span><p>${t}</p></li>`).join('');
+            document.getElementById('chat-window').innerHTML = `<div class="flex justify-start items-start space-x-3"><div class="p-3 chat-bubble-ai rounded-xl shadow-sm text-xs">Chào bạn! Tôi có thể kể cho bạn về di sản của <b>${p.name}</b> hoặc tâm huyết của nghệ nhân <b>${p.artist}</b>. Bạn muốn tìm hiểu gì?</div></div>`;
+            document.getElementById('detail-sidebar').classList.remove('translate-x-full');
+        };
+
+        const sendBtn = document.getElementById('chat-send');
+        const input = document.getElementById('chat-input');
+        const chatWin = document.getElementById('chat-window');
+
+        function handleChat() {
+            const val = input.value.trim();
+            if (!val || !activeId) return;
+            chatWin.innerHTML += `<div class="flex justify-end mb-3"><div class="p-3 chat-bubble-user rounded-xl shadow-sm text-xs">${val}</div></div>`;
+            input.value = '';
+            chatWin.scrollTop = chatWin.scrollHeight;
+            setTimeout(() => {
+                const p = allProducts.find(x => x.id === activeId);
+                chatWin.innerHTML += `<div class="flex justify-start items-start space-x-3"><div class="p-3 chat-bubble-ai rounded-xl shadow-sm text-xs"><b>VietSoul AI:</b> Về ${p.name}, đây là câu chuyện: ${p.story}</div></div>`;
+                chatWin.scrollTop = chatWin.scrollHeight;
+            }, 1000);
+        }
+        sendBtn.onclick = handleChat;
+        input.onkeypress = (e) => e.key === 'Enter' && handleChat();
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHomeProducts();
+
+            // Filter logic
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    filterCat = btn.dataset.filter;
+                    renderMarketplace();
+                };
+            });
+            document.getElementById('green-tag-filter').onchange = (e) => {
+                greenTag = e.target.checked;
+                renderMarketplace();
+            };
+
+            // Sidebar Tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    document.getElementById('tab-story').classList.toggle('hidden', btn.dataset.tab !== 'story');
+                    document.getElementById('tab-green').classList.toggle('hidden', btn.dataset.tab !== 'green');
+                };
+            });
+            document.getElementById('close-sidebar-btn').onclick = () => document.getElementById('detail-sidebar').classList.add('translate-x-full');
+
+            // Countdown Timer
+            let time = 2 * 24 * 60 * 60;
+            setInterval(() => {
+                time--;
+                const d = Math.floor(time/86400);
+                const h = Math.floor((time%86400)/3600);
+                const m = Math.floor((time%3600)/60);
+                const s = time % 60;
+                document.getElementById('days').textContent = d.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = h.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = m.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = s.toString().padStart(2, '0');
+            }, 1000);
+
+            document.getElementById('user-id-display').textContent = `ID: GUEST_${Math.random().toString(36).substring(7).toUpperCase()}`;
+        });
+    </script>
+</body>
+</html>
