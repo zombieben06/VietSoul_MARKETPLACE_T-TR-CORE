@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viet Soul - Trang Chủ & Marketplace</title>
+    <title>Viet Soul - Di Sản Văn Hóa Số</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Fonts -->
@@ -71,12 +71,14 @@
             background-color: var(--color-primary);
             color: white;
             border-bottom-right-radius: 0;
+            max-width: 85%;
         }
         .chat-bubble-ai {
             background-color: white;
             color: #333;
             border: 1px solid #e2c68c;
             border-bottom-left-radius: 0;
+            max-width: 90%;
         }
 
         .tab-btn.active {
@@ -85,11 +87,6 @@
             font-weight: bold;
         }
 
-        .filter-btn {
-            background-color: white;
-            color: var(--color-primary);
-            transition: all 0.3s;
-        }
         .filter-btn.active {
             background-color: var(--color-primary);
             color: white;
@@ -103,13 +100,13 @@
     <!-- SHARED HEADER -->
     <header class="bg-primary shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-            <span onclick="showPage('home')" class="text-5xl text-white font-bold tracking-widest text-display cursor-pointer uppercase">VIET SOUL</span>
-            <span class="text-sm ml-3 px-2 py-1 rounded-full bg-brand-accent text-white font-semibold">
-                CULTURE & GREEN COMMERCE
-            </span>
+            <div onclick="showPage('home')" class="flex items-center space-x-4 cursor-pointer">
+                <span class="text-5xl text-white font-bold tracking-widest text-display uppercase">VIET SOUL</span>
+                <span class="hidden md:inline-block text-[10px] px-2 py-1 rounded-full bg-secondary text-primary font-bold tracking-wider">CULTURE & GREEN COMMERCE</span>
+            </div>
             
             <div class="hidden lg:flex flex-1 mx-8 max-w-xl">
-                <input type="text" placeholder="Tìm kiếm sản phẩm, danh mục..." class="w-full p-2 rounded-l-md border-none focus:ring-2 focus:ring-secondary text-gray-800 text-sm" />
+                <input type="text" placeholder="Tìm kiếm di sản, làng nghề..." class="w-full p-2 rounded-l-md border-none focus:ring-2 focus:ring-secondary text-gray-800 text-sm" />
                 <button class="bg-secondary text-primary p-2 rounded-r-md hover:opacity-90 transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </button>
@@ -129,18 +126,19 @@
         <nav class="bg-primary border-t border-white/20 text-sm">
             <div class="container mx-auto px-4">
                 <ul class="flex justify-center space-x-4 lg:space-x-8 py-2 overflow-x-auto">
-                    <li><a href="javascript:void(0)" onclick="showPage('home')" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading">TRANG CHỦ</a></li>
-                    <li><a href="javascript:void(0)" onclick="showPage('products')" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading">DANH MỤC</a></li>
-                    <li><a href="#" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading">MÃ GIẢM GIÁ</a></li>
-                    <li><a href="#" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading">BỘ SƯU TẬP</a></li>
-                    <li><a href="#" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading">LÀNG NGHỀ</a></li>
-                    <li><a href="#" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading">CHĂM SÓC KHÁCH HÀNG</a></li>
+                    <li><a href="javascript:void(0)" onclick="showPage('home')" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading uppercase">Trang Chủ</a></li>
+                    <li><a href="javascript:void(0)" onclick="showPage('products')" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading uppercase">Danh mục</a></li>
+                    <li><a href="#" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading uppercase">Mã giảm giá</a></li>
+                    <li><a href="#" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading uppercase">Làng nghề</a></li>
+                    <li><a href="#" class="block py-2 px-2 text-white hover:text-secondary border-b-2 border-transparent hover:border-secondary transition whitespace-nowrap font-heading uppercase">Chăm sóc khách hàng</a></li>
                 </ul>
             </div>
         </nav>
     </header>
 
+    <!-- MAIN CONTENT -->
     <div id="main-content">
+        
         <!-- PAGE 1: HOME PAGE -->
         <main id="home-page" class="flex-1">
             <!-- Hero/Banner Section (3 cột) -->
@@ -564,18 +562,17 @@ Chúng tôi không chỉ bán những sản phẩm thủ công; chúng tôi đan
         </main>
 
         <!-- PAGE 2: MARKETPLACE PAGE -->
-        <main id="products-page" class="hidden-page flex-grow container mx-auto px-4 py-8 max-w-7xl text-left">
+        <main id="products-page" class="hidden-page flex-grow container mx-auto px-4 py-8 max-w-7xl text-left animate-in fade-in duration-500">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
                 <!-- Sidebar -->
                 <aside class="md:col-span-3 bg-white p-6 rounded-xl shadow-lg h-fit sticky top-28">
                     <h3 class="text-xl font-bold text-primary mb-4 border-b pb-2 text-display uppercase tracking-widest">Danh mục Văn hóa</h3>
-                    <div id="filter-container" class="space-y-2">
-                        <button data-filter="all" class="filter-btn active w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition font-heading">TẤT CẢ SẢN PHẨM</button>
-                        <button data-filter="tranh" class="filter-btn w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition font-heading">TRANH DÂN GIAN</button>
-                        <button data-filter="gom" class="filter-btn w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition font-heading">GỐM SỨ & ĐAN LÁT</button>
-                        <button data-filter="lua" class="filter-btn w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition font-heading">LỤA & VẢI THỦ CÔNG</button>
-                        <button data-filter="dotuong" class="filter-btn w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition font-heading">ĐỒ THỜ TƯỢNG</button>
-                        <button data-filter="gift" class="filter-btn w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition font-heading">QUÀ TẶNG ESG</button>
+                    <div id="filter-container" class="space-y-2 font-heading uppercase text-[10px]">
+                        <button data-filter="all" class="filter-btn active w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition">Tất cả sản phẩm</button>
+                        <button data-filter="tranh" class="filter-btn w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition">Tranh Dân Gian</button>
+                        <button data-filter="gom" class="filter-btn w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition">Gốm Sứ & Đan Lát</button>
+                        <button data-filter="lua" class="filter-btn w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition">Lụa & Vải</button>
+                        <button data-filter="dotuong" class="filter-btn w-full text-left py-2 px-4 rounded-lg hover:bg-primary hover:text-white transition">Đồ Thờ Tượng</button>
                     </div>
                     <h3 class="text-xl font-bold text-primary mt-8 mb-4 border-b pb-2 text-display uppercase tracking-widest">Tiêu chí Xanh</h3>
                     <label class="flex items-center space-x-2 text-sm cursor-pointer hover:text-primary transition group">
@@ -589,12 +586,12 @@ Chúng tôi không chỉ bán những sản phẩm thủ công; chúng tôi đan
                     <div class="flex justify-between items-end mb-8 border-b-2 border-primary/20 pb-4">
                         <div>
                             <h2 class="text-3xl font-bold text-primary text-display uppercase tracking-wider">Chợ Văn Hóa Số</h2>
-                            <p class="text-xs text-gray-500 mt-1 uppercase tracking-widest">Tinh hoa làng nghề Việt Nam</p>
+                            <p class="text-xs text-gray-500 mt-1 uppercase tracking-widest">Tinh hoa di sản nghệ nhân Việt</p>
                         </div>
-                        <button onclick="showPage('home')" class="text-xs font-bold text-gray-400 hover:text-primary transition">← Quay lại Trang Chủ</button>
+                        <button onclick="showPage('home')" class="text-[10px] font-bold text-gray-400 hover:text-primary transition uppercase tracking-widest">← Về Trang Chủ</button>
                     </div>
                     <div id="marketplace-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- JS Renders Full Data here -->
+                        <!-- JS Renders here -->
                     </div>
                 </section>
             </div>
@@ -639,7 +636,7 @@ Chúng tôi không chỉ bán những sản phẩm thủ công; chúng tôi đan
             </div>
         </footer>
 
-    <!-- PRODUCT DETAIL SIDEBAR -->
+    <!-- SIDEBAR DETAIL -->
     <div id="detail-sidebar" class="fixed inset-y-0 right-0 w-full md:w-[450px] bg-white shadow-2xl z-[60] transform translate-x-full transition-transform duration-500 overflow-y-auto p-8 flex flex-col text-left">
         <div class="flex justify-between items-center border-b border-primary/10 pb-4 mb-6">
             <h3 class="text-2xl font-bold text-primary text-display uppercase">Chi tiết sản phẩm</h3>
@@ -648,30 +645,30 @@ Chúng tôi không chỉ bán những sản phẩm thủ công; chúng tôi đan
         <div id="product-detail-content" class="flex-grow scroll-smooth">
             <div id="product-summary" class="mb-8"></div>
             <div class="border-t border-primary/5 pt-6">
-                <div class="flex space-x-1 border-b border-primary/10">
-                    <button class="tab-btn active px-4 py-2 text-sm uppercase font-heading" data-tab="story">AI STORYTELLING</button>
-                    <button class="tab-btn px-4 py-2 text-sm uppercase font-heading" data-tab="green">GREEN TAG</button>
+                <div class="flex space-x-1 border-b border-primary/10 font-heading text-[10px] font-black tracking-widest uppercase">
+                    <button class="tab-btn active px-4 py-2" data-tab="story">AI STORYTELLING</button>
+                    <button class="tab-btn px-4 py-2" data-tab="green">GREEN TAG</button>
                 </div>
                 <div id="tab-story" class="pt-6">
                     <div id="chat-interface" class="bg-[#fcf8f5] h-96 rounded-xl p-4 flex flex-col shadow-inner border border-primary/5">
-                        <div id="chat-window" class="flex-grow overflow-y-auto space-y-4 pr-2 text-sm leading-relaxed"></div>
+                        <div id="product-chat-window" class="flex-grow overflow-y-auto space-y-4 pr-2 text-xs leading-relaxed"></div>
                         <div class="mt-4 flex bg-white rounded-full p-1 border border-primary/10 shadow-sm">
-                            <input type="text" id="chat-input" placeholder="Hỏi AI về nghệ nhân..." class="flex-grow bg-transparent px-4 py-2 text-xs focus:outline-none">
-                            <button id="chat-send" class="bg-primary text-white p-2 rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-900 transition">↑</button>
+                            <!-- Chú ý các ID: product-chat-input và product-send-btn -->
+                            <input type="text" id="product-chat-input" placeholder="Gõ câu trả lời của bạn..." class="flex-grow bg-transparent px-4 py-2 text-[11px] focus:outline-none" disabled>
+                            <button id="product-send-btn" class="bg-primary text-white p-2 rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-900 transition disabled:opacity-50" disabled>↑</button>
                         </div>
                     </div>
                 </div>
                 <div id="tab-green" class="pt-6 hidden">
-                    <ul id="green-list" class="space-y-4 text-sm text-gray-700 italic"></ul>
+                    <ul id="green-tag-list" class="space-y-4 text-sm text-gray-700 italic"></ul>
                 </div>
             </div>
         </div>
-        <button class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:shadow-2xl transition mt-8 uppercase font-heading tracking-widest text-sm">THÊM VÀO GIỎ HÀNG</button>
+        <button class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:shadow-2xl transition mt-8 uppercase font-heading tracking-widest text-sm">Thêm vào giỏ hàng</button>
     </div>
 
     <!-- SCRIPTS -->
     <script type="module">
-        // --- MASTER DATA (KẾT HỢP DỮ LIỆU CẢ 2 TRANG) ---
         const allProducts = [
             { id: 1, name: "Tranh Đông Hồ 'Mục Đồng'", description: "Tranh Gỗ Sơn Mài | Làng Sình", price: "150.000", sold: "987", category: "tranh", location: "Hà Nội", artist: "Nguyễn Văn B", isGreen: true, img: "https://noithatbinhminh.com.vn/wp-content/uploads/2021/11/tranh-dong-ho-06.jpg", fallback: "https://placehold.co/600x400/8B0000/FFF8E1?text=Tranh+Đông+Hồ", tags: ["Mực in sinh học", "Bao bì Kraft tái chế", "Eco-Delivery"], story: "Tranh Mục Đồng cưỡi trâu thổi sáo thể hiện cảnh thái bình. Nghệ nhân B đã khắc gỗ hơn 50 năm để tạo ra bản in này." },
             { id: 2, name: "Áo Dài Lụa Tơ Tằm", description: "Chất liệu Tơ Tằm cao cấp | Vạn Phúc", price: "500.000", sold: "2346", category: "lua", location: "Hà Nội", artist: "HTX Vạn Phúc", isGreen: true, img: "https://tse3.mm.bing.net/th/id/OIP.lhv8Zf1PwAa9LOToaNPNFgHaJ4?cb=ucfimg2&ucfimg=1&w=2250&h=3000&rs=1&pid=ImgDetMain&o=7&rm=3", fallback: "https://placehold.co/600x400/A0522D/FFF8E1?text=Áo+Dài+Lụa", tags: ["Tơ tằm tự nhiên", "Dệt tay truyền thống"], story: "Lụa Vạn Phúc mướt nhẹ, nhuộm từ lá cây tự nhiên, là biểu tượng của sự thanh cao phụ nữ Việt." },
@@ -689,14 +686,16 @@ Chúng tôi không chỉ bán những sản phẩm thủ công; chúng tôi đan
             { id: 14, name: "Tranh Sơn Mài 'Phố Cổ'", description: "Sơn Mài Cao Cấp | Hà Nội", price: "500.000", sold: "55", artist: "Họa sĩ V", category: "tranh", location: "Hà Nội", img: "https://www.kiettacnghethuat.com/wp-content/uploads/ha-noi-moi-tranh-son-mai-pho-cua-hoa-si-nguyen-van-nghia.jpg", fallback: "https://placehold.co/600x400/8B4513/FFF8E1?text=Sơn+Mài", tags: ["Nguyên liệu nhựa cây sơn tự nhiên", "Giảm thiểu hóa chất", "Độ bền trên 50 năm"], story: "Tranh sơn mài vẽ phong cảnh Phố Cổ, sử dụng nhựa cây sơn tự nhiên. Quy trình chế tác mất 6 tháng với nhiều công đoạn mài và đánh bóng thủ công. Đây là một tác phẩm nghệ thuật có giá trị đầu tư và bền vững về mặt vật liệu.", isGreen: true }
         ];
 
-        // --- MOCK CHAT RESPONSES (KỊCH BẢN CHAT CHO 14 SẢN PHẨM) ---
+        // --- MOCK CHAT RESPONSES (5 BƯỚC ĐỒNG BỘ) ---
         const USER_TURN = 'user_turn';
         const mockChatResponses = {};
         allProducts.forEach(p => {
             mockChatResponses[p.id] = [
                 { role: 'ai', text: `Chào bạn, tôi là AI Hướng Dẫn của VietSoul. Tôi có thể kể cho bạn nghe về lịch sử của <b>${p.name}</b>, ý nghĩa từng chi tiết, hoặc người nghệ nhân tạo ra nó. Bạn muốn biết gì?` },
+                { role: USER_TURN, text: 'Hello' },
+                { role: 'ai', text: `Chào bạn! Sản phẩm <b>${p.name}</b> là một phần di sản Việt Nam, thủ công bởi ${p.artist} tại ${p.location}. Bạn muốn tìm hiểu quy trình hay câu chuyện đằng sau?` },
                 { role: USER_TURN, text: 'Kể cho tôi nghe về câu chuyện của sản phẩm này đi.' },
-                { role: 'ai', text: `Tuyệt vời! ${p.story} Sản phẩm này đến từ ${p.location} và được tạo ra bởi ${p.artist}. Bạn có muốn biết về các tiêu chí Xanh (Green Tag) của nó không?` }
+                { role: 'ai', text: `Tuyệt vời! ${p.story} Bạn có quan tâm đến chứng nhận Xanh (Green Tag) của nó không?` }
             ];
         });
 
@@ -712,11 +711,10 @@ Chúng tôi không chỉ bán những sản phẩm thủ công; chúng tôi đan
             if (pageId === 'products') renderMarketplace();
         };
 
-        // --- RENDER HOMEPAGE (STYLE CHỈNH Y NHƯ MẪU) ---
+        // --- HOMEPAGE RENDERING (Y NHƯ MẪU CỦA BẠN) ---
         function renderHomeProducts() {
             const grid = document.getElementById('featured-products-grid');
             if (!grid) return;
-            // Hiển thị 6 sản phẩm đầu tiên theo style của bạn
             const homeItems = allProducts.slice(0, 6);
             grid.innerHTML = homeItems.map(p => `
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden group hover:shadow-2xl transition duration-300">
@@ -732,25 +730,24 @@ Chúng tôi không chỉ bán những sản phẩm thủ công; chúng tôi đan
                         <p class="text-sm text-gray-500 mb-2">${p.description}</p>
                         <div class="flex items-center justify-between">
                             <p class="text-xl font-bold text-primary">${p.price} ₫</p>
-                            <p class="text-xs text-gray-400">Đã bán ${p.sold}</p>
+                            <p class="text-xs text-gray-400 font-bold uppercase">Đã bán ${p.sold}</p>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        // --- RENDER MARKETPLACE ---
+        // --- MARKETPLACE RENDERING ---
         let filterCat = 'all';
-        let greenTag = false;
-
+        let greenFlag = false;
         function renderMarketplace() {
             const grid = document.getElementById('marketplace-grid');
-            const filtered = allProducts.filter(p => (filterCat === 'all' || p.category === filterCat) && (!greenTag || p.isGreen));
+            const filtered = allProducts.filter(p => (filterCat === 'all' || p.category === filterCat) && (!greenFlag || p.isGreen));
             grid.innerHTML = filtered.map(p => `
                 <div class="product-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer" onclick="openProductDetail(${p.id})">
                     <div class="relative h-48 overflow-hidden">
-                        <img src="${p.img}" class="w-full h-full object-cover" alt="${p.name}">
-                        ${p.isGreen ? '<span class="absolute top-2 right-2 bg-primary text-white text-[10px] px-2 py-1 rounded-full font-bold">🌿</span>' : ''}
+                        <img src="${p.img}" class="w-full h-full object-cover" onerror="this.src='${p.fallback}';">
+                        ${p.isGreen ? '<span class="absolute top-2 right-2 bg-primary text-white text-[10px] px-2 py-1 rounded-full font-bold shadow-lg">🌿</span>' : ''}
                     </div>
                     <div class="p-4">
                         <p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest mb-1">${p.location} | ${p.artist}</p>
@@ -764,49 +761,105 @@ Chúng tôi không chỉ bán những sản phẩm thủ công; chúng tôi đan
             `).join('');
         }
 
-        // --- DETAIL & CHAT LOGIC ---
-        let activeId = null;
+        // --- SIDEBAR DETAIL & CHAT LOGIC ---
         window.openProductDetail = (id) => {
             const p = allProducts.find(x => x.id === id);
-            activeId = id;
+            if (!p) return;
+            currentProductChatId = id;
+            
             document.getElementById('product-summary').innerHTML = `
-                <img src="${p.img}" class="w-full h-44 object-cover rounded-xl shadow-lg mb-6">
+                <img src="${p.img}" class="w-full h-44 object-cover rounded-xl shadow-lg mb-6 border border-primary/10" onerror="this.src='${p.fallback}';">
                 <h4 class="text-3xl font-black text-primary text-display leading-tight uppercase mb-2">${p.name}</h4>
                 <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mb-3">${p.artist} — ${p.location}</p>
                 <div class="bg-gray-50 p-4 rounded-xl flex justify-between items-center border border-primary/5">
                     <span class="text-2xl font-black text-primary">${p.price} ₫</span>
-                    <span class="text-[10px] font-bold text-secondary uppercase">Đã bán ${p.sold}</span>
+                    <span class="text-[10px] font-bold text-secondary uppercase tracking-widest">Đã bán ${p.sold}</span>
                 </div>
             `;
-            document.getElementById('green-list').innerHTML = p.tags.map(t => `<li class="flex items-center space-x-2"><span>✅</span><p>${t}</p></li>`).join('');
-            document.getElementById('chat-window').innerHTML = `<div class="flex justify-start items-start space-x-3"><div class="p-3 chat-bubble-ai rounded-xl shadow-sm text-xs">Chào bạn! Tôi có thể kể cho bạn về di sản của <b>${p.name}</b> hoặc tâm huyết của nghệ nhân <b>${p.artist}</b>. Bạn muốn tìm hiểu gì?</div></div>`;
+            
+            document.getElementById('green-tag-list').innerHTML = (p.tags || ["Cam kết thủ công"]).map(t => `
+                <li class="flex items-center space-x-2 text-primary font-bold"><span>✅</span><p class="text-gray-700 font-normal">${t}</p></li>
+            `).join('');
+
+            const win = document.getElementById('product-chat-window');
+            win.innerHTML = '';
+            chatHistory[id] = 0;
+            
+            // Đảm bảo Reset input khi mở sản phẩm mới
+            document.getElementById('product-chat-input').disabled = true;
+            document.getElementById('product-send-btn').disabled = true;
+
+            setTimeout(() => startChatSimulation(id), 500);
+
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('[data-tab="story"]').classList.add('active');
+            document.getElementById('tab-story').classList.remove('hidden');
+            document.getElementById('tab-green').classList.add('hidden');
+
             document.getElementById('detail-sidebar').classList.remove('translate-x-full');
         };
 
-        const sendBtn = document.getElementById('chat-send');
-        const input = document.getElementById('chat-input');
-        const chatWin = document.getElementById('chat-window');
-
-        function handleChat() {
-            const val = input.value.trim();
-            if (!val || !activeId) return;
-            chatWin.innerHTML += `<div class="flex justify-end mb-3"><div class="p-3 chat-bubble-user rounded-xl shadow-sm text-xs">${val}</div></div>`;
-            input.value = '';
-            chatWin.scrollTop = chatWin.scrollHeight;
-            setTimeout(() => {
-                const p = allProducts.find(x => x.id === activeId);
-                chatWin.innerHTML += `<div class="flex justify-start items-start space-x-3"><div class="p-3 chat-bubble-ai rounded-xl shadow-sm text-xs"><b>VietSoul AI:</b> Về ${p.name}, đây là câu chuyện: ${p.story}</div></div>`;
-                chatWin.scrollTop = chatWin.scrollHeight;
-            }, 1000);
+        function addMessage(role, text) {
+            const window = document.getElementById('product-chat-window');
+            const div = document.createElement('div');
+            div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start items-start space-x-2'} mb-3`;
+            if (role === 'user') {
+                div.innerHTML = `<div class="p-3 chat-bubble-user rounded-xl shadow-sm text-[11px] font-medium">${text}</div>`;
+            } else {
+                div.innerHTML = `
+                    <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-[8px] text-white font-bold">AI</div>
+                    <div class="p-3 chat-bubble-ai rounded-xl shadow-sm text-[11px] leading-relaxed"><b>VietSoul AI:</b> ${text}</div>
+                `;
+            }
+            window.appendChild(div);
+            window.scrollTop = window.scrollHeight;
         }
-        sendBtn.onclick = handleChat;
-        input.onkeypress = (e) => e.key === 'Enter' && handleChat();
+
+        function startChatSimulation(id) {
+            const currentStep = chatHistory[id] || 0;
+            const data = mockChatResponses[id];
+            const input = document.getElementById('product-chat-input');
+            const sendBtn = document.getElementById('product-send-btn');
+
+            if (data && currentStep < data.length) {
+                const msg = data[currentStep];
+                if (msg.role === 'ai') {
+                    addMessage('ai', msg.text);
+                    chatHistory[id]++;
+                    // Nếu bước tiếp theo là lượt của người dùng -> BẬT INPUT
+                    if (chatHistory[id] < data.length && data[chatHistory[id]].role === USER_TURN) {
+                        setTimeout(() => {
+                            input.disabled = false;
+                            sendBtn.disabled = false;
+                            input.focus();
+                        }, 500);
+                    }
+                }
+            }
+        }
+
+        document.getElementById('product-send-btn').onclick = () => {
+            const input = document.getElementById('product-chat-input');
+            const val = input.value.trim();
+            if (!val || input.disabled) return;
+            
+            addMessage('user', val);
+            input.value = '';
+            input.disabled = true;
+            document.getElementById('product-send-btn').disabled = true;
+            
+            chatHistory[currentProductChatId]++; // Tăng step
+            setTimeout(() => startChatSimulation(currentProductChatId), 1000);
+        };
+
+        document.getElementById('product-chat-input').onkeypress = (e) => {
+            if (e.key === 'Enter') document.getElementById('product-send-btn').click();
+        };
 
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             renderHomeProducts();
-
-            // Filter logic
+            
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.onclick = () => {
                     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -816,11 +869,10 @@ Chúng tôi không chỉ bán những sản phẩm thủ công; chúng tôi đan
                 };
             });
             document.getElementById('green-tag-filter').onchange = (e) => {
-                greenTag = e.target.checked;
+                greenFlag = e.target.checked;
                 renderMarketplace();
             };
-
-            // Sidebar Tabs
+            document.getElementById('close-sidebar-btn').onclick = () => document.getElementById('detail-sidebar').classList.add('translate-x-full');
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.onclick = () => {
                     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -829,20 +881,14 @@ Chúng tôi không chỉ bán những sản phẩm thủ công; chúng tôi đan
                     document.getElementById('tab-green').classList.toggle('hidden', btn.dataset.tab !== 'green');
                 };
             });
-            document.getElementById('close-sidebar-btn').onclick = () => document.getElementById('detail-sidebar').classList.add('translate-x-full');
 
-            // Countdown Timer
+            // Countdown
             let time = 2 * 24 * 60 * 60;
             setInterval(() => {
                 time--;
-                const d = Math.floor(time/86400);
-                const h = Math.floor((time%86400)/3600);
-                const m = Math.floor((time%3600)/60);
-                const s = time % 60;
-                document.getElementById('days').textContent = d.toString().padStart(2, '0');
-                document.getElementById('hours').textContent = h.toString().padStart(2, '0');
-                document.getElementById('minutes').textContent = m.toString().padStart(2, '0');
-                document.getElementById('seconds').textContent = s.toString().padStart(2, '0');
+                if(document.getElementById('days')) document.getElementById('days').textContent = Math.floor(time/86400).toString().padStart(2, '0');
+                if(document.getElementById('hours')) document.getElementById('hours').textContent = Math.floor((time%86400)/3600).toString().padStart(2, '0');
+                if(document.getElementById('minutes')) document.getElementById('minutes').textContent = Math.floor((time%3600)/60).toString().padStart(2, '0');
             }, 1000);
 
             document.getElementById('user-id-display').textContent = `ID: GUEST_${Math.random().toString(36).substring(7).toUpperCase()}`;
