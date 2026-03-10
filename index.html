@@ -292,7 +292,7 @@
             backdrop-filter: blur(8px);
         }
         .fog-main-label {
-            font-family: 'Playfair Display', serif;
+            font-family: 'SVN Agency FB', sans-serif;
             font-size: clamp(1.3rem, 4.5vw, 2.2rem);
             font-weight: 900; letter-spacing: 0.32em; text-transform: uppercase;
             color: #3A0000;
@@ -314,7 +314,8 @@
             color: rgba(58,0,0,0.72); letter-spacing: 0.17em;
         }
     </style>
-    
+    <!-- VietSoul Enhancements -->
+    <link rel="stylesheet" href="vietsoul-enhancements.css">
 </head>
 <body class="min-h-screen flex flex-col">
     <!-- ═══ FOG HOÀI CỔ OVERLAY ═══ -->
@@ -524,7 +525,7 @@
                 <!-- Badge ngày lễ -->
                 <div style="display:flex;justify-content:center;padding-top:32px;padding-bottom:8px;">
                     <div style="background:#FFD700;color:#8B0000;font-size:10px;font-weight:900;letter-spacing:0.15em;text-transform:uppercase;padding:5px 18px;border-radius:999px;display:flex;align-items:center;gap:6px;box-shadow:0 2px 12px rgba(0,0,0,0.25);">
-                        <span style="font-size:14px;">🎖️</span> ĐẠI LỄ 30/4 &amp; 1/5 · 2026
+                        <span style="font-size:14px;">🎖️</span> ĐẠI LỄ 30/4 &amp; 1/5 · 2025
                     </div>
                 </div>
 
@@ -806,7 +807,7 @@
             <!-- PAGE 1: HOME PAGE -->
             <main id="home-page" class="flex-1">
                 <!-- Hero/Banner Section (3 cột) -->
-                <section class="px-4 mt-6">
+                <section class="px-4 mt-2">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <!-- Banner 1: Đèn Lồng -->
                         <a href="#" class="relative overflow-hidden rounded-lg shadow-xl group h-64 sm:h-80 lg:h-96">
@@ -949,7 +950,7 @@
                         
                         <!-- RIGHT COLUMN (Featured Products) -->
                         <div class="lg:col-span-3 xl:col-span-9">
-                            <h2 class="text-3xl text-primary font-bold mb-4 pb-2 border-b-2 border-primary text-display">SẢN PHẨM NỔI BẬT</h2>
+                            <h2 class="text-3xl text-primary font-bold mb-4 pb-2 border-b-2 border-yellow-500 text-display">SẢN PHẨM NỔI BẬT</h2>
                             
                             <!-- PRODUCT GRID -->
                             <div id="featured-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -957,7 +958,7 @@
                             </div>
 
                             <div class="text-center mt-6">
-                                <button onclick="showPage('products')" class="px-10 py-3 border-2 border-primary text-primary font-bold rounded-full hover:bg-primary hover:text-white transition uppercase text-sm tracking-widest font-heading shadow-md">
+                                <button onclick="showPage('products')" class="px-10 py-3 border-2 border-primary text-primary font-bold rounded-full bg-white hover:bg-gray-50 transition uppercase text-sm tracking-widest font-heading shadow-md">
                                     Xem tất cả sản phẩm
                                 </button>
                             </div>
@@ -969,6 +970,98 @@
                 <section class="container mx-auto px-4 my-16">
 
                 <!-- ══ BEST SELLER SECTION ══════════════════════════════════ -->
+                <!-- GỢI Ý HÔM NAY -->
+                <section id="section-goiy" class="container mx-auto px-4 my-10">
+                    <div class="flex items-center justify-between mb-5 pb-3 border-b-2 border-yellow-500">
+                        <div class="flex items-center gap-3">
+                            <span style="font-size:22px;">✨</span>
+                            <h2 class="text-2xl font-black text-primary text-display uppercase tracking-wide">Gợi Ý Hôm Nay</h2>
+                            <span id="goiy-date" style="font-size:10px;font-weight:700;color:rgba(139,0,0,.4);letter-spacing:.15em;text-transform:uppercase;"></span>
+                        </div>
+                        <button onclick="renderGoiY()" style="font-size:10px;font-weight:900;color:#8B0000;background:none;border:1.5px solid rgba(139,0,0,.2);padding:5px 12px;border-radius:99px;cursor:pointer;letter-spacing:.1em;text-transform:uppercase;" onmouseover="this.style.background='rgba(139,0,0,.06)'" onmouseout="this.style.background='none'">
+                            🔄 Xem khác
+                        </button>
+                    </div>
+                    <div id="goiy-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+                </section>
+
+                <script>
+                (function() {
+                    var _goiyRendered = false;
+                    var _goiyIndexes = [];
+
+                    function pickGoiY() {
+                        var pool = window.allProductsRef || [];
+                        if (pool.length === 0) return [];
+                        // Shuffle seeded by date so "hôm nay" stays consistent per day
+                        var seed = new Date().toDateString();
+                        var shuffled = pool.slice().sort(function(a,b){
+                            var ha = (a.id * 2654435761 + seed.charCodeAt(0)) % 997;
+                            var hb = (b.id * 2654435761 + seed.charCodeAt(0)) % 997;
+                            return ha - hb;
+                        });
+                        return shuffled.slice(0, 8);
+                    }
+
+                    window.renderGoiY = function() {
+                        var grid = document.getElementById('goiy-grid');
+                        if (!grid) return;
+                        var pool = window.allProductsRef || [];
+                        if (pool.length === 0) { setTimeout(window.renderGoiY, 300); return; }
+
+                        // Rotate picks on each manual refresh
+                        var all = pool.slice();
+                        if (window._goiyOffset === undefined) window._goiyOffset = 0;
+                        var picks = [];
+                        for (var i = 0; i < 8; i++) {
+                            picks.push(all[(window._goiyOffset + i) % all.length]);
+                        }
+                        window._goiyOffset = (window._goiyOffset + 4) % all.length;
+
+                        grid.style.opacity = '0';
+                        setTimeout(function() {
+                            grid.innerHTML = picks.map(function(p) {
+                                var greenBadge = p.isGreen ? '<span style="position:absolute;top:8px;left:8px;background:#2e7d32;color:white;font-size:8px;font-weight:900;padding:2px 7px;border-radius:99px;letter-spacing:.08em;">🌿 GREEN</span>' : '';
+                                return '<div onclick="openProductDetail&&openProductDetail(' + p.id + ')" style="background:white;border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.07);border:1px solid rgba(139,0,0,.06);transition:transform .2s,box-shadow .2s;" onmouseover="this.style.transform=\'translateY(-3px)\';this.style.boxShadow=\'0 8px 28px rgba(0,0,0,.13)\'" onmouseout="this.style.transform=\'\';this.style.boxShadow=\'0 2px 12px rgba(0,0,0,.07)\'">'
+                                    + '<div style="position:relative;height:140px;overflow:hidden;">'
+                                    + '<img src="' + p.img + '" onerror="this.src=\'' + p.fallback + '\'" alt="' + p.name + '" style="width:100%;height:100%;object-fit:cover;transition:transform .4s;" onmouseover="this.style.transform=\'scale(1.06)\'" onmouseout="this.style.transform=\'\'">'
+                                    + greenBadge
+                                    + '</div>'
+                                    + '<div style="padding:10px 12px 12px;">'
+                                    + '<p style="font-size:8px;color:#9a7a60;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px;">' + p.location + '</p>'
+                                    + '<h5 style="font-size:12px;font-weight:900;color:#8B0000;font-family:\'SVN Agency FB\',\'Playfair Display\',serif;text-transform:uppercase;line-height:1.25;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">' + p.name + '</h5>'
+                                    + '<div style="display:flex;align-items:center;justify-content:space-between;">'
+                                    + '<span style="font-size:13px;font-weight:900;color:#8B0000;">' + p.price + '₫</span>'
+                                    + '<span style="font-size:9px;color:#9a7a60;font-weight:600;">Đã bán ' + p.sold + '</span>'
+                                    + '</div></div></div>';
+                            }).join('');
+                            grid.style.transition = 'opacity .3s';
+                            grid.style.opacity = '1';
+                        }, 200);
+
+                        // Set date label
+                        var dateEl = document.getElementById('goiy-date');
+                        if (dateEl) {
+                            var d = new Date();
+                            dateEl.textContent = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear();
+                        }
+                    };
+
+                    // Auto-render when allProductsRef is ready
+                    function tryRender() {
+                        if (window.allProductsRef && window.allProductsRef.length > 0) {
+                            window.renderGoiY();
+                        } else {
+                            setTimeout(tryRender, 200);
+                        }
+                    }
+                    if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', tryRender);
+                    } else {
+                        tryRender();
+                    }
+                })();
+                </script>
                 <section id="section-bestseller" class="container mx-auto px-4 my-14">
                     <div class="flex items-end justify-between mb-6">
                         <div>
@@ -976,9 +1069,9 @@
                                 <span class="text-secondary text-2xl">⭐</span>
                                 <h2 class="text-3xl font-black text-primary text-display uppercase tracking-wider">Best Seller</h2>
                             </div>
-                            <p class="text-xs text-gray-400 uppercase tracking-widest font-bold">Những sản phẩm được yêu thích nhất — đặt hàng nhiều nhất tháng này</p>
+                            <p class="text-xs text-black-400 uppercase tracking-widest font-bold">Những sản phẩm được yêu thích nhất — đặt hàng nhiều nhất tháng này</p>
                         </div>
-                        <button onclick="showPage('products')" class="text-[11px] font-black text-primary hover:text-red-800 uppercase tracking-widest border-b-2 border-secondary pb-0.5 transition whitespace-nowrap">Xem tất cả →</button>
+                        <button onclick="showPage('products')" class="text-[11px] font-black text-primary hover:text-red-800 uppercase tracking-widest border-b-2 border-yellow-500 pb-0.5 transition whitespace-nowrap">Xem tất cả →</button>
                     </div>
 
                     <!-- 5 sản phẩm best seller ngang hàng -->
@@ -1529,10 +1622,10 @@
 
                     <!-- Grid -->
                     <section class="md:col-span-9">
-                        <div class="flex justify-between items-end mb-8 border-b-2 border-primary/20 pb-4">
+                        <div class="flex justify-between items-end mb-8 border-b-2 border-yellow-500 pb-4">
                             <div>
                                 <h2 class="text-3xl font-bold text-primary text-display uppercase tracking-wider">Chợ Văn Hóa Số</h2>
-                                <p class="text-xs text-gray-500 mt-1 uppercase tracking-widest">Tinh hoa di sản nghệ nhân Việt</p>
+                                <p class="text-xs text-black-500 mt-1 uppercase tracking-widest">Tinh hoa di sản nghệ nhân Việt</p>
                             </div>
                             <button onclick="showPage('home')" class="text-[10px] font-bold text-gray-400 hover:text-primary transition uppercase tracking-widest">← Về Trang Chủ</button>
                         </div>
@@ -1544,14 +1637,14 @@
             </main>
                     <!-- PAGE 3: COUPONS PAGE -->
             <main id="coupons-page" class="hidden-page flex-grow container mx-auto px-4 py-8 max-w-7xl text-left">
-                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 border-b-2 border-primary/20 pb-4">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 border-b-2 border-yellow-500 pb-4">
                     <div>
                         <h2 class="text-3xl font-bold text-primary text-display uppercase tracking-wider">Mã Giảm Giá</h2>
-                        <p class="text-xs text-gray-500 mt-1 uppercase tracking-widest">Săn voucher – dùng nhanh – ưu đãi thật</p>
+                        <p class="text-xs text-black-500 mt-1 uppercase tracking-widest">Săn voucher – dùng nhanh – ưu đãi thật</p>
                     </div>
                     <div class="flex gap-3">
-                        <button onclick="showPage('home')" class="text-[10px] font-bold text-gray-400 hover:text-primary transition uppercase tracking-widest">← Về Trang Chủ</button>
-                        <button onclick="showPage('products')" class="text-[10px] font-bold text-gray-400 hover:text-primary transition uppercase tracking-widest">Sang Danh Mục →</button>
+                        <button onclick="showPage('home')" class="text-[10px] font-bold text-black-400 hover:text-primary transition uppercase tracking-widest">← Về Trang Chủ</button>
+                        <button onclick="showPage('products')" class="text-[10px] font-bold text-black-400 hover:text-primary transition uppercase tracking-widest">Sang Danh Mục →</button>
                     </div>
                 </div>
 
@@ -1752,14 +1845,14 @@
 
             <!-- PAGE 4: VILLAGES PAGE -->
             <main id="villages-page" class="hidden-page flex-grow container mx-auto px-4 py-8 max-w-7xl text-left">
-                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 border-b-2 border-primary/20 pb-4">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 border-b-2 border-yellow-500 pb-4">
                     <div>
                         <h2 class="text-3xl font-bold text-primary text-display uppercase tracking-wider">Làng Nghề</h2>
-                        <p class="text-xs text-gray-500 mt-1 uppercase tracking-widest">Bản đồ tinh hoa – câu chuyện nghệ nhân – sản phẩm nguyên bản</p>
+                        <p class="text-xs text-black-500 mt-1 uppercase tracking-widest">Bản đồ tinh hoa – câu chuyện nghệ nhân – sản phẩm nguyên bản</p>
                     </div>
                     <div class="flex gap-3">
-                        <button onclick="showPage('home')" class="text-[10px] font-bold text-gray-400 hover:text-primary transition uppercase tracking-widest">← Về Trang Chủ</button>
-                        <button onclick="showPage('products')" class="text-[10px] font-bold text-gray-400 hover:text-primary transition uppercase tracking-widest">Sang Danh Mục →</button>
+                        <button onclick="showPage('home')" class="text-[10px] font-bold text-black-400 hover:text-primary transition uppercase tracking-widest">← Về Trang Chủ</button>
+                        <button onclick="showPage('products')" class="text-[10px] font-bold text-black-400 hover:text-primary transition uppercase tracking-widest">Sang Danh Mục →</button>
                     </div>
                 </div>
 
@@ -1961,7 +2054,7 @@
                     <div class="mb-5 flex items-end justify-between">
                         <div>
                             <h3 class="text-2xl text-primary font-black text-display uppercase">Bản Đồ Làng Nghề Việt Nam</h3>
-                            <p class="text-xs text-gray-500 mt-1 uppercase tracking-widest">Chọn vùng miền · Khám phá sản phẩm đặc trưng</p>
+                            <p class="text-xs text-black-500 mt-1 uppercase tracking-widest">Chọn vùng miền · Khám phá sản phẩm đặc trưng</p>
                         </div>
                     </div>
                     <!-- Không border, sương mờ gradient 4 cạnh để phân ranh mềm -->
@@ -1973,7 +2066,7 @@
                                 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
                                 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
-                                <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:800;background:rgba(255,255,255,0.95);padding:5px 16px;border-radius:999px;font-size:10px;font-weight:800;color:#8B0000;text-transform:uppercase;letter-spacing:0.12em;box-shadow:0 3px 12px rgba(0,0,0,0.13);white-space:nowrap;pointer-events:none;">👆 Bấm vào vùng miền</div>
+                                <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:800;background:rgba(255,255,255,0.95);padding:5px 16px;border-radius:999px;font-size:10px;font-weight:800;color:#8B0000;text-transform:uppercase;letter-spacing:0.12em;box-shadow:0 3px 12px rgba(0,0,0,0.13);white-space:nowrap;pointer-events:none;">👆 Chọn vùng miền</div>
 
                                 <div id="vn-map" style="width:100%;height:580px;z-index:1;"></div>
 
@@ -2011,19 +2104,58 @@
                                         bac:{fill:'#c8e6c9',afill:'#66bb6a',stroke:'#388e3c',
                                             ft:[21.5,105.5],fz:7,
                                             coords:[[23.38,102.14],[23.38,104.70],[22.82,105.32],[22.02,106.70],[21.55,107.10],[20.92,107.35],[20.32,106.70],[20.10,106.02],[19.82,105.90],[20.10,105.42],[20.52,104.90],[20.88,104.12],[21.28,103.55],[21.68,102.90],[22.50,102.14]],
-                                            cities:[{n:'Hà Nội',lat:21.027,lng:105.834,m:true},{n:'Bắc Ninh',lat:21.186,lng:106.076,m:false},{n:'Hạ Long',lat:20.951,lng:107.085,m:false}]},
+                                            cities:[
+                                                {n:'Hà Nội',    lat:21.027,lng:105.834,m:true},
+                                                {n:'Hải Phòng', lat:20.844,lng:106.688,m:true},
+                                                {n:'Bắc Ninh',  lat:21.186,lng:106.076,m:false},
+                                                {n:'Hạ Long',   lat:20.951,lng:107.085,m:false},
+                                                {n:'Thái Nguyên',lat:21.594,lng:105.848,m:false},
+                                                {n:'Nam Định',  lat:20.420,lng:106.168,m:false},
+                                                {n:'Hải Dương', lat:20.940,lng:106.331,m:false},
+                                                {n:'Vĩnh Phúc', lat:21.360,lng:105.598,m:false},
+                                                {n:'Lào Cai',   lat:22.485,lng:103.975,m:false},
+                                                {n:'Hà Giang',  lat:22.823,lng:104.984,m:false}
+                                            ]},
                                         trung:{fill:'#fff9c4',afill:'#fff176',stroke:'#c8960c',
                                             ft:[16.0,108.0],fz:7,
                                             coords:[[19.82,105.90],[20.10,106.02],[20.32,106.70],[20.92,107.35],[21.10,107.62],[20.28,107.88],[19.38,108.18],[18.02,109.00],[17.10,108.62],[16.52,108.05],[15.95,108.38],[15.38,108.55],[14.52,108.02],[13.52,109.22],[12.22,109.30],[11.52,108.92],[11.02,107.95],[11.48,107.50],[12.48,107.75],[13.48,108.00],[14.48,107.52],[15.78,107.75],[17.02,106.52],[18.52,105.82]],
-                                            cities:[{n:'Huế',lat:16.467,lng:107.590,m:true},{n:'Đà Nẵng',lat:16.054,lng:108.202,m:true},{n:'Hội An',lat:15.880,lng:108.335,m:false}]},
+                                            cities:[
+                                                {n:'Huế',       lat:16.467,lng:107.590,m:true},
+                                                {n:'Đà Nẵng',   lat:16.054,lng:108.202,m:true},
+                                                {n:'Hội An',    lat:15.880,lng:108.335,m:false},
+                                                {n:'Quảng Nam', lat:15.573,lng:108.474,m:false},
+                                                {n:'Quảng Ngãi',lat:15.120,lng:108.792,m:false},
+                                                {n:'Quy Nhơn',  lat:13.782,lng:109.219,m:false},
+                                                {n:'Nha Trang', lat:12.238,lng:109.197,m:false},
+                                                {n:'Phan Thiết',lat:10.929,lng:108.102,m:false},
+                                                {n:'Vinh',      lat:18.671,lng:105.692,m:false},
+                                                {n:'Đồng Hới',  lat:17.480,lng:106.600,m:false}
+                                            ]},
                                         taynguyen:{fill:'#ffe0b2',afill:'#ffa726',stroke:'#e65100',
                                             ft:[13.0,108.0],fz:7,
                                             coords:[[11.02,107.95],[11.52,108.92],[12.22,109.30],[13.52,109.22],[14.48,107.52],[13.48,108.00],[12.48,107.75],[11.48,107.50]],
-                                            cities:[{n:'Gia Lai',lat:13.983,lng:108.017,m:true},{n:'Đắk Lắk',lat:12.710,lng:108.238,m:false}]},
+                                            cities:[
+                                                {n:'Gia Lai',   lat:13.983,lng:108.017,m:true},
+                                                {n:'Đắk Lắk',  lat:12.710,lng:108.238,m:true},
+                                                {n:'Kon Tum',   lat:14.349,lng:108.000,m:false},
+                                                {n:'Đà Lạt',    lat:11.940,lng:108.458,m:false},
+                                                {n:'Đắk Nông',  lat:12.005,lng:107.690,m:false}
+                                            ]},
                                         nam:{fill:'#fce4ec',afill:'#f48fb1',stroke:'#880e4f',
                                             ft:[10.5,106.2],fz:7,
                                             coords:[[11.02,107.95],[11.48,107.50],[11.02,108.00],[10.85,107.55],[10.42,107.22],[10.82,106.62],[10.02,106.48],[9.50,105.80],[8.82,105.12],[8.62,104.82],[9.18,104.52],[10.02,104.80],[10.52,104.52],[10.82,105.02]],
-                                            cities:[{n:'TP.HCM',lat:10.823,lng:106.629,m:true},{n:'Cần Thơ',lat:10.045,lng:105.747,m:false},{n:'Vũng Tàu',lat:10.346,lng:107.084,m:false}]}
+                                            cities:[
+                                                {n:'TP.HCM',    lat:10.823,lng:106.629,m:true},
+                                                {n:'Cần Thơ',   lat:10.045,lng:105.747,m:true},
+                                                {n:'Vũng Tàu',  lat:10.346,lng:107.084,m:false},
+                                                {n:'Bình Dương',lat:11.165,lng:106.652,m:false},
+                                                {n:'Đồng Nai',  lat:10.945,lng:107.241,m:false},
+                                                {n:'Tiền Giang',lat:10.360,lng:106.365,m:false},
+                                                {n:'Bến Tre',   lat:10.243,lng:106.375,m:false},
+                                                {n:'An Giang',  lat:10.521,lng:105.125,m:false},
+                                                {n:'Đồng Tháp', lat:10.672,lng:105.634,m:false},
+                                                {n:'Kiên Giang',lat:10.012,lng:105.081,m:false}
+                                            ]}
                                     };
                                     var vnMap=null, vnDots=[], vnActive=null, vnReady=false;
 
@@ -2202,17 +2334,17 @@
 
             <!-- PAGE 5: CUSTOMER SUPPORT PAGE -->
             <main id="support-page" class="hidden-page flex-grow container mx-auto px-4 py-8 max-w-7xl text-left">
-                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 border-b-2 border-primary/20 pb-4">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 border-b-2 border-yellow-500 pb-4">
                     <div>
                         <h2 class="text-3xl font-bold text-primary text-display uppercase tracking-wider">Chăm sóc khách hàng</h2>
-                        <p class="text-xs text-gray-500 mt-1 uppercase tracking-widest">
+                        <p class="text-xs text-black-500 mt-1 uppercase tracking-widest">
                             Mã khách truy cập:
                             <span id="user-id-display" class="text-primary font-black"></span>
                         </p>
                     </div>
                     <div class="flex gap-3">
-                        <button onclick="showPage('home')" class="text-[10px] font-bold text-gray-400 hover:text-primary transition uppercase tracking-widest">← Về Trang Chủ</button>
-                        <button onclick="showPage('products')" class="text-[10px] font-bold text-gray-400 hover:text-primary transition uppercase tracking-widest">Sang Danh Mục →</button>
+                        <button onclick="showPage('home')" class="text-[10px] font-bold text-black-400 hover:text-primary transition uppercase tracking-widest">← Về Trang Chủ</button>
+                        <button onclick="showPage('products')" class="text-[10px] font-bold text-black-400 hover:text-primary transition uppercase tracking-widest">Sang Danh Mục →</button>
                     </div>
                 </div>
 
@@ -2229,7 +2361,7 @@
                                 </div>
                                 <div class="rounded-xl border border-primary/10 p-4 bg-[#fcf8f5]">
                                     <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Email</p>
-                                    <p class="text-primary font-black text-lg"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0f7c7a7f7f607d7b4f79666a7b7c607a63217961">VietSoul@gmail.com</a></p>
+                                    <p class="text-primary font-black text-lg"><a href="mailto:VietSoul@gmail.com">VietSoul@gmail.com</a></p>
                                     <p class="text-xs text-gray-600 mt-1">Phản hồi trong 24h</p>
                                 </div>
                                 <div class="rounded-xl border border-primary/10 p-4 bg-[#fcf8f5]">
@@ -2328,14 +2460,14 @@
 
             <!-- PAGE 6: LOGIN PAGE -->
             <main id="login-page" class="hidden-page flex-grow container mx-auto px-4 py-8 max-w-7xl text-left">
-            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 border-b-2 border-primary/20 pb-4">
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 border-b-2 border-yellow-500 pb-4">
                 <div>
                 <h2 class="text-3xl font-bold text-primary text-display uppercase tracking-wider">Đăng nhập</h2>
-                <p class="text-xs text-gray-500 mt-1 uppercase tracking-widest">Chào mừng bạn quay lại VietSoul</p>
+                <p class="text-xs text-black-500 mt-1 uppercase tracking-widest">Chào mừng bạn quay lại VietSoul</p>
                 </div>
                 <div class="flex gap-3">
-                <button onclick="showPage('home')" class="text-[10px] font-bold text-gray-400 hover:text-primary transition uppercase tracking-widest">← Về Trang Chủ</button>
-                <button onclick="showPage('register')" class="text-[10px] font-bold text-gray-400 hover:text-primary transition uppercase tracking-widest">Chưa có tài khoản?</button>
+                <button onclick="showPage('home')" class="text-[10px] font-bold text-black-400 hover:text-primary transition uppercase tracking-widest">← Về Trang Chủ</button>
+                <button onclick="showPage('register')" class="text-[10px] font-bold text-black-400 hover:text-primary transition uppercase tracking-widest">Chưa có tài khoản?</button>
                 </div>
             </div>
 
@@ -2398,14 +2530,14 @@
 
             <!-- PAGE 7: REGISTER PAGE -->
             <main id="register-page" class="hidden-page flex-grow container mx-auto px-4 py-8 max-w-7xl text-left">
-            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 border-b-2 border-primary/20 pb-4">
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 border-b-2 border-yellow-500 pb-4">
                 <div>
                 <h2 class="text-3xl font-bold text-primary text-display uppercase tracking-wider">Đăng ký</h2>
-                <p class="text-xs text-gray-500 mt-1 uppercase tracking-widest">Tạo tài khoản VietSoul chỉ trong 1 phút</p>
+                <p class="text-xs text-black-500 mt-1 uppercase tracking-widest">Tạo tài khoản VietSoul chỉ trong 1 phút</p>
                 </div>
                 <div class="flex gap-3">
-                <button onclick="showPage('home')" class="text-[10px] font-bold text-gray-400 hover:text-primary transition uppercase tracking-widest">← Về Trang Chủ</button>
-                <button onclick="showPage('login')" class="text-[10px] font-bold text-gray-400 hover:text-primary transition uppercase tracking-widest">Đã có tài khoản?</button>
+                <button onclick="showPage('home')" class="text-[10px] font-bold text-black-400 hover:text-primary transition uppercase tracking-widest">← Về Trang Chủ</button>
+                <button onclick="showPage('login')" class="text-[10px] font-bold text-black-400 hover:text-primary transition uppercase tracking-widest">Đã có tài khoản?</button>
                 </div>
             </div>
 
@@ -2800,7 +2932,7 @@
                     <div>
                         <h4 class="text-lg font-semibold mb-3 border-b border-secondary/50 pb-1 text-display">Liên Hệ</h4>
                         <p class="text-sm">Địa chỉ: 123 Ngũ Hành Sơn, Đà Nẵng, Việt Nam</p>
-                        <p class="text-sm">Email: <a href="mailto:VietSoul@gmail.com">VietSoul@gmail.com</a></p>
+                        <p class="text-sm">Email: <a href="mailto:VietSoul@gmail.com" class="hover:text-secondary transition duration-150">VietSoul@gmail.com</a></p>
                         <p class="text-sm">Điện thoại: (024) 1234 5678</p>
                     </div>
                 </div>
@@ -2849,14 +2981,30 @@
                 { id: 4, name: "Hoa giấy Thanh Tiên", description: "Hoa giấy truyền thống lâu đời | Huế", price: "100.000", sold: "1005", category: "gift", location: "Huế", artist: "Làng Thanh Tiên", isGreen: true, img: "https://dulichtudo.vn/wp-content/uploads/2021/03/3-lang-nghe-hoa-giay-thanh-tien-768x512.jpg", fallback: "https://placehold.co/600x400/FF6B35/FFF8E1?text=Hoa+Giấy", tags: ["Giấy tre nhuộm màu thực vật"], story: "Hoa giấy Thanh Tiên rực rỡ, không tàn, là niềm tự hào của vùng đất Cố đô Huế." },
                 { id: 5, name: "Gốm Sứ Bát Tràng", description: "Bộ ấm chén cao cấp | Bát Tràng", price: "600.000", sold: "567", category: "gom", location: "Hà Nội", artist: "HTX Bát Tràng", isGreen: true, img: "https://images.squarespace-cdn.com/content/v1/5ef75ab2b9e1265aaf984ec3/fb7790c5-bf44-4aa3-909d-1016088707c2/Porcelain+faceted.bowls+with+markings.jpeg", fallback: "https://placehold.co/600x400/4A90E2/FFF8E1?text=Gốm+Bát+Tràng", tags: ["Đất sét tự nhiên", "Nung tiết kiệm điện"], story: "Ấm chén được nung ở 1200 độ C, loại bỏ chì và độc tố, giữ trọn hương vị trà xanh Việt." },
                 { id: 6, name: "Giỏ Đan Tre", description: "Thủ công mỹ nghệ | Bao La", price: "120.000", sold: "423", category: "gom", location: "Huế", artist: "Nghệ nhân T", isGreen: false, img: "https://images.baoangiang.com.vn/image/fckeditor/upload/2023/20231119/images/450afdbf5640801ed951.jpg", fallback: "https://placehold.co/600x400/7CB342/FFF8E1?text=Giỏ+Tre", tags: ["Tre già tự nhiên"], story: "Tre được phơi nắng để tạo màu óng vàng thay vì sử dụng hóa chất nhuộm công nghiệp." },
-                { id: 7, name: "Tượng Quan Âm Gỗ", description: "Làng mộc | Kim Bồng", price: "400.000", sold: "76", category: "dotuong", location: "Hội An", artist: "Làng Đồng Kỵ", isGreen: true, img: "https://godinh.com/web/image/1714964/image3.png?access_token=b5472d81-b8e6-48c6-925f-d499eb9f49ed", fallback: "https://placehold.co/600x400/8B4513/FFF8E1?text=Tượng+Gỗ", tags: ["Gỗ quý tái sinh", "Chạm thủ công"], story: "Sử dụng gỗ từ các công trình kiến trúc cũ bị dỡ bỏ để chạm khắc thành các tác phẩm tâm linh." },
+                { id: 7, name: "Tượng Quan Âm Gỗ", description: "Làng mộc | Kim Bồng", price: "400.000", sold: "76", category: "dotuong", location: "Hội An", artist: "Làng Đồng Kỵ", isGreen: true, img: "https://tse4.mm.bing.net/th/id/OIP.bELTPtEqSQ8E0zW_TvUe3QHaKi?rs=1&pid=ImgDetMain&o=7&rm=3", fallback: "https://placehold.co/600x400/8B4513/FFF8E1?text=Tượng+Gỗ", tags: ["Gỗ quý tái sinh", "Chạm thủ công"], story: "Sử dụng gỗ từ các công trình kiến trúc cũ bị dỡ bỏ để chạm khắc thành các tác phẩm tâm linh." },
                 { id: 8, name: "Túi Vải Thêu Sen", description: "Vải Bông Tái Chế | ESG", price: "250.000", sold: "301", category: "lua", location: "TP.HCM", artist: "HTX Xã hội X", isGreen: true, img: "https://i.etsystatic.com/32617721/r/il/e9c3b6/3697004149/il_1588xN.3697004149_jjyv.jpg", fallback: "https://placehold.co/600x400/616161/FFF8E1?text=Túi+Vải", tags: ["Tạo việc làm xã hội", "Vải cotton tái chế"], story: "Mỗi chiếc túi thêu tay giúp tạo sinh kế cho cộng đồng người khuyết tật vượt khó tại TP.HCM." },
                 { id: 9, name: "Tranh Ngũ Hổ Làng Sình", description: "Tranh Dân Gian | Di sản Huế", price: "450.000", sold: "1.2K", artist: "Nghệ nhân Nguyễn Văn B", category: "tranh", location: "Huế", img: "https://file.hstatic.net/200000017614/file/tranh-ngu-ho-1_430d9f1800314e81b3e2fb3a27f5c9a6.jpg", fallback: "https://placehold.co/600x400/8B0000/FFF8E1?text=Tranh+Ngũ+Hổ", tags: ["Bao bì tái chế (Kraft)", "Mực in sinh học", "Giao hàng Carbon thấp (Eco-Delivery)"], story: "Tranh Ngũ Hổ là biểu tượng hộ mệnh của người dân Huế. Bức tranh này được khắc từ khuôn gỗ hơn 100 năm tuổi, in bằng tay với mực sinh học. Câu chuyện về người thợ Kỳ Hữu Phước đã giữ gìn bí quyết này qua 5 thế hệ là minh chứng cho sự kiên trì với di sản văn hóa phi vật thể.", isGreen: true },
                 { id: 10, name: "Bình Gốm Hoa Sen Khảm", description: "Gốm Bát Tràng | Tinh hoa Đất", price: "890.000", sold: "850", artist: "Hợp tác xã Bát Tràng", category: "gom", location: "Hà Nội", img: "https://i.etsystatic.com/20886807/r/il/15690c/1977818224/il_1080xN.1977818224_mo5c.jpg", fallback: "https://placehold.co/600x400/4A90E2/FFF8E1?text=Gốm+Hoa+Sen", tags: ["Sản xuất tiết kiệm năng lượng", "Nguyên liệu đất sét tự nhiên", "Không sử dụng chì/hóa chất độc hại"], story: "Bình gốm này được nung ở nhiệt độ thấp hơn tiêu chuẩn công nghiệp để giảm phát thải khí CO2, nhưng vẫn giữ được độ bền. Họa tiết Hoa Sen tượng trưng cho sự thanh khiết, được khảm thủ công tỉ mỉ trong 3 ngày.", isGreen: true },
                 { id: 11, name: "Khăn Lụa Vạn Phúc Nhuộm Chàm", description: "Lụa Vạn Phúc | Hà Nội", price: "280.000", sold: "2.1K", artist: "Thương hiệu Sắc Việt", category: "lua", location: "Hà Nội", img: "https://cdn.shopify.com/s/files/1/0101/0450/4401/products/c4-jpg-1575540676767_600x.jpg?v=1575622995", fallback: "https://placehold.co/600x400/A0522D/FFF8E1?text=Khăn+Lụa", tags: ["Nhuộm tự nhiên (Chàm)", "Vật liệu vải lụa tơ tằm", "Bao bì giấy tái chế"], story: "Sản phẩm sử dụng phương pháp nhuộm Chàm truyền thống, không thải hóa chất ra môi trường. Khăn lụa mềm mại, giữ ấm tốt, là món quà lý tưởng cho người thân yêu. Câu chuyện về người phụ nữ khởi nghiệp ở làng lụa Vạn Phúc trong thời đại số.", isGreen: true },
                 { id: 12, name: "Sáo trúc", description: "Nhạc cụ dân tộc | Văn hoá", price: "170.000", sold: "320", artist: "Nghệ nhân H", category: "gift", location: "Gia Lai", img: "https://i.vdoc.vn/data/image/2019/01/23/sao-truc.jpg", fallback: "https://placehold.co/600x400/920c0c/fcf8f5?text=Quà+ESG", tags: ["100% vật liệu tái chế", "Sản phẩm được chứng nhận Green Tag", "Tạo sinh kế cho 3 làng nghề"], story: "Bộ quà tặng được thiết kế dành riêng cho doanh nghiệp (B2B) nhằm mục đích ESG. Bao gồm một món gốm mini, một cuốn sổ tay từ giấy tái chế và một postcard Tranh Sình. Mỗi hộp quà là một thông điệp về trách nhiệm xã hội.", isGreen: true },
                 { id: 13, name: "Đồ trang trí mây tre đan", description: "Mây Tre Đan | Huế", price: "150.000", sold: "410", artist: "Hợp tác xã Bao La", category: "gom", location: "Huế", img: "https://dantra.vn/uploads/san-pham/thi-cong/decor-tuong/trang-tri-may-tre-dan-16.jpg", fallback: "https://placehold.co/600x400/7CB342/FFF8E1?text=Mây+Tre", tags: ["Nguyên liệu mây tre tự nhiên"], story: "Món đồ trang trí nhà cửa, sử dụng nguyên liệu mây tre đan tự nhiên, phơi nắng để tạo màu, không dùng thuốc nhuộm công nghiệp. Sản phẩm này không có Green Tag vì vận chuyển xa, nhưng nghệ nhân cam kết về nguyên liệu.", isGreen: false },
-                { id: 14, name: "Tranh Sơn Mài 'Phố Cổ'", description: "Sơn Mài Cao Cấp | Hà Nội", price: "500.000", sold: "55", artist: "Họa sĩ V", category: "tranh", location: "Hà Nội", img: "https://www.kiettacnghethuat.com/wp-content/uploads/ha-noi-moi-tranh-son-mai-pho-cua-hoa-si-nguyen-van-nghia.jpg", fallback: "https://placehold.co/600x400/8B4513/FFF8E1?text=Sơn+Mài", tags: ["Nguyên liệu nhựa cây sơn tự nhiên", "Giảm thiểu hóa chất", "Độ bền trên 50 năm"], story: "Tranh sơn mài vẽ phong cảnh Phố Cổ, sử dụng nhựa cây sơn tự nhiên. Quy trình chế tác mất 6 tháng với nhiều công đoạn mài và đánh bóng thủ công. Đây là một tác phẩm nghệ thuật có giá trị đầu tư và bền vững về mặt vật liệu.", isGreen: true }
+                { id: 14, name: "Tranh Sơn Mài 'Phố Cổ'", description: "Sơn Mài Cao Cấp | Hà Nội", price: "500.000", sold: "55", artist: "Họa sĩ V", category: "tranh", location: "Hà Nội", img: "https://www.kiettacnghethuat.com/wp-content/uploads/ha-noi-moi-tranh-son-mai-pho-cua-hoa-si-nguyen-van-nghia.jpg", fallback: "https://placehold.co/600x400/8B4513/FFF8E1?text=Sơn+Mài", tags: ["Nguyên liệu nhựa cây sơn tự nhiên", "Giảm thiểu hóa chất", "Độ bền trên 50 năm"], story: "Tranh sơn mài vẽ phong cảnh Phố Cổ, sử dụng nhựa cây sơn tự nhiên. Quy trình chế tác mất 6 tháng với nhiều công đoạn mài và đánh bóng thủ công. Đây là một tác phẩm nghệ thuật có giá trị đầu tư và bền vững về mặt vật liệu.", isGreen: true },
+                { id: 15, name: "Nón Lá Bài Thơ Huế", description: "Nón Lá Truyền Thống | Huế", price: "95.000", sold: "3.4K", artist: "Làng Tây Hồ", category: "gift", location: "Huế", img: "https://www.kkday.com/en/blog/wp-content/uploads/da-nang-conical-hat-1024x667.jpg", fallback: "https://placehold.co/600x400/A0522D/FFF8E1?text=Nón+Lá", tags: ["Lá buông tự nhiên", "Không dùng keo hóa học"], story: "Nón Bài Thơ Huế mỏng đến mức soi lên mặt trời thấy bóng lá in thơ bên trong. Làng Tây Hồ giữ nghề nón hơn 400 năm.", isGreen: true },
+                { id: 16, name: "Gốm Chu Đậu Men Ngọc", description: "Gốm Cổ Phục Hưng | Hải Dương", price: "720.000", sold: "188", artist: "Công ty Gốm Chu Đậu", category: "gom", location: "Hải Dương", img: "https://tse1.mm.bing.net/th/id/OIP.eE-KHbRgZFn8E0ZrkknQBQHaLG?w=750&h=1124&rs=1&pid=ImgDetMain&o=7&rm=3", fallback: "https://placehold.co/600x400/4A90E2/FFF8E1?text=Gốm+Chu+Đậu", tags: ["Đất sét trắng tự nhiên", "Men ngọc không chì"], story: "Gốm Chu Đậu thất truyền 400 năm, được tìm lại từ con tàu đắm ngoài khơi. Men ngọc xanh ngà là bí quyết pha chế độc nhất.", isGreen: true },
+                { id: 17, name: "Thổ Cẩm H'Mông Đen", description: "Vải Lanh Thêu Tay | Đồng Văn", price: "380.000", sold: "512", artist: "Phụ nữ H'Mông Đen", category: "lua", location: "Hà Giang", img: "https://media.urbanistnetwork.com/urbanistvietnam/articleimages/2022/07/12/10b.jpg", fallback: "https://placehold.co/600x400/3d2a8a/FFF8E1?text=Thổ+Cẩm", tags: ["Lanh tự trồng", "Nhuộm chàm tự nhiên"], story: "Người H'Mông Đen trồng lanh từ tháng 3, nhuộm chàm đến tận mùa đông. Mỗi tấm thổ cẩm là câu chuyện tình yêu trên cao nguyên đá.", isGreen: true },
+                { id: 18, name: "Tranh Kính Đông Triều", description: "Tranh Kính Cổ | Quảng Ninh", price: "320.000", sold: "97", artist: "Nghệ nhân Lê Văn Đức", category: "tranh", location: "Quảng Ninh", img: "https://i.pinimg.com/originals/4d/ff/58/4dff58dc3fa753cc08ce579dd9b811f9.jpg", fallback: "https://placehold.co/600x400/1a3a5c/FFF8E1?text=Tranh+Kính", tags: ["Kính thủ công", "Màu khoáng tự nhiên"], story: "Tranh kính vẽ ngược từ mặt sau kính — nghệ nhân phải hình dung toàn bộ bức tranh đảo chiều trước khi vẽ.", isGreen: false },
+                { id: 19, name: "Mộc Bản Kinh Phật Khắc Tay", description: "Đồ Gỗ Tâm Linh | Huế", price: "550.000", sold: "63", artist: "Xưởng mộc Thuận Hóa", category: "dotuong", location: "Huế", img: "https://tulieuphatgiao.vn/data/uploads/2023/05/DS05_b-1024x746.jpg", fallback: "https://placehold.co/600x400/5d3a1a/FFF8E1?text=Mộc+Bản", tags: ["Gỗ thị tái sinh", "Khắc tay 100%"], story: "Mộc bản kinh Phật khắc tay trên gỗ thị. Một người thợ cần 3 tháng để hoàn thành một bản kinh đầy đủ.", isGreen: true },
+                { id: 20, name: "Lụa Shan Tuyết Mù Cang Chải", description: "Lụa Rừng Nguyên Bản | Yên Bái", price: "950.000", sold: "145", artist: "HTX Lụa Tằm Mù Cang", category: "lua", location: "Yên Bái", img: "https://image.made-in-china.com/2f0j00LyoVZlRKAkct/Custom-Design-Square-Silk-Scarf-in-100-Silk-with-Hand-Rolled-Hem.jpg", fallback: "https://placehold.co/600x400/c8960c/fff8e1?text=Lụa+Shan+Tuyết", tags: ["Tơ tằm rừng shan tuyết", "Eco-certified"], story: "Tằm Shan Tuyết sống trên cây dâu rừng nguyên sinh ở độ cao 1.000m — loại lụa quý hiếm nhất Việt Nam.", isGreen: true },
+                { id: 21, name: "Tò He Làng Xuân La", description: "Đồ Chơi Dân Gian | Hà Nội", price: "80.000", sold: "2.8K", artist: "Nghệ nhân Đặng Văn Hậu", category: "gift", location: "Hà Nội", img: "https://ik.imagekit.io/tvlk/blog/2018/07/to-he-xuan-la-3.jpg?tr=dpr-2,w-675", fallback: "https://placehold.co/600x400/FF6B35/fff8e1?text=Tò+He", tags: ["Bột gạo nếp tự nhiên", "Màu thực phẩm an toàn"], story: "Tò He Xuân La nặn từ bột gạo nếp rang, màu từ lá cây và củ quả. Mỗi con tò he được nặn trong vài phút bởi đôi tay thoăn thoắt.", isGreen: true },
+                { id: 22, name: "Gốm Mộc Phù Lãng", description: "Gốm Đất Nâu | Bắc Ninh", price: "340.000", sold: "289", artist: "Lò gốm Phù Lãng", category: "gom", location: "Bắc Ninh", img: "https://file.hstatic.net/200000873845/file/gom-phu-lang-5_3c10decdc40b477c8c8adaafeddf000c.jpg", fallback: "https://placehold.co/600x400/8B4513/FFF8E1?text=Gốm+Phù+Lãng", tags: ["Đất sét nâu tự nhiên", "Men tro rơm rạ"], story: "Gốm Phù Lãng màu nâu đỏ đặc trưng của đất sông Cầu. Men tro tạo vân màu không thể lặp lại — mỗi chiếc là độc bản.", isGreen: true },
+                { id: 23, name: "Đàn Bầu Thủ Công", description: "Nhạc Cụ Dân Tộc | Hà Nội", price: "1.200.000", sold: "34", artist: "Xưởng đàn Hồng Hà", category: "gift", location: "Hà Nội", img: "https://lirp.cdn-website.com/46b951bd/dms3rep/multi/opt/bieu-dien-dan-bau-240714-500x333-1920w.jpg", fallback: "https://placehold.co/600x400/3d2a1e/FFF8E1?text=Đàn+Bầu", tags: ["Gỗ cẩm lai tái sinh", "Khắc tay thủ công"], story: "Đàn bầu một dây nhưng tạo ra âm thanh đủ cung bậc. Người làm đàn phải biết chơi đàn mới nghe được tiếng thử.", isGreen: true },
+                { id: 24, name: "Vải Zèng Cổ A Lưới", description: "Dệt Thổ Cẩm | A Lưới, Huế", price: "460.000", sold: "178", artist: "Phụ nữ Pa Kô", category: "lua", location: "A Lưới, Huế", img: "https://media.sohuutritue.net.vn/files/duyluong/2022/09/14/f91de9c621aee5f0bcbf-0622.jpg", fallback: "https://placehold.co/600x400/6B3FA0/FFF8E1?text=Vải+Zèng", tags: ["Sợi bông tự trồng", "UNESCO phi vật thể"], story: "Vải Zèng Pa Kô có họa tiết hình học độc đáo không giống bất kỳ dân tộc nào. Một tấm đầy đủ hoa văn cần 3 tháng dệt.", isGreen: true },
+                { id: 25, name: "Tranh Thêu Tay Hà Đông", description: "Tranh Thêu Silk | Hà Nội", price: "680.000", sold: "203", artist: "Xưởng thêu Hà Đông", category: "tranh", location: "Hà Nội", img: "https://th.bing.com/th/id/R.fac464dcb9bec7650168d04924e24ff8?rik=7WKbOVyYtnE1xw&pid=ImgRaw&r=0", fallback: "https://placehold.co/600x400/8B0000/FFF8E1?text=Tranh+Thêu", tags: ["Chỉ tơ tằm tự nhiên", "Không dùng máy thêu"], story: "Một bức tranh thêu trung bình cần 2–3 tháng hoàn thiện. Đường kim mũi chỉ tinh xảo tái hiện cảnh vật như một bức ảnh.", isGreen: true },
+                { id: 26, name: "Bình Hoa Gốm Lý Triều", description: "Gốm Men Trắng Cổ | Hà Nội", price: "1.100.000", sold: "42", artist: "Nghệ nhân Nguyễn Phú Long", category: "gom", location: "Hà Nội", img: "https://th.bing.com/th/id/R.e2aacfb976a741350653db1ca8ea23dc?rik=F6Avf7tbWsehiw&riu=http%3a%2f%2fgomsudongtrieu.com%2fwp-content%2fuploads%2f2021%2f03%2fbinh-hoa-45cm.jpg&ehk=W040zFcYisAxrd2qv10Mh3BuJazrtzXXURTf3c63t2g%3d&risl=&pid=ImgRaw&r=0", fallback: "https://placehold.co/600x400/f0f0e0/8B0000?text=Gốm+Lý+Triều", tags: ["Phục hưng gốm cổ Đại Việt", "Men trắng xương tinh khiết"], story: "Phục chế kỹ thuật gốm men trắng thời Lý — loại gốm từng được tiến vua. Mỗi bình là tháng nghiên cứu và thử nghiệm công thức men cổ.", isGreen: true },
+                { id: 27, name: "Áo Bà Ba Nam Bộ Thêu Tay", description: "Trang Phục Truyền Thống | TP.HCM", price: "420.000", sold: "634", artist: "HTX May Mặc Cần Thơ", category: "lua", location: "Cần Thơ", img: "https://trangphucduyenha.com/uploads/plugin/news/136/1673321495-1171655059-gi-i-thi-u-ao-ba-ba-trang-ph-c-truy-n-th-ng-ng-i-nam-b.jpg", fallback: "https://placehold.co/600x400/1a5c3a/FFF8E1?text=Áo+Bà+Ba", tags: ["Vải lụa tơ tằm", "Thêu tay truyền thống"], story: "Áo Bà Ba là linh hồn của người phụ nữ miền Nam. Chiếc áo này thêu hoa súng đồng bằng sông Cửu Long — biểu tượng của sự dịu dàng và bền bỉ.", isGreen: true },
+                { id: 28, name: "Hộp Sơn Mài Khảm Trai", description: "Sơn Mài Cao Cấp | Hà Nội", price: "780.000", sold: "118", artist: "Làng Hạ Thái", category: "dotuong", location: "Hà Nội", img: "https://5.imimg.com/data5/SELLER/Default/2023/7/325034800/KT/LA/UV/113806295/n-4-4--500x500.jpg", fallback: "https://placehold.co/600x400/1a0a00/FFD700?text=Sơn+Mài+Khảm", tags: ["Nhựa sơn tự nhiên", "Trai ốc biển tái chế"], story: "Sơn mài khảm trai Hạ Thái qua 27 lớp sơn và mài. Ánh xà cừ lấp lánh từ từng mảnh trai được ghép thủ công như một bức tranh ghép hình.", isGreen: true },
+                { id: 29, name: "Chiếu Cói Nga Sơn", description: "Chiếu Truyền Thống | Thanh Hóa", price: "230.000", sold: "876", artist: "Làng chiếu Nga Sơn", category: "lua", location: "Thanh Hóa", img: "https://chieucoi.com.vn/wp-content/uploads/2017/06/20190825_074754-1024x768.jpg", fallback: "https://placehold.co/600x400/c8960c/FFF8E1?text=Chiếu+Cói", tags: ["Cói tự nhiên không tẩy trắng", "Phơi nắng tự nhiên"], story: "Chiếu Nga Sơn nổi tiếng khắp Bắc Trung Bộ. Cây cói được trồng trên vùng đất mặn đặc biệt, phơi nắng 7 ngày mới đạt độ mềm và hương thơm tự nhiên.", isGreen: true },
+                { id: 30, name: "Đèn Lồng Hội An Ngũ Sắc", description: "Đèn Lồng Thủ Công | Quảng Nam", price: "185.000", sold: "4.2K", artist: "Làng đèn Hội An", category: "gift", location: "Hội An", img: "https://3.bp.blogspot.com/-DEEf3atZAjQ/U2CqEYDYriI/AAAAAAAABbg/OnWwvINkUC8/s1600/demramphoco4.jpg", fallback: "https://placehold.co/600x400/FF6B35/FFF8E1?text=Đèn+Lồng", tags: ["Vải lụa tơ tằm", "Khung tre già"], story: "Đèn lồng Hội An thắp sáng di sản thế giới suốt 400 năm. Mỗi chiếc khung tre được vót thủ công, vải lụa nhuộm màu tự nhiên theo 5 sắc ngũ hành.", isGreen: true }
             ];
             window.allProductsRef = allProducts; // expose for cart delegation
 
@@ -3124,7 +3272,7 @@
                     emoji: '🌲',
                     desc: 'Cái nôi của nền thủ công mỹ nghệ Việt Nam — gốm Bát Tràng nghìn năm, lụa Vạn Phúc tinh tế, tranh Đông Hồ dân gian.',
                     villages: ['Gốm Bát Tràng', 'Lụa Vạn Phúc', 'Tranh Đông Hồ', 'Sơn mài Hạ Thái'],
-                    locations: ['Hà Nội', 'Bắc Ninh', 'Thái Nguyên'],
+                    locations: ['Hà Nội', 'Bắc Ninh', 'Thái Nguyên', 'Hà Nam', 'Nam Định', 'Ninh Bình', 'Hưng Yên', 'Quảng Ninh'],
                     color: '#c8e6c9', glow: '#2e7d32',
                 },
                 trung: {
@@ -3133,7 +3281,7 @@
                     emoji: '☀️',
                     desc: 'Vùng đất của cố đô và di sản UNESCO — tranh làng Sình, mộc Kim Bồng, nón lá Huế mang hồn xứ sở.',
                     villages: ['Mộc Kim Bồng', 'Tranh Làng Sình', 'Nón Lá Huế', 'Đèn lồng Hội An'],
-                    locations: ['Huế', 'Hội An', 'Đà Nẵng'],
+                    locations: ['Huế', 'Hội An', 'Đà Nẵng', 'Quảng Trị', 'Quảng Bình', 'Nghệ An', 'Hà Tĩnh'],
                     color: '#fff9c4', glow: '#f57f17',
                 },
                 taynguyen: {
@@ -3142,7 +3290,7 @@
                     emoji: '🏔️',
                     desc: 'Đại ngàn hùng vĩ — thổ cẩm dệt tay của đồng bào dân tộc, gùi tre đan tinh xảo, cồng chiêng vang vọng.',
                     villages: ['Thổ cẩm Gia Lai', 'Đan lát Kon Tum', 'Gốm đất Mạ', 'Điêu khắc gỗ Tây Nguyên'],
-                    locations: ['Gia Lai', 'Lâm Đồng', 'Kon Tum'],
+                    locations: ['Gia Lai', 'Lâm Đồng', 'Kon Tum', 'Đắk Lắk', 'Đắk Nông', 'Buôn Ma Thuột', 'Pleiku'],
                     color: '#ffe0b2', glow: '#e65100',
                 },
                 nam: {
@@ -3151,7 +3299,7 @@
                     emoji: '🌊',
                     desc: 'Đô thị năng động & đồng bằng xanh mướt — túi vải thêu tay, gốm xã hội ESG, đồ lưu niệm sáng tạo.',
                     villages: ['Thêu tay TP.HCM', 'Gốm ESG Bình Dương', 'Lá buông An Giang', 'Mây tre Đồng Tháp'],
-                    locations: ['TP.HCM', 'Đồng Nai', 'Cần Thơ'],
+                    locations: ['TP.HCM', 'Đồng Nai', 'Cần Thơ', 'An Giang', 'Đồng Tháp', 'Vĩnh Long', 'Bến Tre', 'Cà Mau'],
                     color: '#fce4ec', glow: '#c62828',
                 },
             };
@@ -3305,6 +3453,11 @@
                 }, 1000);
 
                 document.getElementById('user-id-display').textContent = `ID: GUEST_${Math.random().toString(36).substring(7).toUpperCase()}`;
+
+                // Expose render functions for enhancements script
+                window.renderHomeProducts = renderHomeProducts;
+                window.renderBestSeller   = renderBestSeller;
+                window.renderMarketplace  = renderMarketplace;
             });
         </script>
         <script type="module">
@@ -3780,7 +3933,68 @@
                     if (!popup) return;
                     card.style.transform = 'scale(0.9) translateY(20px)';
                     card.style.opacity   = '0';
-                    setTimeout(() => { popup.style.display = 'none'; }, 350);
+                    setTimeout(() => {
+                        popup.style.display = 'none';
+                        // Hiện floating bubble
+                        let bubble = document.getElementById('vs-promo-bubble');
+                        if (!bubble) {
+                            bubble = document.createElement('div');
+                            bubble.id = 'vs-promo-bubble';
+                            bubble.style.cssText = `
+                                position:fixed; bottom:90px; right:18px; z-index:9980;
+                                width:72px; height:72px; border-radius:50%;
+                                background:linear-gradient(135deg,#8B0000,#C8960C);
+                                box-shadow:0 6px 24px rgba(139,0,0,.45);
+                                cursor:pointer; display:flex; flex-direction:column;
+                                align-items:center; justify-content:center;
+                                animation:vsBubblePop .4s cubic-bezier(.34,1.56,.64,1) forwards;
+                                border:2.5px solid rgba(255,215,0,.6);
+                            `;
+                            bubble.innerHTML = `
+                                <div style="font-size:22px;line-height:1;">🎁</div>
+                                <div style="font-size:7.5px;font-weight:900;color:#FFD700;letter-spacing:.08em;text-transform:uppercase;margin-top:2px;text-align:center;line-height:1.2;">Ưu đãi<br>-30%</div>
+                                <div style="position:absolute;top:-5px;right:-4px;background:#FF3B30;color:white;font-size:8px;font-weight:900;padding:2px 5px;border-radius:99px;border:1.5px solid white;">HOT</div>
+                            `;
+                            // Tooltip khi hover
+                            const tip = document.createElement('div');
+                            tip.style.cssText = `
+                                position:absolute; right:82px; bottom:50%; transform:translateY(50%);
+                                background:#1a0800; color:white; font-size:11px; font-weight:700;
+                                padding:8px 12px; border-radius:10px; white-space:nowrap;
+                                opacity:0; pointer-events:none; transition:opacity .2s;
+                                border:1px solid rgba(200,150,12,.3);
+                                box-shadow:0 4px 16px rgba(0,0,0,.3);
+                            `;
+                            tip.innerHTML = `<span style="color:#FFD700;font-weight:900;">LANGLE304</span> · Giảm 30% đơn đầu<br><span style="font-size:9px;opacity:.7;">Bấm để xem ưu đãi</span>`;
+                            tip.id = 'vs-bubble-tip';
+                            bubble.appendChild(tip);
+                            bubble.onmouseenter = () => { tip.style.opacity = '1'; };
+                            bubble.onmouseleave = () => { tip.style.opacity = '0'; };
+                            bubble.onclick = () => {
+                                bubble.remove();
+                                showPopup304();
+                            };
+                            // CSS animation
+                            if (!document.getElementById('vs-bubble-style')) {
+                                const s = document.createElement('style');
+                                s.id = 'vs-bubble-style';
+                                s.textContent = `
+                                    @keyframes vsBubblePop {
+                                        0%   { transform:scale(0) rotate(-20deg); opacity:0; }
+                                        70%  { transform:scale(1.15) rotate(5deg); opacity:1; }
+                                        100% { transform:scale(1) rotate(0deg); opacity:1; }
+                                    }
+                                    @keyframes vsBubblePulse {
+                                        0%,100% { box-shadow:0 6px 24px rgba(139,0,0,.45); }
+                                        50%     { box-shadow:0 6px 32px rgba(200,150,12,.6); }
+                                    }
+                                    #vs-promo-bubble { animation:vsBubblePop .4s cubic-bezier(.34,1.56,.64,1) forwards, vsBubblePulse 2.5s ease-in-out 1s infinite; }
+                                `;
+                                document.head.appendChild(s);
+                            }
+                            document.body.appendChild(bubble);
+                        }
+                    }, 350);
                 }
 
                 function copyCode304() {
@@ -4272,5 +4486,7 @@
         })();
 
         </script>
+        <!-- VietSoul Enhancements -->
+        <script src="vietsoul-enhancements.js"></script>
         </body>
 </html>
