@@ -8,6 +8,9 @@
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&family=Inter:wght@100..900&display=swap" rel="stylesheet">
 
@@ -43,85 +46,380 @@
       box-shadow: 0 10px 18px rgba(0,0,0,0.12);
     }
 
-    /* ===== Brand mark (SÌNH SOUL) ===== */
+    /* ===== Brand mark ===== */
     .brand-mark{
-    width: 82px;
-    height: 82px;
+    width: 82px; height: 82px;
     border-radius: 18px;
     background: rgba(255,255,255,0.85);
     border: 2px solid rgba(0,0,0,0.06);
     box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:flex; align-items:center; justify-content:center;
     }
     .brand-mark__text{
     font-family: var(--font-display);
     color: var(--color-primary);
-    font-weight: 900;
-    letter-spacing: 0.12em;
-    line-height: 1;
-    text-align:center;
-    text-transform: uppercase;
+    font-weight: 900; letter-spacing: 0.12em;
+    line-height: 1; text-align:center; text-transform: uppercase;
     }
-    .brand-mark__text span{
-    display:block;
-    font-size: 22px;
-    }
-    .brand-mark__text span:last-child{
-    margin-top: 6px;
-    }
+    .brand-mark__text span{ display:block; font-size: 22px; }
+    .brand-mark__text span:last-child{ margin-top: 6px; }
 
-    /* ===== Badge system (linh hoạt) ===== */
+    /* ===== Badge system ===== */
     .badge{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-    padding: 6px 12px;
-    border-radius: 999px;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    border: 1px solid transparent;
+    display:inline-flex; align-items:center; justify-content:center;
+    gap:6px; padding: 6px 12px; border-radius: 999px;
+    font-size: 10px; font-weight: 900; letter-spacing: .14em;
+    text-transform: uppercase; white-space: nowrap; border: 1px solid transparent;
     }
-
-    /* variants */
-    .badge--selling{
-    background: var(--color-primary);
-    color: #fff;
-    border-color: rgba(0,0,0,0.06);
-    }
-    .badge--featured{
-    background: var(--color-secondary);
-    color: var(--color-primary);
-    border-color: rgba(0,0,0,0.06);
-    }
-    .badge--update{
-    background: rgba(255,255,255,0.9);
-    color: var(--color-primary);
-    border-color: rgba(139,0,0,0.22);
-    }
-
-    /* icon circle (nhỏ gọn) */
-    .badge i{
-    width: 8px;
-    height: 8px;
-    border-radius: 999px;
-    display:inline-block;
-    }
+    .badge--selling{ background: var(--color-primary); color: #fff; border-color: rgba(0,0,0,0.06); }
+    .badge--featured{ background: var(--color-secondary); color: var(--color-primary); border-color: rgba(0,0,0,0.06); }
+    .badge--update{ background: rgba(255,255,255,0.9); color: var(--color-primary); border-color: rgba(139,0,0,0.22); }
+    .badge i{ width: 8px; height: 8px; border-radius: 999px; display:inline-block; }
     .badge--selling i{ background:#fff; opacity:0.9; }
     .badge--featured i{ background: var(--color-primary); opacity:0.9; }
     .badge--update i{ background: var(--color-primary); opacity:0.55; }
 
+    /* ===== TAB SYSTEM ===== */
+    .main-tab-btn {
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 11px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: .14em;
+      cursor: pointer; transition: all .2s;
+      color: rgba(139,0,0,0.5);
+      background: transparent; border: none;
+      white-space: nowrap;
+    }
+    .main-tab-btn.active {
+      background: #8B0000; color: white;
+      box-shadow: 0 4px 14px rgba(139,0,0,0.3);
+    }
+    .main-tab-btn:not(.active):hover {
+      background: rgba(139,0,0,0.08); color: #8B0000;
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ===== DASHBOARD METRICS ===== */
+    .metric-card {
+      background: white;
+      border-radius: 20px;
+      border: 1px solid rgba(139,0,0,0.08);
+      box-shadow: 0 2px 16px rgba(139,0,0,0.05);
+      padding: 20px 22px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .metric-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(139,0,0,0.1);
+    }
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .metric-card.red::before   { background: linear-gradient(90deg, #8B0000, #C8960C); }
+    .metric-card.gold::before  { background: linear-gradient(90deg, #C8960C, #FFD700); }
+    .metric-card.green::before { background: linear-gradient(90deg, #2e7d32, #66bb6a); }
+    .metric-card.blue::before  { background: linear-gradient(90deg, #1565C0, #42a5f5); }
+
+    .metric-val {
+      font-family: var(--font-display);
+      font-size: 32px; font-weight: 900;
+      color: #8B0000; line-height: 1;
+      margin: 8px 0 4px;
+    }
+    .metric-label {
+      font-size: 9px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: .16em;
+      color: rgba(26,8,0,0.4);
+    }
+    .metric-delta {
+      font-size: 10px; font-weight: 800;
+      margin-top: 6px;
+    }
+    .metric-delta.up   { color: #2e7d32; }
+    .metric-delta.down { color: #c62828; }
+    .metric-icon {
+      position: absolute; top: 18px; right: 18px;
+      font-size: 26px; opacity: .18;
+    }
+
+    /* ===== CHART CARD ===== */
+    .chart-card {
+      background: white;
+      border-radius: 20px;
+      border: 1px solid rgba(139,0,0,0.08);
+      box-shadow: 0 2px 16px rgba(139,0,0,0.05);
+      padding: 22px 24px;
+    }
+    .chart-title {
+      font-size: 10px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: .16em;
+      color: rgba(139,0,0,0.45); margin-bottom: 4px;
+    }
+    .chart-heading {
+      font-family: var(--font-display);
+      font-size: 17px; font-weight: 900;
+      color: #8B0000; margin-bottom: 16px;
+    }
+
+    /* ===== PRODUCT TABLE ===== */
+    .prod-rank-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(139,0,0,0.06);
+    }
+    .prod-rank-row:last-child { border-bottom: none; }
+    .rank-num {
+      font-family: var(--font-display);
+      font-size: 22px; font-weight: 900;
+      color: rgba(139,0,0,0.15); min-width: 28px;
+      text-align: right;
+    }
+    .rank-num.top { color: #C8960C; }
+    .rank-bar-wrap {
+      flex: 1; height: 6px;
+      background: rgba(139,0,0,0.07);
+      border-radius: 99px; overflow: hidden;
+    }
+    .rank-bar { height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, #8B0000, #C8960C);
+      transition: width .8s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ===== CREATE PRODUCT MODAL ===== */
+    #vs-create-overlay {
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(10,4,0,.88);
+      backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .35s ease;
+    }
+    #vs-create-overlay.open { opacity: 1; pointer-events: all; }
+
+    #vs-create-panel {
+      width: min(680px, 96vw);
+      max-height: 92vh;
+      background: #fffdf7;
+      border-radius: 28px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transform: scale(.96) translateY(16px);
+      transition: transform .38s cubic-bezier(.34,1.56,.64,1);
+      box-shadow: 0 40px 100px rgba(0,0,0,.5);
+    }
+    #vs-create-overlay.open #vs-create-panel {
+      transform: scale(1) translateY(0);
+    }
+
+    .create-header {
+      padding: 24px 28px 18px;
+      border-bottom: 1px solid rgba(139,0,0,0.08);
+      display: flex; align-items: flex-start;
+      justify-content: space-between;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #8B0000, #5a0000);
+    }
+    .create-header-txt { color: white; }
+    .create-pre {
+      font-size: 8px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: .22em;
+      color: rgba(255,215,0,.7); margin-bottom: 4px;
+    }
+    .create-title {
+      font-family: var(--font-display);
+      font-size: 24px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: .04em;
+      line-height: 1.1;
+    }
+    #vs-create-close {
+      background: rgba(255,255,255,0.15);
+      border: none; color: white;
+      font-size: 16px; border-radius: 50%;
+      width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background .15s;
+      flex-shrink: 0;
+    }
+    #vs-create-close:hover { background: rgba(255,255,255,0.28); }
+
+    /* Steps */
+    .create-steps {
+      display: flex; gap: 0;
+      padding: 0 28px;
+      background: linear-gradient(135deg, #8B0000, #5a0000);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      flex-shrink: 0;
+    }
+    .cstep {
+      padding: 10px 16px;
+      font-size: 9px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: .14em;
+      color: rgba(255,255,255,0.4);
+      border-bottom: 2px solid transparent;
+      cursor: pointer; transition: all .2s;
+      white-space: nowrap;
+    }
+    .cstep.active {
+      color: #FFD700;
+      border-bottom-color: #FFD700;
+    }
+
+    /* Create body */
+    .create-body {
+      flex: 1; overflow-y: auto; padding: 24px 28px;
+      scrollbar-width: thin; scrollbar-color: rgba(139,0,0,.15) transparent;
+    }
+    .create-body::-webkit-scrollbar { width: 4px; }
+    .create-body::-webkit-scrollbar-thumb { background: rgba(139,0,0,.15); border-radius: 99px; }
+
+    .create-step-panel { display: none; }
+    .create-step-panel.active { display: block; }
+
+    /* Form fields */
+    .cf-label {
+      display: block; font-size: 9px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: .14em;
+      color: rgba(139,0,0,0.5); margin-bottom: 6px;
+    }
+    .cf-input, .cf-select, .cf-textarea {
+      width: 100%; box-sizing: border-box;
+      padding: 11px 16px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(139,0,0,0.12);
+      background: white; font-size: 12px; color: #1a0800;
+      font-family: var(--font-body);
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .cf-input:focus, .cf-select:focus, .cf-textarea:focus {
+      outline: none;
+      border-color: rgba(139,0,0,0.45);
+      box-shadow: 0 0 0 3px rgba(139,0,0,0.07);
+    }
+    .cf-input::placeholder, .cf-textarea::placeholder { color: rgba(139,0,0,0.25); }
+    .cf-select option { background: #fff8e1; }
+    .cf-textarea { resize: vertical; line-height: 1.6; }
+    .cf-group { margin-bottom: 16px; }
+    .cf-grid { display: grid; gap: 14px; }
+    .cf-grid-2 { grid-template-columns: 1fr 1fr; }
+    .cf-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    /* Image upload zone */
+    .cf-upload {
+      border: 2px dashed rgba(139,0,0,0.2);
+      border-radius: 14px;
+      padding: 30px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s;
+      background: rgba(139,0,0,0.02);
+    }
+    .cf-upload:hover {
+      border-color: rgba(139,0,0,0.45);
+      background: rgba(139,0,0,0.04);
+    }
+    .cf-upload-icon { font-size: 32px; margin-bottom: 8px; }
+    .cf-upload-txt { font-size: 11px; font-weight: 700; color: rgba(139,0,0,0.6); }
+    .cf-upload-sub { font-size: 9px; color: rgba(139,0,0,0.35); margin-top: 3px; }
+
+    /* Tag toggle */
+    .cf-tag-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+    .cf-tag {
+      padding: 5px 12px;
+      border-radius: 99px;
+      border: 1.5px solid rgba(139,0,0,0.15);
+      background: #faf5e8; font-size: 10px; font-weight: 800;
+      color: rgba(26,8,0,0.55); cursor: pointer; transition: all .18s;
+    }
+    .cf-tag.active {
+      background: #8B0000; color: white;
+      border-color: #8B0000;
+      box-shadow: 0 2px 8px rgba(139,0,0,0.25);
+    }
+
+    /* Section heading in form */
+    .cf-section {
+      font-size: 9px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: .18em;
+      color: rgba(139,0,0,0.4);
+      margin: 20px 0 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .cf-section::after {
+      content: ''; flex: 1; height: 1px;
+      background: rgba(139,0,0,0.08);
+    }
+
+    /* Create footer */
+    .create-footer {
+      padding: 16px 28px 20px;
+      border-top: 1px solid rgba(139,0,0,0.08);
+      display: flex; gap: 10px; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .cf-btn-cancel {
+      padding: 11px 22px;
+      border-radius: 12px; border: 1.5px solid rgba(139,0,0,0.18);
+      background: transparent; font-size: 10px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: .12em;
+      color: rgba(139,0,0,0.5); cursor: pointer; transition: all .18s;
+    }
+    .cf-btn-cancel:hover { border-color: rgba(139,0,0,.4); color: #8B0000; }
+    .cf-btn-next {
+      flex: 1; padding: 12px 20px;
+      border-radius: 12px; border: none;
+      background: linear-gradient(135deg, #8B0000, #C8960C);
+      color: white; font-size: 11px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: .12em;
+      cursor: pointer; box-shadow: 0 6px 20px rgba(139,0,0,0.3);
+      transition: all .2s;
+    }
+    .cf-btn-next:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(139,0,0,.4); }
+    .cf-btn-publish {
+      flex: 1; padding: 12px 20px;
+      border-radius: 12px; border: none;
+      background: linear-gradient(135deg, #2e7d32, #4caf50);
+      color: white; font-size: 11px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: .12em;
+      cursor: pointer; box-shadow: 0 6px 20px rgba(46,125,50,0.3);
+      transition: all .2s; display: none;
+    }
+    .cf-btn-publish:hover { transform: translateY(-1px); }
+
+    /* Preview card */
+    .cf-preview-card {
+      border-radius: 16px; overflow: hidden;
+      border: 1.5px solid rgba(139,0,0,0.1);
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    }
+    .cf-preview-img {
+      width: 100%; height: 160px; object-fit: cover;
+      background: linear-gradient(135deg, #f5e6c8, #e8d5a0);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px;
+    }
+    .cf-preview-body { padding: 14px 16px; background: white; }
+    .cf-preview-name {
+      font-family: var(--font-display);
+      font-size: 15px; font-weight: 900; color: #8B0000;
+      text-transform: uppercase; margin-bottom: 3px;
+    }
+    .cf-preview-meta { font-size: 9px; color: rgba(26,8,0,0.4); margin-bottom: 8px; }
+    .cf-preview-price {
+      font-family: var(--font-display);
+      font-size: 18px; font-weight: 900; color: #8B0000;
+    }
   </style>
 </head>
 
 <body class="min-h-screen flex flex-col">
 
-  <!-- HEADER -->
+  <!-- HEADER (giữ nguyên, chỉ thêm onclick cho nút Tạo sản phẩm) -->
   <header class="bg-primary sticky top-0 z-50 shadow-lg">
     <div class="container mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -135,8 +433,8 @@
         <button onclick="location.href='index.html'" class="px-4 py-2 rounded-full bg-white/10 text-white text-[11px] font-black uppercase tracking-widest hover:bg-white/20 transition">
           ← Về Khách hàng
         </button>
-        <button class="px-4 py-2 rounded-full bg-secondary text-primary text-[11px] font-black uppercase tracking-widest hover:opacity-90 transition">
-          Tạo sản phẩm
+        <button onclick="openCreateProduct()" class="px-4 py-2 rounded-full bg-secondary text-primary text-[11px] font-black uppercase tracking-widest hover:opacity-90 transition">
+          + Tạo sản phẩm
         </button>
       </div>
     </div>
@@ -144,226 +442,277 @@
 
   <!-- MAIN -->
   <main class="container mx-auto px-4 py-8 max-w-7xl flex-1">
+
+    <!-- Page header + tab switcher -->
     <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6 border-b-2 border-primary/20 pb-4">
       <div>
         <h1 class="text-3xl sm:text-4xl font-black text-primary text-display uppercase tracking-wider">Trang Nghệ Nhân</h1>
-        <p class="text-xs text-gray-500 mt-1 uppercase tracking-widest">Thông tin người bán • Việc cần làm • Danh sách bán hàng</p>
+        <p class="text-xs text-gray-500 mt-1 uppercase tracking-widest">Thông tin người bán • Việc cần làm • Danh sách bán hàng • Phân tích</p>
       </div>
-
-      <div class="flex gap-2">
-        <div class="px-4 py-2 rounded-full bg-white border border-primary/10 text-[11px] font-black uppercase tracking-widest text-primary">
-          Trạng thái: Đang hoạt động
-        </div>
+      <div class="flex items-center gap-1 bg-white rounded-2xl p-1.5 border border-primary/10 shadow-sm">
+        <button class="main-tab-btn active" onclick="switchMainTab('dashboard')" id="tab-btn-dashboard">📊 Tổng quan</button>
+        <button class="main-tab-btn" onclick="switchMainTab('analytics')" id="tab-btn-analytics">📈 Phân tích</button>
       </div>
     </div>
 
-    <!-- ONE PAGE: 3 blocks in one layout -->
-    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- ══════════════════════════════════════
+         TAB 1: DASHBOARD (nội dung gốc)
+    ══════════════════════════════════════ -->
+    <div id="tab-dashboard" class="tab-panel active">
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-      <!-- SELLER INFO -->
-      <div class="lg:col-span-4 bg-white rounded-2xl shadow-xl border border-primary/10 overflow-hidden">
-        <div class="bg-primary text-white p-6">
-          <p class="text-[10px] font-black uppercase tracking-widest text-secondary">Thông tin người bán</p>
-          <h2 class="text-2xl font-black text-display uppercase tracking-wider mt-1">Nghệ nhân Dương Tiến Thành</h2>
-          <p class="text-white/80 text-sm mt-2">Làng nghề • Huế • Chuyên: Tranh Làng Sình</p>
-        </div>
-
-        <div class="p-6">
-          <div class="flex items-center gap-4">
-            <div class="brand-mark">
-                <div class="brand-mark__text">
-                    <span>SÌNH</span>
-                    <span>SOUL</span>
-                </div>
-            </div>
-            <div>
-              <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Xếp hạng</p>
-              <p class="text-primary font-black text-xl text-display">4.9 ★</p>
-              <p class="text-xs text-gray-500">12,500+ đánh giá</p>
-            </div>
+        <!-- SELLER INFO (giữ nguyên 100%) -->
+        <div class="lg:col-span-4 bg-white rounded-2xl shadow-xl border border-primary/10 overflow-hidden">
+          <div class="bg-primary text-white p-6">
+            <p class="text-[10px] font-black uppercase tracking-widest text-secondary">Thông tin người bán</p>
+            <h2 class="text-2xl font-black text-display uppercase tracking-wider mt-1">Nghệ nhân Dương Tiến Thành</h2>
+            <p class="text-white/80 text-sm mt-2">Làng nghề • Huế • Chuyên: Tranh Làng Sình</p>
           </div>
-
-          <div class="grid grid-cols-3 gap-3 mt-6">
-            <div class="p-4 rounded-2xl bg-[#fcf8f5] border border-primary/10">
-              <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Sản phẩm</p>
-              <p class="text-2xl font-black text-primary text-display">14</p>
+          <div class="p-6">
+            <div class="flex items-center gap-4">
+              <div class="brand-mark">
+                  <div class="brand-mark__text">
+                      <span>SÌNH</span><span>SOUL</span>
+                  </div>
+              </div>
+              <div>
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Xếp hạng</p>
+                <p class="text-primary font-black text-xl text-display">4.9 ★</p>
+                <p class="text-xs text-gray-500">12,500+ đánh giá</p>
+              </div>
             </div>
-            <div class="p-4 rounded-2xl bg-[#fcf8f5] border border-primary/10">
-              <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Đơn</p>
-              <p class="text-2xl font-black text-primary text-display">3.4K</p>
+            <div class="grid grid-cols-3 gap-3 mt-6">
+              <div class="p-4 rounded-2xl bg-[#fcf8f5] border border-primary/10">
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Sản phẩm</p>
+                <p class="text-2xl font-black text-primary text-display">14</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-[#fcf8f5] border border-primary/10">
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Đơn</p>
+                <p class="text-2xl font-black text-primary text-display">3.4K</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-[#fcf8f5] border border-primary/10">
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Green</p>
+                <p class="text-2xl font-black text-primary text-display">90%</p>
+              </div>
             </div>
-            <div class="p-4 rounded-2xl bg-[#fcf8f5] border border-primary/10">
-              <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Green</p>
-              <p class="text-2xl font-black text-primary text-display">90%</p>
+            <div class="mt-6">
+              <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-2">Hồ sơ</p>
+              <ul class="space-y-2 text-sm text-gray-700">
+                <li class="flex gap-2"><span class="text-primary font-black">✓</span> Đã xác minh nghệ nhân</li>
+                <li class="flex gap-2"><span class="text-primary font-black">✓</span> Có chứng nhận Green Tag theo sản phẩm</li>
+                <li class="flex gap-2"><span class="text-primary font-black">✓</span> Cam kết kể chuyện di sản (AI Storytelling)</li>
+              </ul>
             </div>
-          </div>
-
-          <div class="mt-6">
-            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-2">Hồ sơ</p>
-            <ul class="space-y-2 text-sm text-gray-700">
-              <li class="flex gap-2"><span class="text-primary font-black">✓</span> Đã xác minh nghệ nhân</li>
-              <li class="flex gap-2"><span class="text-primary font-black">✓</span> Có chứng nhận Green Tag theo sản phẩm</li>
-              <li class="flex gap-2"><span class="text-primary font-black">✓</span> Cam kết kể chuyện di sản (AI Storytelling)</li>
-            </ul>
-          </div>
-
-          <button class="mt-6 w-full py-3 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-[11px] btn-hover transition">
-            Cập nhật hồ sơ
-          </button>
-        </div>
-      </div>
-
-      <!-- TODO LIST -->
-      <div class="lg:col-span-4 bg-white rounded-2xl shadow-xl border border-primary/10 overflow-hidden">
-        <div class="p-6 border-b border-primary/10">
-          <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Danh sách cần làm</p>
-          <h2 class="text-2xl font-black text-primary text-display uppercase tracking-wider mt-1">Việc hôm nay</h2>
-          <p class="text-xs text-gray-500 mt-2">Checklist giúp bạn quản lý đơn và sản phẩm nhanh.</p>
-        </div>
-
-        <div class="p-6 space-y-3">
-          <label class="flex items-start gap-3 p-4 rounded-2xl bg-[#fcf8f5] border border-primary/10 cursor-pointer">
-            <input type="checkbox" class="mt-1 rounded text-primary focus:ring-primary">
-            <div>
-              <p class="font-bold text-primary">Xác nhận đơn mới</p>
-              <p class="text-xs text-gray-600">Kiểm tra thông tin giao hàng và đóng gói.</p>
-            </div>
-          </label>
-
-          <label class="flex items-start gap-3 p-4 rounded-2xl bg-[#fcf8f5] border border-primary/10 cursor-pointer">
-            <input type="checkbox" class="mt-1 rounded text-primary focus:ring-primary">
-            <div>
-              <p class="font-bold text-primary">Cập nhật tồn kho</p>
-              <p class="text-xs text-gray-600">Số lượng sản phẩm / biến thể màu.</p>
-            </div>
-          </label>
-
-          <label class="flex items-start gap-3 p-4 rounded-2xl bg-[#fcf8f5] border border-primary/10 cursor-pointer">
-            <input type="checkbox" class="mt-1 rounded text-primary focus:ring-primary">
-            <div>
-              <p class="font-bold text-primary">Viết câu chuyện di sản</p>
-              <p class="text-xs text-gray-600">Hoàn thiện “AI Storytelling” cho sản phẩm mới.</p>
-            </div>
-          </label>
-
-          <label class="flex items-start gap-3 p-4 rounded-2xl bg-[#fcf8f5] border border-primary/10 cursor-pointer">
-            <input type="checkbox" class="mt-1 rounded text-primary focus:ring-primary">
-            <div>
-              <p class="font-bold text-primary">Gắn nhãn Green Tag</p>
-              <p class="text-xs text-gray-600">Nguyên liệu, bao bì, vận chuyển, chứng nhận.</p>
-            </div>
-          </label>
-
-          <button class="w-full py-3 rounded-2xl border-2 border-primary text-primary font-black uppercase tracking-widest text-[11px] hover:bg-primary hover:text-white transition">
-            + Thêm việc
-          </button>
-        </div>
-      </div>
-
-      <!-- SALES LIST -->
-      <div class="lg:col-span-4 bg-white rounded-2xl shadow-xl border border-primary/10 overflow-hidden">
-        <div class="p-6 border-b border-primary/10">
-          <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Danh sách bán hàng</p>
-          <h2 class="text-2xl font-black text-primary text-display uppercase tracking-wider mt-1">Sản phẩm đang bán</h2>
-
-          <div class="mt-4 flex gap-2">
-            <input id="saleSearch" type="text" placeholder="Tìm sản phẩm..." class="w-full p-3 rounded-2xl border border-primary/10 focus:ring-2 focus:ring-secondary text-sm">
-            <button onclick="filterSales()" class="px-4 rounded-2xl bg-secondary text-primary font-black uppercase tracking-widest text-[11px] hover:opacity-90 transition">
-              Tìm
+            <button class="mt-6 w-full py-3 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-[11px] btn-hover transition">
+              Cập nhật hồ sơ
             </button>
           </div>
         </div>
 
-        <div class="p-6">
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+        <!-- TODO LIST (giữ nguyên 100%) -->
+        <div class="lg:col-span-4 bg-white rounded-2xl shadow-xl border border-primary/10 overflow-hidden">
+          <div class="p-6 border-b border-primary/10">
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Danh sách cần làm</p>
+            <h2 class="text-2xl font-black text-primary text-display uppercase tracking-wider mt-1">Việc hôm nay</h2>
+            <p class="text-xs text-gray-500 mt-2">Checklist giúp bạn quản lý đơn và sản phẩm nhanh.</p>
+          </div>
+          <div class="p-6 space-y-3">
+            <label class="flex items-start gap-3 p-4 rounded-2xl bg-[#fcf8f5] border border-primary/10 cursor-pointer">
+              <input type="checkbox" class="mt-1 rounded text-primary focus:ring-primary">
+              <div><p class="font-bold text-primary">Xác nhận đơn mới</p><p class="text-xs text-gray-600">Kiểm tra thông tin giao hàng và đóng gói.</p></div>
+            </label>
+            <label class="flex items-start gap-3 p-4 rounded-2xl bg-[#fcf8f5] border border-primary/10 cursor-pointer">
+              <input type="checkbox" class="mt-1 rounded text-primary focus:ring-primary">
+              <div><p class="font-bold text-primary">Cập nhật tồn kho</p><p class="text-xs text-gray-600">Số lượng sản phẩm / biến thể màu.</p></div>
+            </label>
+            <label class="flex items-start gap-3 p-4 rounded-2xl bg-[#fcf8f5] border border-primary/10 cursor-pointer">
+              <input type="checkbox" class="mt-1 rounded text-primary focus:ring-primary">
+              <div><p class="font-bold text-primary">Viết câu chuyện di sản</p><p class="text-xs text-gray-600">Hoàn thiện "AI Storytelling" cho sản phẩm mới.</p></div>
+            </label>
+            <label class="flex items-start gap-3 p-4 rounded-2xl bg-[#fcf8f5] border border-primary/10 cursor-pointer">
+              <input type="checkbox" class="mt-1 rounded text-primary focus:ring-primary">
+              <div><p class="font-bold text-primary">Gắn nhãn Green Tag</p><p class="text-xs text-gray-600">Nguyên liệu, bao bì, vận chuyển, chứng nhận.</p></div>
+            </label>
+            <button class="w-full py-3 rounded-2xl border-2 border-primary text-primary font-black uppercase tracking-widest text-[11px] hover:bg-primary hover:text-white transition">
+              + Thêm việc
+            </button>
+          </div>
+        </div>
+
+        <!-- SALES LIST (giữ nguyên 100%) -->
+        <div class="lg:col-span-4 bg-white rounded-2xl shadow-xl border border-primary/10 overflow-hidden">
+          <div class="p-6 border-b border-primary/10">
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Danh sách bán hàng</p>
+            <h2 class="text-2xl font-black text-primary text-display uppercase tracking-wider mt-1">Sản phẩm đang bán</h2>
+            <div class="mt-4 flex gap-2">
+              <input id="saleSearch" type="text" placeholder="Tìm sản phẩm..." class="w-full p-3 rounded-2xl border border-primary/10 focus:ring-2 focus:ring-secondary text-sm">
+              <button onclick="filterSales()" class="px-4 rounded-2xl bg-secondary text-primary font-black uppercase tracking-widest text-[11px] hover:opacity-90 transition">Tìm</button>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
                 <tbody id="salesBody" class="align-top">
-                    <!-- ITEM 1 -->
-                    <tr class="border-t border-primary/10">
-                        <td class="py-4">
-                        <div class="flex items-start justify-between gap-4">
-                            <div class="min-w-0">
-                            <p class="font-black text-primary text-[15px] leading-snug line-clamp-2">
-                                Bình gốm hoa sen khảm
-                            </p>
-                            <p class="text-xs text-gray-500 mt-1 flex items-center gap-2">
-                                <span>Bát Tràng • Green Tag</span>
-                                <span class="text-base leading-none">🌿</span>
-                            </p>
-                            </div>
-
-                            <div class="shrink-0 flex flex-col items-end gap-2">
-                            <span class="px-4 py-2 rounded-full bg-primary text-white text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-white/90"></span> Đang bán
-                            </span>
-                            <span class="font-black text-primary text-[15px]">890.000₫</span>
-                            </div>
+                  <tr class="border-t border-primary/10">
+                    <td class="py-4">
+                      <div class="flex items-start justify-between gap-4">
+                        <div class="min-w-0">
+                          <p class="font-black text-primary text-[15px] leading-snug line-clamp-2">Bình gốm hoa sen khảm</p>
+                          <p class="text-xs text-gray-500 mt-1 flex items-center gap-2"><span>Bát Tràng • Green Tag</span><span class="text-base leading-none">🌿</span></p>
                         </div>
-                        </td>
-                    </tr>
-
-                    <!-- ITEM 2 -->
-                    <tr class="border-t border-primary/10">
-                        <td class="py-4">
-                        <div class="flex items-start justify-between gap-4">
-                            <div class="min-w-0">
-                            <p class="font-black text-primary text-[15px] leading-snug line-clamp-2">
-                                Tranh sơn mài “Phố Cổ”
-                            </p>
-                            <p class="text-xs text-gray-500 mt-1 flex items-center gap-2">
-                                <span>Hà Nội • Green Tag</span>
-                                <span class="text-base leading-none">🌿</span>
-                            </p>
-                            </div>
-
-                            <div class="shrink-0 flex flex-col items-end gap-2">
-                            <span class="px-4 py-2 rounded-full bg-secondary text-primary text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-2 border border-black/10">
-                                <span class="w-2 h-2 rounded-full bg-primary"></span> Nổi bật
-                            </span>
-                            <span class="font-black text-primary text-[15px]">500.000₫</span>
-                            </div>
+                        <div class="shrink-0 flex flex-col items-end gap-2">
+                          <span class="px-4 py-2 rounded-full bg-primary text-white text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-white/90"></span> Đang bán</span>
+                          <span class="font-black text-primary text-[15px]">890.000₫</span>
                         </div>
-                        </td>
-                    </tr>
-
-                    <!-- ITEM 3 -->
-                    <tr class="border-t border-primary/10">
-                        <td class="py-4">
-                        <div class="flex items-start justify-between gap-4">
-                            <div class="min-w-0">
-                            <p class="font-black text-primary text-[15px] leading-snug line-clamp-2">
-                                Giỏ đan tre
-                            </p>
-                            <p class="text-xs text-gray-500 mt-1">
-                                Huế • Chưa Green
-                            </p>
-                            </div>
-
-                            <div class="shrink-0 flex flex-col items-end gap-2">
-                            <span class="px-4 py-2 rounded-full bg-white border border-primary/25 text-primary text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-primary/40"></span> Cần cập nhật
-                            </span>
-                            <span class="font-black text-primary text-[15px]">120.000₫</span>
-                            </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="border-t border-primary/10">
+                    <td class="py-4">
+                      <div class="flex items-start justify-between gap-4">
+                        <div class="min-w-0">
+                          <p class="font-black text-primary text-[15px] leading-snug line-clamp-2">Tranh sơn mài "Phố Cổ"</p>
+                          <p class="text-xs text-gray-500 mt-1 flex items-center gap-2"><span>Hà Nội • Green Tag</span><span class="text-base leading-none">🌿</span></p>
                         </div>
-                        </td>
-                    </tr>
+                        <div class="shrink-0 flex flex-col items-end gap-2">
+                          <span class="px-4 py-2 rounded-full bg-secondary text-primary text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-2 border border-black/10"><span class="w-2 h-2 rounded-full bg-primary"></span> Nổi bật</span>
+                          <span class="font-black text-primary text-[15px]">500.000₫</span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="border-t border-primary/10">
+                    <td class="py-4">
+                      <div class="flex items-start justify-between gap-4">
+                        <div class="min-w-0">
+                          <p class="font-black text-primary text-[15px] leading-snug line-clamp-2">Giỏ đan tre</p>
+                          <p class="text-xs text-gray-500 mt-1">Huế • Chưa Green</p>
+                        </div>
+                        <div class="shrink-0 flex flex-col items-end gap-2">
+                          <span class="px-4 py-2 rounded-full bg-white border border-primary/25 text-primary text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary/40"></span> Cần cập nhật</span>
+                          <span class="font-black text-primary text-[15px]">120.000₫</span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
-            </table>
+              </table>
+            </div>
+            <div class="mt-6 grid grid-cols-2 gap-3">
+              <button class="py-3 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-[11px] btn-hover transition">Quản lý đơn</button>
+              <button class="py-3 rounded-2xl border-2 border-primary text-primary font-black uppercase tracking-widest text-[11px] hover:bg-primary hover:text-white transition">Xuất báo cáo</button>
+            </div>
           </div>
+        </div>
 
-          <div class="mt-6 grid grid-cols-2 gap-3">
-            <button class="py-3 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-[11px] btn-hover transition">
-              Quản lý đơn
-            </button>
-            <button class="py-3 rounded-2xl border-2 border-primary text-primary font-black uppercase tracking-widest text-[11px] hover:bg-primary hover:text-white transition">
-              Xuất báo cáo
-            </button>
-          </div>
+      </section>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         TAB 2: ANALYTICS DASHBOARD
+    ══════════════════════════════════════ -->
+    <div id="tab-analytics" class="tab-panel">
+
+      <!-- KPI Row -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="metric-card red">
+          <div class="metric-icon">💰</div>
+          <div class="metric-label">Doanh thu tháng</div>
+          <div class="metric-val">28.4M</div>
+          <div class="metric-delta up">↑ 18.2% so tháng trước</div>
+        </div>
+        <div class="metric-card gold">
+          <div class="metric-icon">📦</div>
+          <div class="metric-label">Đơn hoàn thành</div>
+          <div class="metric-val">342</div>
+          <div class="metric-delta up">↑ 24 đơn so tuần trước</div>
+        </div>
+        <div class="metric-card green">
+          <div class="metric-icon">⭐</div>
+          <div class="metric-label">Đánh giá TB</div>
+          <div class="metric-val">4.91</div>
+          <div class="metric-delta up">↑ 0.04 điểm</div>
+        </div>
+        <div class="metric-card blue">
+          <div class="metric-icon">👀</div>
+          <div class="metric-label">Lượt xem</div>
+          <div class="metric-val">12.6K</div>
+          <div class="metric-delta up">↑ 31% so tháng trước</div>
         </div>
       </div>
 
-    </section>
+      <!-- Charts row 1 -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+
+        <!-- Revenue trend (2/3 width) -->
+        <div class="lg:col-span-2 chart-card">
+          <div class="chart-title">Biểu đồ doanh thu</div>
+          <div class="chart-heading">Doanh thu 6 tháng gần nhất</div>
+          <canvas id="chartRevenue" height="110"></canvas>
+        </div>
+
+        <!-- Order status donut (1/3) -->
+        <div class="chart-card">
+          <div class="chart-title">Trạng thái đơn hàng</div>
+          <div class="chart-heading">Tháng này</div>
+          <canvas id="chartOrderStatus" height="160"></canvas>
+          <div class="mt-3 space-y-2" id="donut-legend"></div>
+        </div>
+      </div>
+
+      <!-- Charts row 2 -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+
+        <!-- Top products (1/3) -->
+        <div class="chart-card">
+          <div class="chart-title">Hiệu suất sản phẩm</div>
+          <div class="chart-heading">Top 5 bán chạy nhất</div>
+          <div id="top-products" class="mt-2"></div>
+        </div>
+
+        <!-- Weekly orders bar (2/3) -->
+        <div class="lg:col-span-2 chart-card">
+          <div class="flex items-start justify-between mb-1">
+            <div>
+              <div class="chart-title">Đơn hàng theo ngày</div>
+              <div class="chart-heading">7 ngày gần nhất</div>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="switchOrderChart('week')" id="ocw" class="text-[9px] font-900 uppercase tracking-widest px-3 py-1.5 rounded-full bg-primary text-white">7 ngày</button>
+              <button onclick="switchOrderChart('month')" id="ocm" class="text-[9px] font-900 uppercase tracking-widest px-3 py-1.5 rounded-full bg-white border border-primary/20 text-primary">30 ngày</button>
+            </div>
+          </div>
+          <canvas id="chartOrders" height="110"></canvas>
+        </div>
+      </div>
+
+      <!-- Charts row 3 -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+        <!-- Category breakdown -->
+        <div class="chart-card">
+          <div class="chart-title">Danh mục sản phẩm</div>
+          <div class="chart-heading">Tỷ lệ doanh thu</div>
+          <canvas id="chartCategory" height="180"></canvas>
+        </div>
+
+        <!-- Customer insights -->
+        <div class="chart-card">
+          <div class="chart-title">Nguồn khách hàng</div>
+          <div class="chart-heading">Kênh mua sắm</div>
+          <canvas id="chartSource" height="180"></canvas>
+        </div>
+
+        <!-- Review sentiment & Green score -->
+        <div class="chart-card">
+          <div class="chart-title">Chất lượng & Xanh</div>
+          <div class="chart-heading">Radar tổng hợp</div>
+          <canvas id="chartRadar" height="180"></canvas>
+        </div>
+      </div>
+
+    </div><!-- /tab-analytics -->
+
   </main>
 
   <footer class="bg-primary text-white p-6">
@@ -372,7 +721,220 @@
     </div>
   </footer>
 
+  <!-- ══════════════════════════════════════
+       CREATE PRODUCT MODAL
+  ══════════════════════════════════════ -->
+  <div id="vs-create-overlay">
+    <div id="vs-create-panel">
+
+      <div class="create-header">
+        <div class="create-header-txt">
+          <div class="create-pre">VietSoul · Nghệ nhân</div>
+          <div class="create-title">Tạo sản phẩm mới</div>
+        </div>
+        <button id="vs-create-close" onclick="closeCreateProduct()">✕</button>
+      </div>
+
+      <!-- Step tabs -->
+      <div class="create-steps">
+        <div class="cstep active" id="cstep-1" onclick="goCreateStep(1)">① Thông tin</div>
+        <div class="cstep" id="cstep-2" onclick="goCreateStep(2)">② Ảnh & Giá</div>
+        <div class="cstep" id="cstep-3" onclick="goCreateStep(3)">③ Câu chuyện</div>
+        <div class="cstep" id="cstep-4" onclick="goCreateStep(4)">④ Xem trước</div>
+      </div>
+
+      <div class="create-body">
+
+        <!-- STEP 1: Basic info -->
+        <div class="create-step-panel active" id="cpanel-1">
+          <div class="cf-section">Thông tin cơ bản</div>
+          <div class="cf-group">
+            <label class="cf-label">Tên sản phẩm *</label>
+            <input class="cf-input" id="cp-name" type="text" placeholder="VD: Bình gốm hoa sen men tro Bát Tràng">
+          </div>
+          <div class="cf-group cf-grid cf-grid-2">
+            <div>
+              <label class="cf-label">Danh mục</label>
+              <select class="cf-select" id="cp-category">
+                <option value="">-- Chọn danh mục --</option>
+                <option value="gom">🏺 Gốm sứ</option>
+                <option value="tranh">🖼 Tranh dân gian</option>
+                <option value="lua">🧵 Lụa & thổ cẩm</option>
+                <option value="dotuong">🗿 Đồ tượng & điêu khắc</option>
+                <option value="gift">🎁 Quà tặng</option>
+                <option value="other">✨ Khác</option>
+              </select>
+            </div>
+            <div>
+              <label class="cf-label">Làng nghề / Xuất xứ</label>
+              <input class="cf-input" id="cp-origin" type="text" placeholder="VD: Bát Tràng, Hà Nội">
+            </div>
+          </div>
+          <div class="cf-group">
+            <label class="cf-label">Mô tả ngắn</label>
+            <textarea class="cf-textarea" id="cp-desc" rows="3" placeholder="Mô tả 1–2 câu hiện trên thẻ sản phẩm..."></textarea>
+          </div>
+          <div class="cf-section">Phân loại & Kho</div>
+          <div class="cf-group cf-grid cf-grid-3">
+            <div>
+              <label class="cf-label">Số lượng tồn</label>
+              <input class="cf-input" id="cp-stock" type="number" placeholder="0" min="0">
+            </div>
+            <div>
+              <label class="cf-label">Thời gian làm (ngày)</label>
+              <input class="cf-input" id="cp-leadtime" type="number" placeholder="3" min="1">
+            </div>
+            <div>
+              <label class="cf-label">Có nhận đặt riêng?</label>
+              <select class="cf-select" id="cp-custom">
+                <option value="yes">✅ Có</option>
+                <option value="no">❌ Không</option>
+              </select>
+            </div>
+          </div>
+          <div class="cf-section">Biến thể sản phẩm</div>
+          <div class="cf-group">
+            <label class="cf-label">Kích cỡ có sẵn</label>
+            <div class="cf-tag-grid" id="cp-sizes">
+              <span class="cf-tag" onclick="toggleTag(this)">Nhỏ</span>
+              <span class="cf-tag" onclick="toggleTag(this)">Vừa</span>
+              <span class="cf-tag" onclick="toggleTag(this)">Lớn</span>
+              <span class="cf-tag" onclick="toggleTag(this)">XL</span>
+              <span class="cf-tag" onclick="toggleTag(this)">Tuỳ chỉnh</span>
+            </div>
+          </div>
+          <div class="cf-group">
+            <label class="cf-label">Màu sắc có sẵn</label>
+            <div class="cf-tag-grid" id="cp-colors">
+              <span class="cf-tag" onclick="toggleTag(this)">🔴 Đỏ son</span>
+              <span class="cf-tag" onclick="toggleTag(this)">🟡 Vàng nghệ</span>
+              <span class="cf-tag" onclick="toggleTag(this)">🟢 Xanh rêu</span>
+              <span class="cf-tag" onclick="toggleTag(this)">⚫ Đen bóng</span>
+              <span class="cf-tag" onclick="toggleTag(this)">⚪ Trắng ngà</span>
+              <span class="cf-tag" onclick="toggleTag(this)">🟤 Nâu gỗ</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Images & Pricing -->
+        <div class="create-step-panel" id="cpanel-2">
+          <div class="cf-section">Ảnh sản phẩm</div>
+          <div class="cf-group">
+            <div class="cf-upload" onclick="document.getElementById('cp-img-input').click()">
+              <div class="cf-upload-icon">📸</div>
+              <div class="cf-upload-txt">Nhấn để tải ảnh chính lên</div>
+              <div class="cf-upload-sub">JPG, PNG, WEBP · Tối đa 10MB · Khuyến nghị 800×800px</div>
+              <input type="file" id="cp-img-input" accept="image/*" class="hidden" onchange="previewImg(this)">
+            </div>
+            <div id="cp-img-preview" class="mt-3 hidden">
+              <img id="cp-img-thumb" class="w-32 h-32 rounded-xl object-cover border border-primary/10" src="" alt="">
+            </div>
+          </div>
+          <div class="cf-section">Định giá</div>
+          <div class="cf-group cf-grid cf-grid-2">
+            <div>
+              <label class="cf-label">Giá bán (₫) *</label>
+              <input class="cf-input" id="cp-price" type="text" placeholder="350.000" oninput="formatPriceInput(this)">
+            </div>
+            <div>
+              <label class="cf-label">Giá gốc / So sánh (₫)</label>
+              <input class="cf-input" id="cp-compare-price" type="text" placeholder="500.000" oninput="formatPriceInput(this)">
+            </div>
+          </div>
+          <div class="cf-group">
+            <label class="cf-label">Chi phí sản xuất ước tính (₫)</label>
+            <input class="cf-input" id="cp-cost" type="text" placeholder="180.000" oninput="formatPriceInput(this)">
+            <p class="text-[10px] text-gray-400 mt-1.5">Chỉ bạn thấy. Giúp tính biên lợi nhuận.</p>
+          </div>
+          <!-- Margin indicator -->
+          <div id="cp-margin-box" class="hidden mt-2 p-4 rounded-2xl bg-green-50 border border-green-200">
+            <div class="text-[10px] font-900 uppercase tracking-widest text-green-700 mb-1">Biên lợi nhuận ước tính</div>
+            <div class="text-2xl font-black text-green-700 font-display" id="cp-margin-val">—</div>
+          </div>
+          <div class="cf-section">Green Tag & Chứng nhận</div>
+          <div class="cf-group">
+            <label class="cf-label">Nhãn xanh áp dụng</label>
+            <div class="cf-tag-grid">
+              <span class="cf-tag" onclick="toggleTag(this)">🌿 Nguyên liệu tự nhiên</span>
+              <span class="cf-tag" onclick="toggleTag(this)">♻️ Bao bì tái chế</span>
+              <span class="cf-tag" onclick="toggleTag(this)">🚚 Vận chuyển xanh</span>
+              <span class="cf-tag" onclick="toggleTag(this)">🌱 Không hóa chất</span>
+              <span class="cf-tag" onclick="toggleTag(this)">🤝 Thương mại công bằng</span>
+              <span class="cf-tag" onclick="toggleTag(this)">🏅 Chứng nhận UNESCO</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: Story -->
+        <div class="create-step-panel" id="cpanel-3">
+          <div class="cf-section">Câu chuyện di sản (AI Storytelling)</div>
+          <div class="cf-group">
+            <label class="cf-label">Câu chuyện sản phẩm</label>
+            <textarea class="cf-textarea" id="cp-story" rows="5" placeholder="Kể câu chuyện về sản phẩm này — nguồn gốc, kỹ thuật, ý nghĩa văn hoá...&#10;&#10;VD: Bình gốm được tạo từ đất sét bờ sông Hồng, lọc qua 3 lần..."></textarea>
+          </div>
+          <div class="cf-group">
+            <label class="cf-label">Quy trình chế tác (mỗi bước một dòng)</label>
+            <textarea class="cf-textarea" id="cp-process" rows="4" placeholder="Bước 1: Lọc đất sét từ bờ sông&#10;Bước 2: Tạo hình trên bàn xoay&#10;Bước 3: Tráng men tro tự nhiên&#10;Bước 4: Nung ở 1200°C trong 12 giờ"></textarea>
+          </div>
+          <div class="cf-group">
+            <label class="cf-label">Thông điệp từ nghệ nhân</label>
+            <textarea class="cf-textarea" id="cp-message" rows="3" placeholder="Một câu trích dẫn hoặc chia sẻ cá nhân từ bạn về sản phẩm này..."></textarea>
+          </div>
+          <div class="cf-section">Từ khoá SEO</div>
+          <div class="cf-group">
+            <label class="cf-label">Tags tìm kiếm (cách nhau bằng dấu phẩy)</label>
+            <input class="cf-input" id="cp-tags" type="text" placeholder="gốm Bát Tràng, men tro, thủ công mỹ nghệ, quà tặng">
+          </div>
+        </div>
+
+        <!-- STEP 4: Preview -->
+        <div class="create-step-panel" id="cpanel-4">
+          <div class="cf-section">Xem trước sản phẩm</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-2">
+            <div>
+              <p class="text-[10px] font-900 uppercase tracking-widest text-gray-400 mb-3">Thẻ sản phẩm</p>
+              <div class="cf-preview-card">
+                <div class="cf-preview-img" id="preview-img-wrap">
+                  <span id="preview-img-emoji">🏺</span>
+                  <img id="preview-img-real" class="hidden w-full h-full object-cover" src="" alt="">
+                </div>
+                <div class="cf-preview-body">
+                  <div class="cf-preview-name" id="preview-name">Tên sản phẩm</div>
+                  <div class="cf-preview-meta" id="preview-meta">Nghệ nhân · Xuất xứ</div>
+                  <div class="cf-preview-price" id="preview-price">0 ₫</div>
+                </div>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <p class="text-[10px] font-900 uppercase tracking-widest text-gray-400 mb-3">Tóm tắt thông tin</p>
+              <div id="preview-summary" class="space-y-2 text-sm text-gray-700"></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /create-body -->
+
+      <div class="create-footer">
+        <button class="cf-btn-cancel" id="cf-back-btn" onclick="createStepBack()" style="display:none;">← Quay lại</button>
+        <button class="cf-btn-cancel" onclick="closeCreateProduct()">Huỷ</button>
+        <button class="cf-btn-next" id="cf-next-btn" onclick="createStepNext()">Tiếp theo →</button>
+        <button class="cf-btn-publish" id="cf-publish-btn" onclick="publishProduct()">🌿 Đăng sản phẩm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCRIPTS ══ -->
   <script>
+    /* ── Tab switching ── */
+    function switchMainTab(tab) {
+      ['dashboard','analytics'].forEach(t => {
+        document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+        document.getElementById('tab-btn-' + t).classList.toggle('active', t === tab);
+      });
+      if (tab === 'analytics') initCharts();
+    }
+
+    /* ── Sales search (gốc) ── */
     function filterSales(){
       const q = (document.getElementById('saleSearch')?.value || '').trim().toUpperCase();
       const rows = document.querySelectorAll('#salesBody tr');
@@ -381,39 +943,382 @@
         r.style.display = (!q || txt.includes(q)) ? '' : 'none';
       });
     }
-    document.getElementById('saleSearch')?.addEventListener('keyup', (e) => {
-      if (e.key === 'Enter') filterSales();
-      else filterSales();
-    });
-  </script>
-  <script>
+    document.getElementById('saleSearch')?.addEventListener('keyup', filterSales);
+
+    /* ── Badge system (gốc) ── */
     function applyBadges(){
-        document.querySelectorAll('[data-badge]').forEach(el=>{
+      document.querySelectorAll('[data-badge]').forEach(el=>{
         const type = el.getAttribute('data-badge');
         el.classList.remove('badge--selling','badge--featured','badge--update');
         if(type === 'selling') el.classList.add('badge--selling');
         if(type === 'featured') el.classList.add('badge--featured');
         if(type === 'update') el.classList.add('badge--update');
-        });
+      });
     }
-
-    // gọi khi load trang
     document.addEventListener('DOMContentLoaded', applyBadges);
 
-    function filterSales(){
-        const q = (document.getElementById('saleSearch')?.value || '').trim().toUpperCase();
-        const rows = document.querySelectorAll('#salesBody tr');
-        rows.forEach(r => {
-        const txt = (r.textContent || '').toUpperCase();
-        r.style.display = (!q || txt.includes(q)) ? '' : 'none';
-        });
+    /* ════════════════════════════════════════
+       CHARTS
+    ════════════════════════════════════════ */
+    let chartsInited = false;
+    let chartOrdersInst = null;
+
+    const PALETTE = {
+      red:    '#8B0000',
+      gold:   '#C8960C',
+      yellow: '#FFD700',
+      green:  '#2e7d32',
+      blue:   '#1565C0',
+      teal:   '#00695C',
+      bg:     'rgba(139,0,0,0.07)',
+    };
+
+    function initCharts() {
+      if (chartsInited) return;
+      chartsInited = true;
+
+      Chart.defaults.font.family = "'Inter', sans-serif";
+      Chart.defaults.color = 'rgba(26,8,0,0.45)';
+
+      /* 1. Revenue trend */
+      new Chart(document.getElementById('chartRevenue'), {
+        type: 'line',
+        data: {
+          labels: ['T10/24','T11/24','T12/24','T1/25','T2/25','T3/25'],
+          datasets: [{
+            label: 'Doanh thu (triệu ₫)',
+            data: [14.2, 18.5, 24.8, 16.1, 22.3, 28.4],
+            borderColor: PALETTE.red,
+            backgroundColor: 'rgba(139,0,0,0.07)',
+            borderWidth: 2.5,
+            pointBackgroundColor: PALETTE.red,
+            pointRadius: 4, pointHoverRadius: 6,
+            fill: true, tension: 0.42,
+          },{
+            label: 'Đơn hàng × 100K',
+            data: [9.8, 12.1, 17.3, 11.4, 15.8, 19.6],
+            borderColor: PALETTE.gold,
+            backgroundColor: 'transparent',
+            borderWidth: 2, borderDash: [5,4],
+            pointBackgroundColor: PALETTE.gold,
+            pointRadius: 3, pointHoverRadius: 5,
+            tension: 0.42,
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } } },
+          scales: {
+            y: { grid: { color: 'rgba(139,0,0,0.06)' }, ticks: { font: { size: 9 } } },
+            x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+          }
+        }
+      });
+
+      /* 2. Order status donut */
+      const statusData = [
+        { label: 'Hoàn thành', val: 218, color: PALETTE.green },
+        { label: 'Đang giao',  val: 74,  color: PALETTE.gold },
+        { label: 'Chờ xử lý', val: 32,  color: PALETTE.red },
+        { label: 'Đã huỷ',    val: 18,  color: 'rgba(139,0,0,0.25)' },
+      ];
+      new Chart(document.getElementById('chartOrderStatus'), {
+        type: 'doughnut',
+        data: {
+          labels: statusData.map(d => d.label),
+          datasets: [{ data: statusData.map(d => d.val), backgroundColor: statusData.map(d => d.color), borderWidth: 2, borderColor: '#fffdf7', hoverOffset: 6 }]
+        },
+        options: {
+          cutout: '68%', responsive: true,
+          plugins: { legend: { display: false } }
+        }
+      });
+      const legend = document.getElementById('donut-legend');
+      statusData.forEach(d => {
+        const total = statusData.reduce((s,x) => s+x.val, 0);
+        const pct = Math.round(d.val/total*100);
+        legend.innerHTML += `<div style="display:flex;align-items:center;justify-content:space-between;font-size:10px;">
+          <span style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:${d.color};display:inline-block;flex-shrink:0;"></span>${d.label}</span>
+          <strong style="color:#1a0800;">${d.val} <span style="color:rgba(26,8,0,0.4);font-weight:400;">(${pct}%)</span></strong></div>`;
+      });
+
+      /* 3. Top products */
+      const products = [
+        { name: 'Bình gốm hoa sen',     sales: 98,  rev: '8.7M' },
+        { name: 'Tranh sơn mài Phố Cổ', sales: 74,  rev: '3.7M' },
+        { name: 'Khăn lụa tơ tằm',      sales: 62,  rev: '3.1M' },
+        { name: 'Tượng Quan Âm gỗ',     sales: 51,  rev: '6.1M' },
+        { name: 'Giỏ đan tre',          sales: 43,  rev: '0.5M' },
+      ];
+      const max = products[0].sales;
+      const wrap = document.getElementById('top-products');
+      products.forEach((p, i) => {
+        wrap.innerHTML += `
+          <div class="prod-rank-row">
+            <div class="rank-num ${i===0?'top':''}">${i+1}</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:11px;font-weight:800;color:#1a0800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px;">${p.name}</div>
+              <div class="rank-bar-wrap"><div class="rank-bar" style="width:${p.sales/max*100}%"></div></div>
+            </div>
+            <div style="text-align:right;flex-shrink:0;margin-left:10px;">
+              <div style="font-size:10px;font-weight:900;color:#8B0000;">${p.rev}</div>
+              <div style="font-size:9px;color:rgba(26,8,0,0.4);">${p.sales} đơn</div>
+            </div>
+          </div>`;
+      });
+
+      /* 4. Weekly orders */
+      const weekLabels = ['T2','T3','T4','T5','T6','T7','CN'];
+      const weekData   = [18, 24, 31, 28, 42, 55, 38];
+      chartOrdersInst = new Chart(document.getElementById('chartOrders'), {
+        type: 'bar',
+        data: {
+          labels: weekLabels,
+          datasets: [{
+            label: 'Số đơn',
+            data: weekData,
+            backgroundColor: weekData.map((v,i) => v===Math.max(...weekData) ? PALETTE.red : 'rgba(139,0,0,0.15)'),
+            borderRadius: 8, borderSkipped: false,
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { grid: { color: 'rgba(139,0,0,0.06)' }, ticks: { font: { size: 9 } } },
+            x: { grid: { display: false }, ticks: { font: { size: 10, weight: '800' } } }
+          }
+        }
+      });
+
+      /* 5. Category pie */
+      new Chart(document.getElementById('chartCategory'), {
+        type: 'pie',
+        data: {
+          labels: ['Gốm sứ','Tranh','Lụa','Đồ tượng','Quà tặng'],
+          datasets: [{ data: [38,24,18,13,7],
+            backgroundColor: ['#8B0000','#C8960C','#2e7d32','#1565C0','#7B1FA2'],
+            borderWidth: 2, borderColor: '#fffdf7', hoverOffset: 5 }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
+      });
+
+      /* 6. Source bar horizontal */
+      new Chart(document.getElementById('chartSource'), {
+        type: 'bar',
+        data: {
+          labels: ['Trang chủ','Tìm kiếm','Gợi ý','Mạng xã hội','Bạn bè'],
+          datasets: [{ data: [42,27,16,10,5],
+            backgroundColor: ['rgba(139,0,0,0.85)','rgba(200,150,12,0.85)','rgba(46,125,50,0.8)','rgba(21,101,192,0.8)','rgba(123,31,162,0.8)'],
+            borderRadius: 6 }]
+        },
+        options: {
+          indexAxis: 'y', responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { color: 'rgba(139,0,0,0.05)' }, ticks: { font: { size: 9 }, callback: v => v+'%' } },
+            y: { grid: { display: false }, ticks: { font: { size: 9, weight: '700' } } }
+          }
+        }
+      });
+
+      /* 7. Radar */
+      new Chart(document.getElementById('chartRadar'), {
+        type: 'radar',
+        data: {
+          labels: ['Chất lượng','Giao hàng','Phản hồi','Green','Sáng tạo','Giá trị'],
+          datasets: [{
+            label: 'Nghệ nhân của bạn',
+            data: [95,82,88,90,78,85],
+            borderColor: PALETTE.red, backgroundColor: 'rgba(139,0,0,0.1)',
+            borderWidth: 2, pointBackgroundColor: PALETTE.red, pointRadius: 3,
+          },{
+            label: 'Trung bình platform',
+            data: [78,75,72,68,70,73],
+            borderColor: PALETTE.gold, backgroundColor: 'rgba(200,150,12,0.07)',
+            borderWidth: 1.5, borderDash: [4,3],
+            pointBackgroundColor: PALETTE.gold, pointRadius: 2,
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } },
+          scales: { r: { min: 0, max: 100, ticks: { stepSize: 25, font: { size: 8 } }, grid: { color: 'rgba(139,0,0,0.08)' }, pointLabels: { font: { size: 9, weight: '700' } } } }
+        }
+      });
     }
 
-    document.getElementById('saleSearch')?.addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') filterSales();
-        else filterSales();
+    /* Toggle weekly / monthly */
+    function switchOrderChart(mode) {
+      const isWeek = mode === 'week';
+      document.getElementById('ocw').className = `text-[9px] font-900 uppercase tracking-widest px-3 py-1.5 rounded-full ${isWeek?'bg-primary text-white':'bg-white border border-primary/20 text-primary'}`;
+      document.getElementById('ocm').className = `text-[9px] font-900 uppercase tracking-widest px-3 py-1.5 rounded-full ${!isWeek?'bg-primary text-white':'bg-white border border-primary/20 text-primary'}`;
+      if (!chartOrdersInst) return;
+      if (isWeek) {
+        chartOrdersInst.data.labels = ['T2','T3','T4','T5','T6','T7','CN'];
+        chartOrdersInst.data.datasets[0].data = [18,24,31,28,42,55,38];
+      } else {
+        chartOrdersInst.data.labels = Array.from({length:30},(_,i)=>i+1+'/3');
+        chartOrdersInst.data.datasets[0].data = Array.from({length:30},()=>Math.floor(8+Math.random()*40));
+      }
+      chartOrdersInst.data.datasets[0].backgroundColor = chartOrdersInst.data.datasets[0].data.map((v,i,arr) =>
+        v===Math.max(...arr) ? '#8B0000' : 'rgba(139,0,0,0.15)'
+      );
+      chartOrdersInst.update();
+    }
+
+    /* ════════════════════════════════════════
+       CREATE PRODUCT MODAL
+    ════════════════════════════════════════ */
+    let currentCreateStep = 1;
+
+    function openCreateProduct() {
+      document.getElementById('vs-create-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      goCreateStep(1);
+    }
+    function closeCreateProduct() {
+      document.getElementById('vs-create-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('vs-create-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeCreateProduct();
     });
-    </script>
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCreateProduct(); });
+
+    function goCreateStep(step) {
+      currentCreateStep = step;
+      [1,2,3,4].forEach(n => {
+        document.getElementById('cpanel-' + n).classList.toggle('active', n === step);
+        const s = document.getElementById('cstep-' + n);
+        if (s) s.classList.toggle('active', n === step);
+      });
+      document.getElementById('cf-back-btn').style.display = step > 1 ? 'block' : 'none';
+      document.getElementById('cf-next-btn').style.display = step < 4 ? 'block' : 'none';
+      document.getElementById('cf-publish-btn').style.display = step === 4 ? 'block' : 'none';
+      if (step === 4) buildPreview();
+    }
+
+    function createStepNext() {
+      if (currentCreateStep === 1) {
+        const name = document.getElementById('cp-name').value.trim();
+        if (!name) { document.getElementById('cp-name').focus(); showToast('Vui lòng nhập tên sản phẩm!'); return; }
+      }
+      if (currentCreateStep === 2) calcMargin();
+      if (currentCreateStep < 4) goCreateStep(currentCreateStep + 1);
+    }
+    function createStepBack() {
+      if (currentCreateStep > 1) goCreateStep(currentCreateStep - 1);
+    }
+
+    /* Price formatting */
+    function formatPriceInput(el) {
+      let v = el.value.replace(/\D/g,'');
+      el.value = v ? parseInt(v).toLocaleString('vi-VN') : '';
+      if (el.id === 'cp-price' || el.id === 'cp-cost') calcMargin();
+    }
+    function parseFormPrice(id) {
+      return parseInt((document.getElementById(id)?.value || '0').replace(/\D/g,'')) || 0;
+    }
+    function calcMargin() {
+      const price = parseFormPrice('cp-price');
+      const cost  = parseFormPrice('cp-cost');
+      const box   = document.getElementById('cp-margin-box');
+      const val   = document.getElementById('cp-margin-val');
+      if (price > 0 && cost > 0) {
+        const margin = Math.round((price - cost) / price * 100);
+        const profit = (price - cost).toLocaleString('vi-VN');
+        val.textContent = `${margin}% · +${profit}₫ / sản phẩm`;
+        box.classList.remove('hidden');
+        box.style.background = margin > 40 ? 'rgba(46,125,50,0.06)' : 'rgba(200,150,12,0.08)';
+      } else {
+        box.classList.add('hidden');
+      }
+    }
+
+    /* Tag toggle */
+    function toggleTag(el) { el.classList.toggle('active'); }
+
+    /* Image preview */
+    function previewImg(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        document.getElementById('cp-img-thumb').src = e.target.result;
+        document.getElementById('cp-img-preview').classList.remove('hidden');
+        // Also update preview step
+        document.getElementById('preview-img-real').src = e.target.result;
+        document.getElementById('preview-img-real').classList.remove('hidden');
+        document.getElementById('preview-img-emoji').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    /* Category emoji map */
+    const CAT_EMOJI = { gom:'🏺', tranh:'🖼', lua:'🧵', dotuong:'🗿', gift:'🎁', other:'✨', '': '🏺' };
+
+    /* Build preview */
+    function buildPreview() {
+      const name   = document.getElementById('cp-name').value || 'Tên sản phẩm';
+      const cat    = document.getElementById('cp-category').value;
+      const origin = document.getElementById('cp-origin').value || 'Không rõ';
+      const price  = document.getElementById('cp-price').value || '0';
+      const stock  = document.getElementById('cp-stock').value || '0';
+      const lead   = document.getElementById('cp-leadtime').value || '—';
+      const story  = document.getElementById('cp-story').value;
+      const tags   = document.getElementById('cp-tags').value;
+
+      document.getElementById('preview-name').textContent = name.toUpperCase();
+      document.getElementById('preview-meta').textContent = `Nghệ nhân · ${origin}`;
+      document.getElementById('preview-price').textContent = (price || '0') + ' ₫';
+      document.getElementById('preview-img-emoji').textContent = CAT_EMOJI[cat] || '🏺';
+
+      const activeSizes  = [...document.querySelectorAll('#cp-sizes .cf-tag.active')].map(t=>t.textContent).join(', ') || '—';
+      const activeColors = [...document.querySelectorAll('#cp-colors .cf-tag.active')].map(t=>t.textContent).join(', ') || '—';
+      const greenTags    = [...document.querySelectorAll('#cpanel-2 .cf-tag.active')].map(t=>t.textContent).join(' ') || '—';
+
+      const rows = [
+        ['📦 Danh mục', cat ? document.querySelector(`#cp-category option[value="${cat}"]`)?.textContent : '—'],
+        ['📍 Xuất xứ', origin],
+        ['🔢 Tồn kho', stock + ' cái'],
+        ['⏱ Thời gian làm', lead + ' ngày'],
+        ['📐 Kích cỡ', activeSizes],
+        ['🎨 Màu sắc', activeColors],
+        ['🌿 Green Tags', greenTags],
+        ['📖 Có câu chuyện', story ? '✅ Đã điền' : '❌ Chưa điền'],
+      ].filter(([,v])=>v);
+
+      document.getElementById('preview-summary').innerHTML = rows.map(([k,v]) =>
+        `<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid rgba(139,0,0,0.06);">
+          <span style="font-size:10px;font-weight:900;color:rgba(139,0,0,0.45);min-width:110px;">${k}</span>
+          <span style="font-size:11px;color:#1a0800;">${v}</span>
+        </div>`
+      ).join('');
+    }
+
+    /* Publish */
+    function publishProduct() {
+      const btn = document.getElementById('cf-publish-btn');
+      btn.textContent = '⏳ Đang đăng...';
+      btn.disabled = true;
+      setTimeout(() => {
+        closeCreateProduct();
+        showToast('🎉 Sản phẩm đã đăng thành công!');
+        btn.textContent = '🌿 Đăng sản phẩm';
+        btn.disabled = false;
+      }, 1400);
+    }
+
+    /* Toast */
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#1a0800;color:#FFD700;padding:10px 24px;border-radius:99px;font-size:11px;font-weight:900;z-index:9999;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.3);';
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2400);
+    }
+  </script>
 
 </body>
 </html>
