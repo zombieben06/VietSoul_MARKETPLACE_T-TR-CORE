@@ -70,7 +70,7 @@ export default async function handler(req, res) {
     }
 
     const completion = await client.chat.completions.create({
-      model: "Qwen/Qwen2.5-72B:featherless-ai",
+      model: "Qwen/Qwen2.5-72B-Instruct:featherless-ai",
       messages,
       temperature: 0.7,
       max_tokens: 400,

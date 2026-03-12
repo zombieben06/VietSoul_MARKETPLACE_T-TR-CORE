@@ -2361,7 +2361,7 @@
                                 </div>
                                 <div class="rounded-xl border border-primary/10 p-4 bg-[#fcf8f5]">
                                     <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Email</p>
-                                    <p class="text-primary font-black text-lg"><a href="mailto:VietSoul@gmail.com">VietSoul@gmail.com</a></p>
+                                    <p class="text-primary font-black text-lg"><a href="/cdn-cgi/l/email-protection#12447b7766417d677e52757f737b7e3c717d7f"><span class="__cf_email__" data-cfemail="085e616d7c5b677d64486f65696164266b6765">[email&#160;protected]</span></a></p>
                                     <p class="text-xs text-gray-600 mt-1">Phản hồi trong 24h</p>
                                 </div>
                                 <div class="rounded-xl border border-primary/10 p-4 bg-[#fcf8f5]">
@@ -2932,7 +2932,7 @@
                     <div>
                         <h4 class="text-lg font-semibold mb-3 border-b border-secondary/50 pb-1 text-display">Liên Hệ</h4>
                         <p class="text-sm">Địa chỉ: 123 Ngũ Hành Sơn, Đà Nẵng, Việt Nam</p>
-                        <p class="text-sm">Email: <a href="mailto:VietSoul@gmail.com" class="hover:text-secondary transition duration-150">VietSoul@gmail.com</a></p>
+                        <p class="text-sm">Email: <a href="/cdn-cgi/l/email-protection#fdab949889ae928891bd9a909c9491d39e9290" class="hover:text-secondary transition duration-150"><span class="__cf_email__" data-cfemail="1046797564437f657c50777d71797c3e737f7d">[email&#160;protected]</span></a></p>
                         <p class="text-sm">Điện thoại: (024) 1234 5678</p>
                     </div>
                 </div>
@@ -2973,7 +2973,7 @@
         </div>
 
         <!-- SCRIPTS -->
-        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
+        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
             const allProducts = [
                 { id: 1, name: "Tranh Đông Hồ 'Mục Đồng'", description: "Tranh Gỗ Sơn Mài | Làng Sình", price: "150.000", sold: "987", category: "tranh", location: "Hà Nội", artist: "Nguyễn Văn B", isGreen: true, img: "https://noithatbinhminh.com.vn/wp-content/uploads/2021/11/tranh-dong-ho-06.jpg", fallback: "https://placehold.co/600x400/8B0000/FFF8E1?text=Tranh+Đông+Hồ", tags: ["Mực in sinh học", "Bao bì Kraft tái chế", "Eco-Delivery"], story: "Tranh Mục Đồng cưỡi trâu thổi sáo thể hiện cảnh thái bình. Nghệ nhân B đã khắc gỗ hơn 50 năm để tạo ra bản in này." },
                 { id: 2, name: "Áo Dài Lụa Tơ Tằm", description: "Chất liệu Tơ Tằm cao cấp | Vạn Phúc", price: "500.000", sold: "2346", category: "lua", location: "Hà Nội", artist: "HTX Vạn Phúc", isGreen: true, img: "https://i.pinimg.com/originals/f2/16/6c/f2166c45c2807cf7c81847aa39047c57.jpg", fallback: "https://placehold.co/600x400/A0522D/FFF8E1?text=Áo+Dài+Lụa", tags: ["Tơ tằm tự nhiên", "Dệt tay truyền thống"], story: "Lụa Vạn Phúc mướt nhẹ, nhuộm từ lá cây tự nhiên, là biểu tượng của sự thanh cao phụ nữ Việt." },
@@ -3175,19 +3175,20 @@
             };
 
             function addMessage(role, text) {
-                const window = document.getElementById('product-chat-window');
+                const chatWin = document.getElementById('product-chat-window');
+                if (!chatWin) return;
                 const div = document.createElement('div');
                 div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start items-start space-x-2'} mb-3`;
                 if (role === 'user') {
                     div.innerHTML = `<div class="p-3 chat-bubble-user rounded-xl shadow-sm text-[11px] font-medium">${text}</div>`;
                 } else {
                     div.innerHTML = `
-                        <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-[8px] text-white font-bold">AI</div>
-                        <div class="p-3 chat-bubble-ai rounded-xl shadow-sm text-[11px] leading-relaxed"><b>VietSoul AI:</b> ${text}</div>
+                        <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-[8px] text-white font-bold flex-shrink-0 mt-0.5">AI</div>
+                        <div class="p-3 chat-bubble-ai rounded-xl shadow-sm text-[11px] leading-relaxed"><b style="color:var(--color-primary)">VietSoul AI:</b> ${text}</div>
                     `;
                 }
-                window.appendChild(div);
-                window.scrollTop = window.scrollHeight;
+                chatWin.appendChild(div);
+                chatWin.scrollTop = chatWin.scrollHeight;
             }
 
             // --- VIETSOUL AI CHAT ENGINE ---
@@ -3311,8 +3312,7 @@
                     + ' Bạn muốn khám phá điều gì về sản phẩm này?';
             }
 
-            // Gọi Claude API
-            // Gọi Hugging Face Inference API (Qwen2.5-72B — tiếng Việt tốt, miễn phí)
+            // Gọi Anthropic Claude API
             async function vsCallClaude(p, userText) {
                 const pid = p.id;
                 if (!window._vsChatHistory) window._vsChatHistory = {};
@@ -3324,45 +3324,35 @@
                 showTyping();
                 vsSetInput(false);
 
-                // Ghép system prompt + history thành 1 chuỗi prompt cho HF
-                const systemPrompt = vsBuildSystem(p);
-                const messages = [
-                    { role: 'system', content: systemPrompt },
-                    ...hist
-                ];
-
                 try {
-                    const res = await fetch(
-                        'https://router.huggingface.co/v1/chat/completions',
-                        {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': 'Bearer hf_',
-                            },
-                            body: JSON.stringify({
-                                model: 'Qwen/Qwen2.5-72B-Instruct:featherless-ai',
-                                messages: messages,
-                                max_tokens: 400,
-                                temperature: 0.7,
-                                stream: false,
-                            }),
-                        }
-                    );
+                    const res = await fetch('https://api.anthropic.com/v1/messages', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'anthropic-version': '2023-06-01',
+                            'anthropic-dangerous-direct-browser-access': 'true',
+                        },
+                        body: JSON.stringify({
+                            model: 'claude-haiku-4-5-20251001',
+                            max_tokens: 400,
+                            system: vsBuildSystem(p),
+                            messages: hist,
+                        }),
+                    });
                     removeTyping();
                     if (!res.ok) {
                         const e = await res.json().catch(() => ({}));
                         throw new Error(e?.error?.message || `HTTP ${res.status}`);
                     }
                     const data = await res.json();
-                    const reply = data.choices?.[0]?.message?.content?.trim() || '';
+                    const reply = data.content?.find(b => b.type === 'text')?.text?.trim() || '';
                     if (!reply) throw new Error('empty');
                     hist.push({ role: 'assistant', content: reply });
                     addMessage('ai', vsFmt(reply));
                 } catch (err) {
                     removeTyping();
-                    console.warn('[VietSoul Chat]', err.message);
-                    addMessage('ai', `Xin lỗi, có sự cố nhỏ 🙏 Bạn thử hỏi lại về <b>${p.name}</b> nhé!`);
+                    console.error('[VietSoul Chat ERROR]', err);
+                    addMessage('ai', `⚠️ Lỗi: <b>${err.message}</b> — Mở F12 > Console để xem chi tiết.`);
                 }
                 vsSetInput(true);
             }
